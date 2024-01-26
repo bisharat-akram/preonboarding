@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 
+import { listContacts } from '../../graphql/queries';
 import { createContact } from '../../graphql/mutations';
 
 import Container from 'react-bootstrap/Container';
@@ -13,9 +14,36 @@ import Button from 'react-bootstrap/Button';
 import {v4 as uuid} from 'uuid';
 
 function Contacts() {
-    //const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState([]);
     const [contactData, setContactData] = useState({name: "", email: "", cell: ""});
     const [profilePic, setProfilePic] = useState("");
+    const [profilePicPaths, setProfilePicPaths] = useState([]);
+
+    const getContacts = async() => {
+        try {
+            const contactsData = await API.graphql(graphqlOperation(listContacts));
+            console.log(contactsData);
+
+            const contactsList = contactsData.data.listContacts.items;
+            setContacts(contactsList);
+
+            contacts.map(async (contact, indx) => {
+                const contactProfilePicPath = contacts[indx].profilePicPath;
+                try {
+                    const contactProfilePicPathURI = await Storage.get(contactProfilePicPath, {expires: 60});
+                    setProfilePicPaths([...profilePicPaths, contactProfilePicPathURI]);
+                } catch(err) {
+                    console.log('error', err);
+                }
+            });
+        } catch(err) {
+            console.log('error', err);
+        }
+    }
+
+    useEffect(() => {
+        getContacts()
+    }, []);
 
     const addNewContact = async () => {
         try {
@@ -46,20 +74,26 @@ function Contacts() {
                 <Col><h1>Contacts</h1></Col>
             </Row>
             <Row>
-                <Col className="px-2 my-2">
-                    <Card style={{ width: '12rem' }}>
-                        <Card.Img
-                            src="/img/contact_1.png"
-                            variant="top" />
-                        <Card.Body>
-                            <Card.Title>Stacy Carlson</Card.Title>
-                            <Card.Text>
-                                stacy@test.com
-                                <br />555.123.4567
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
+                {
+                    contacts.map((contact, indx) => {
+                        return (
+                            <Col className="px-2 my-2" key={indx}>
+                                <Card style={{ width: '12rem' }}>
+                                    <Card.Img 
+                                        src={profilePicPaths[indx]}
+                                        variant="top" />
+                                    <Card.Body>
+                                        <Card.Title>{contact.name}</Card.Title>
+                                        <Card.Text>
+                                            {contact.email}
+                                            <br />{contact.cell}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        )
+                    })
+                }
             </Row>
             <Row className="px-4 my-5">
                 <Col sm={3}>
