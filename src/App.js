@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import { Amplify } from 'aws-amplify';
-import { Authenticator, View, Image, useTheme } from '@aws-amplify/ui-react';
+import { Authenticator, View, Image, useTheme, Text } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
 
 import './App.css';
@@ -29,7 +29,18 @@ function App() {
               />
             </View>
           );
-        }
+        },
+        Footer() {
+            const { tokens } = useTheme();
+        
+            return (
+              <View textAlign="center" padding={tokens.space.large}>
+                <Text color={tokens.colors.neutral[80]}>
+                  &copy; 2024: All Rights Reserved
+                </Text>
+              </View>
+            );
+        },
     };
 
     return (
