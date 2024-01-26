@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "aiagentplatform2bc895b2": {}
+      },
+      "storage": {
+        "aiagentplatformcontactstorage": {}
+      },
+      "api": {
+        "aiagentplatformgraphqlapi": {}
       }
     }
   }
