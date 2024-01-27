@@ -31,15 +31,15 @@ function Contacts() {
             const contactsList = contactsData.data.listContacts.items;
             setContacts(contactsList);
 
-//            contacts.map(async (contact, indx) => {
-//                const contactProfilePicPath = contacts[indx].profilePicPath;
-//                try {
-//                    const contactProfilePicPathURI = await uploadData(contactProfilePicPath, {expires: 60});
-//                    setProfilePicPaths([...profilePicPaths, contactProfilePicPathURI]);
-//                } catch(err) {
-//                    console.log('error', err);
-//                }
-//            });
+            contacts.map(async (contact, indx) => {
+                const contactProfilePicPath = contacts[indx].profilePicPath;
+                try {
+                    const contactProfilePicPathURI = await uploadData(contactProfilePicPath, {expires: 60});
+                    setProfilePicPaths([...profilePicPaths, contactProfilePicPathURI]);
+                } catch(err) {
+                    console.log('error', err);
+                }
+            });
         } catch(err) {
             console.log('error', err);
         }
