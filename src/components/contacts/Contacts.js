@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { API, graphqlOperation, Storage } from 'aws-amplify';
 
 import { listContacts } from '../../graphql/queries';
 import { createContact } from '../../graphql/mutations';
@@ -13,6 +12,11 @@ import Button from 'react-bootstrap/Button';
 
 import {v4 as uuid} from 'uuid';
 
+import { generateClient } from 'aws-amplify/api';
+import { uploadData } from 'aws-amplify/storage';
+
+const client = generateClient();
+
 function Contacts() {
     const [contacts, setContacts] = useState([]);
     const [contactData, setContactData] = useState({name: "", email: "", cell: ""});
@@ -21,21 +25,21 @@ function Contacts() {
 
     const getContacts = async() => {
         try {
-            const contactsData = await API.graphql(graphqlOperation(listContacts));
+            const contactsData = await client.graphql({ query: listContacts });
             console.log(contactsData);
 
             const contactsList = contactsData.data.listContacts.items;
             setContacts(contactsList);
 
-            contacts.map(async (contact, indx) => {
-                const contactProfilePicPath = contacts[indx].profilePicPath;
-                try {
-                    const contactProfilePicPathURI = await Storage.get(contactProfilePicPath, {expires: 60});
-                    setProfilePicPaths([...profilePicPaths, contactProfilePicPathURI]);
-                } catch(err) {
-                    console.log('error', err);
-                }
-            });
+//            contacts.map(async (contact, indx) => {
+//                const contactProfilePicPath = contacts[indx].profilePicPath;
+//                try {
+//                    const contactProfilePicPathURI = await uploadData(contactProfilePicPath, {expires: 60});
+//                    setProfilePicPaths([...profilePicPaths, contactProfilePicPathURI]);
+//                } catch(err) {
+//                    console.log('error', err);
+//                }
+//            });
         } catch(err) {
             console.log('error', err);
         }
@@ -62,7 +66,10 @@ function Contacts() {
             };
 
             // Persist new Contact
-            await API.graphql(graphqlOperation(createContact, {input: newContact}));
+            await client.graphql({ 
+                query: createContact, 
+                variables: {input: newContact},
+            });
         } catch(err) {
             console.log('error', err);
         }
