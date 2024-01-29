@@ -13,7 +13,7 @@ import Button from 'react-bootstrap/Button';
 import {v4 as uuid} from 'uuid';
 
 import { generateClient } from 'aws-amplify/api';
-import { Storage } from 'aws-amplify/storage';
+import { Storage } from 'aws-amplify';
 import { uploadData } from 'aws-amplify/storage';
 
 const client = generateClient();
