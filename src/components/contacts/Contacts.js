@@ -13,7 +13,6 @@ import Button from 'react-bootstrap/Button';
 import {v4 as uuid} from 'uuid';
 
 import { generateClient } from 'aws-amplify/api';
-import { Storage } from 'aws-amplify';
 import { uploadData } from 'aws-amplify/storage';
 
 const client = generateClient();
@@ -55,9 +54,9 @@ function Contacts() {
             const { name, email, cell } = contactData;
 
             // Upload pic to S3
-            Storage.configure({ region: 'us-west-1' });
-            const { key } = await Storage.put(`${uuid()}.png`, profilePic, {contentType: 'image/png'});
-            //uploadData(`${uuid()}.png`, profilePic, {contentType: 'image/png'});
+            //Storage.configure({ region: 'us-west-1' });
+            //const { key } = await Storage.put(`${uuid()}.png`, profilePic, {contentType: 'image/png'});
+            uploadData(`${uuid()}.png`, profilePic, {contentType: 'image/png'});
 
             const newContact = {
                 id: uuid(),
