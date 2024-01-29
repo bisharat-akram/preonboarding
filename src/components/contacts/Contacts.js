@@ -55,7 +55,7 @@ function Contacts() {
 
             // Upload pic to S3
             //Storage.configure({ region: 'us-west-1' });
-            //const { key } = await Storage.put(`${uuid()}.png`, profilePic, {contentType: 'image/png'});
+            pfile_pic = `${uuid()}.png`;
             uploadData(`${uuid()}.png`, profilePic, {contentType: 'image/png'});
 
             const newContact = {
@@ -63,7 +63,7 @@ function Contacts() {
                 name,
                 email,
                 cell,
-                profilePicPath: key
+                profilePicPath: pfile_pic
             };
 
             // Persist new Contact
