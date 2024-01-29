@@ -55,7 +55,7 @@ function Contacts() {
 
             // Upload pic to S3
             //Storage.configure({ region: 'us-west-1' });
-            pfile_pic = `${uuid()}.png`;
+            const pfile_pic = `${uuid()}.png`;
             uploadData(`${uuid()}.png`, profilePic, {contentType: 'image/png'});
 
             const newContact = {
