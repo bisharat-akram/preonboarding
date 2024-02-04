@@ -17,6 +17,9 @@
       },
       "storage": {
         "aiagentplatformcontactstorage": {}
+      },
+      "api": {
+        "aiagentplatformgraphqlapi": {}
       }
     }
   }
