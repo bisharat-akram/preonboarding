@@ -13,51 +13,55 @@ import SiteFooter from './components/common/SiteFooter';
 
 import HomePage from './components/home/HomePage';
 import Contacts from './components/contacts/Contacts';
+import UploadViewPage from './components/file/UploadView';
+import FileDetailsPage from './components/file/FileDetails';
 
 Amplify.configure(awsExports);
 
 function App() {
-    const components = {
-        Header() {
-          const { tokens } = useTheme();
-      
-          return (
-            <View textAlign="center" padding={tokens.space.large}>
-              <Image
-                alt="Contacts App"
-                src="/img/prometheusagi_logo.png"
-              />
-            </View>
-          );
-        },
-        Footer() {
-            const { tokens } = useTheme();
-        
-            return (
-              <View textAlign="center" padding={tokens.space.large}>
-                <Text color={tokens.colors.neutral[80]}>
-                  &copy; 2024: All Rights Reserved
-                </Text>
-              </View>
-            );
-        },
-    };
+  const components = {
+    Header() {
+      const { tokens } = useTheme();
 
-    return (
-        <Authenticator loginMechanisms={["email"]} components={components}>
-        {({ signOut, user }) => (
-            <div>
-            <SiteNav logOut={signOut}/>
-            <Routes>
-                <Route path='*' element={<HomePage />} />
-                <Route path='/' exact={true} element={<HomePage />} />
-                <Route path='/contacts' element={<Contacts />} />
-                </Routes>
-            <SiteFooter />
-            </div>
-        )}
-        </Authenticator>
-    );
+      return (
+        <View textAlign="center" padding={tokens.space.large}>
+          <Image
+            alt="Contacts App"
+            src="/img/prometheusagi_logo.png"
+          />
+        </View>
+      );
+    },
+    Footer() {
+      const { tokens } = useTheme();
+
+      return (
+        <View textAlign="center" padding={tokens.space.large}>
+          <Text color={tokens.colors.neutral[80]}>
+            &copy; 2024: All Rights Reserved
+          </Text>
+        </View>
+      );
+    },
+  };
+
+  return (
+    <Authenticator loginMechanisms={["email"]} components={components}>
+      {({ signOut, user }) => (
+        <div>
+          <SiteNav logOut={signOut} />
+          <Routes>
+            <Route path='*' element={<HomePage />} />
+            <Route path='/' exact={true} element={<HomePage />} />
+            <Route path='/contacts' element={<Contacts />} />
+            <Route path='/files' element={<UploadViewPage />} />
+            <Route path='/files/:fileKey' element={<FileDetailsPage />} />
+          </Routes>
+          <SiteFooter />
+        </div>
+      )}
+    </Authenticator>
+  );
 }
 
 export default App;
