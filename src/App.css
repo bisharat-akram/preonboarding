@@ -1,0 +1,27 @@
+.table-checkbox {
+    width: 50px;
+    /* or any other suitable width */
+}
+
+.table-header {
+    width: 200px;
+    /* or any other suitable width */
+}
+
+.table-cell {
+    max-width: 550px;
+    /* Adjust as needed */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .table-cell {
+        max-width: 200px;
+        /* Adjust for smaller screens */
+    }
+}
