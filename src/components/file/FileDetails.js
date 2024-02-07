@@ -1,59 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { uploadData, getUrl } from 'aws-amplify/storage';
-import { Container, Row, Col, Button, Spinner, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner, Form, Pagination } from 'react-bootstrap';
 import Select from 'react-select';
 import Papa from 'papaparse';
 import FileTable from './FileTable';
 
 function FileDetailsPage() {
-    const [file, setFile] = useState(null);
-    const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const [fileData, setFileData] = useState([]);
     const [selectedRows, setSelectedRows] = useState(new Set());
     const [selectedColumns, setSelectedColumns] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 20;
+    const maxPageItems = 5;
 
     const { fileKey } = useParams();
 
     useEffect(() => {
         getSignUrl();
     }, []);
-
-
-    const handleChange = (e) => {
-        setFile(e.target.files[0]);
-    };
-
-    function CSVTableOld({ data }) {
-        if (data.length === 0) {
-            return null;
-        }
-
-        const headers = Object.keys(data[0]);
-
-        return (
-            <table>
-                <thead>
-                    <tr>
-                        {headers.map((header, index) => (
-                            <th key={index}>{header}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((row, index) => (
-                        <tr key={index}>
-                            {headers.map((header, idx) => (
-                                <td key={idx}>{row[header]}</td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        );
-    }
 
     const getSignUrl = async () => {
         const getUrlResult = await getUrl({
@@ -97,6 +64,50 @@ function FileDetailsPage() {
         // Here you can further process the payload as required
     };
 
+    const calculateTotalPages = (data, rowsPerPage) => {
+        return Math.ceil(data.length / rowsPerPage);
+    }
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    }
+
+    const getPaginationItems = (currentPage, totalPages) => {
+        let items = [];
+        let startPage, endPage;
+
+        if (totalPages <= maxPageItems) {
+            // less than maxPageItems total pages, show all
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            // more than maxPageItems total pages, calculate start and end pages
+            const maxPagesBeforeCurrentPage = Math.floor(maxPageItems / 2);
+            const maxPagesAfterCurrentPage = Math.ceil(maxPageItems / 2) - 1;
+            if (currentPage <= maxPagesBeforeCurrentPage) {
+                startPage = 1;
+                endPage = maxPageItems;
+            } else if (currentPage + maxPagesAfterCurrentPage >= totalPages) {
+                startPage = totalPages - maxPageItems + 1;
+                endPage = totalPages;
+            } else {
+                startPage = currentPage - maxPagesBeforeCurrentPage;
+                endPage = currentPage + maxPagesAfterCurrentPage;
+            }
+        }
+
+        // create page items
+        for (let number = startPage; number <= endPage; number++) {
+            items.push(
+                <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+
+        return items;
+    };
+
 
     const CSVTable = ({ data }) => {
         if (data.length === 0) {
@@ -114,6 +125,22 @@ function FileDetailsPage() {
                 setSelectedRows(new Set());
             }
         };
+
+        const indexOfLastRow = currentPage * rowsPerPage;
+        const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+        const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+
+        const totalPages = calculateTotalPages(data, rowsPerPage);
+        const paginationItems = getPaginationItems(currentPage, totalPages);
+
+        // let paginationItems = [];
+        // for (let number = 1; number <= totalPages; number++) {
+        //     paginationItems.push(
+        //         <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
+        //             {number}
+        //         </Pagination.Item>,
+        //     );
+        // }
 
         return (
             <>
@@ -150,7 +177,7 @@ function FileDetailsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((row, index) => (
+                        {currentRows.map((row, index) => (
                             <tr key={index}>
                                 <td className="table-checkbox">
                                     <Form.Check
@@ -167,6 +194,26 @@ function FileDetailsPage() {
                     </tbody>
                 </table>
 
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '40px' }}>
+                    <Pagination>
+                        <Pagination.Prev onClick={() => handlePageChange(Math.max(1, currentPage - 1))} disabled={currentPage === 1} />
+                        {currentPage > 1 + maxPageItems && (
+                            <>
+                                <Pagination.Item onClick={() => handlePageChange(1)}>1</Pagination.Item>
+                                <Pagination.Ellipsis disabled />
+                            </>
+                        )}
+                        {paginationItems}
+                        {currentPage < totalPages - maxPageItems && (
+                            <>
+                                <Pagination.Ellipsis disabled />
+                                <Pagination.Item onClick={() => handlePageChange(totalPages)}>{totalPages}</Pagination.Item>
+                            </>
+                        )}
+                        <Pagination.Next onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages} />
+                    </Pagination>
+                </div>
+
             </>
         );
     };
@@ -177,7 +224,7 @@ function FileDetailsPage() {
             <Row className="px-4 my-5">
                 <Col sm={12}>
                     <h2 className="font-weight-light text-center">Uploaded File Details</h2>
-                    <p><a href="/files">Back to Files</a></p>
+                    <p><a href="/">Back to Files</a></p>
 
                     {/* Loader or Message */}
                     {isLoading ? (
