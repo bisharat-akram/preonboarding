@@ -52,9 +52,10 @@ function App() {
           <SiteNav logOut={signOut} />
           <Routes>
             <Route path='*' element={<HomePage />} />
-            <Route path='/' exact={true} element={<HomePage />} />
+            <Route path='/' exact={true} element={<UploadViewPage />} />
+            {/* <Route path='/' exact={true} element={<HomePage />} /> */}
             <Route path='/contacts' element={<Contacts />} />
-            <Route path='/files' element={<UploadViewPage />} />
+            {/* <Route path='/files/' element={<UploadViewPage />} /> */}
             <Route path='/files/:fileKey' element={<FileDetailsPage />} />
           </Routes>
           <SiteFooter />

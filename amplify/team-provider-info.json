@@ -22,5 +22,43 @@
         "aiagentplatformgraphqlapi": {}
       }
     }
+  },
+  "devnazmul": {
+    "categories": {
+      "auth": {
+        "aiagentplatform2bc895b2": {}
+      }
+    },
+    "awscloudformation": {}
+  },
+  "nazmul": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-aiagentplatform-nazmul-13841-authRole",
+      "UnauthRoleArn": "arn:aws:iam::692637161728:role/amplify-aiagentplatform-nazmul-13841-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::692637161728:role/amplify-aiagentplatform-nazmul-13841-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-aiagentplatform-nazmul-13841-deployment",
+      "UnauthRoleName": "amplify-aiagentplatform-nazmul-13841-unauthRole",
+      "StackName": "amplify-aiagentplatform-nazmul-13841",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:692637161728:stack/amplify-aiagentplatform-nazmul-13841/050d1170-c395-11ee-9eb4-0a653c677f92",
+      "AmplifyAppId": "dab3xdmuhto5z"
+    },
+    "categories": {
+      "auth": {
+        "aiagentplatform2bc895b2": {}
+      },
+      "api": {
+        "aiagentplatformgraphqlapi": {}
+      },
+      "storage": {
+        "aiagentplatformcontactstorage": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dab3xdmuhto5z",
+          "type": "manual"
+        }
+      }
+    }
   }
 }
