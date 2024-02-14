@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import { uploadData, getUrl } from 'aws-amplify/storage';
-import { Container, Row, Col, Button, Spinner, Form, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner, Form, Pagination, Alert } from 'react-bootstrap';
 import Select from 'react-select';
 import Papa from 'papaparse';
 import FileTable from './FileTable';
@@ -13,8 +14,14 @@ function FileDetailsPage() {
     const [selectedRows, setSelectedRows] = useState(new Set());
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertType, setAlertType] = useState("warning");
+    const [alertMessage, setAlertMessage] = useState("");
+
     const rowsPerPage = 20;
     const maxPageItems = 5;
+
+    const apiUrl = "https://m1vqmhqu9g.execute-api.us-west-1.amazonaws.com/dev/";
 
     const { fileKey } = useParams();
 
@@ -53,15 +60,47 @@ function FileDetailsPage() {
 
 
     const submitData = () => {
-        const payload = Array.from(selectedRows).map(rowIndex => {
-            const row = fileData[rowIndex];
-            return selectedColumns.reduce((acc, col) => {
-                acc[col.value] = row[col.value];
-                return acc;
-            }, {});
+
+        setAlertType("info");
+        setAlertMessage("Your request is being processed. Please wait...");
+        setShowAlert(true);
+
+        const payload = selectedColumns.reduce((acc, col) => {
+            let data = {};
+
+            Array.from(selectedRows).map(rowIndex => {
+                const row = fileData[rowIndex];
+                data = {
+                    ...data,
+                    [rowIndex.toString()]: row[col.value]
+                }
+            });
+
+            acc[col.value] = data;
+            return acc;
+        }, {});
+
+        axios({
+            method: 'post',
+            url: apiUrl,
+            data: payload
+        }).then(response => {
+            console.log(response);
+            setAlertType("success");
+            setAlertMessage("Data submitted successfully");
+            setShowAlert(true);
+        }).catch(error => {
+            console.error('Error submitting data:', error);
+            setAlertType("danger");
+            setAlertMessage("Error submitting data");
+            setShowAlert(true);
         });
-        console.log(payload);
-        // Here you can further process the payload as required
+    };
+
+    const resetAlert = () => {
+        setShowAlert(false);
+        setAlertMessage("");
+
     };
 
     const calculateTotalPages = (data, rowsPerPage) => {
@@ -225,6 +264,12 @@ function FileDetailsPage() {
                 <Col sm={12}>
                     <h2 className="font-weight-light text-center">Uploaded File Details</h2>
                     <p><a href="/">Back to Files</a></p>
+
+                    {showAlert && (
+                        <Alert variant={alertType} onClose={() => resetAlert()} dismissible>
+                            {alertMessage}
+                        </Alert>
+                    )}
 
                     {/* Loader or Message */}
                     {isLoading ? (
