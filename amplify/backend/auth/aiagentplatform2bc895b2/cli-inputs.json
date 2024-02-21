@@ -36,7 +36,7 @@
     "sharedId": "2bc895b2",
     "resourceName": "aiagentplatform2bc895b2",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "defaultSocial",
+    "useDefault": "default",
     "usernameAttributes": [
       "email"
     ],
@@ -58,11 +58,7 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
-    "hostedUI": true,
-    "hostedUIDomainName": "aiagentplatform417636b6-417636b6",
-    "authProvidersUserPool": [],
-    "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://goupp.xyz/redirect/\"],\"LogoutURLs\":[\"https://goupp.xyz/logout/\"]}",
+    "hostedUI": false,
     "authProviders": []
   }
 }

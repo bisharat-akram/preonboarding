@@ -74,7 +74,7 @@ function UploadViewPage() {
         setIsLoading(true);
         //upload csv to s3
         await uploadData({
-            key: file.name,
+            key: file?.name,
             data: file
         }).result;
 

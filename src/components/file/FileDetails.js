@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { uploadData, getUrl } from 'aws-amplify/storage';
 import { Container, Row, Col, Button, Spinner, Form, Pagination, Alert } from 'react-bootstrap';
 import Select from 'react-select';
 import Papa from 'papaparse';
 import FileTable from './FileTable';
+import predictedImageUrl from "../../assets/img/Actual_vs_Predicted.png";
 
 function FileDetailsPage() {
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
     const [fileData, setFileData] = useState([]);
@@ -17,6 +19,7 @@ function FileDetailsPage() {
     const [showAlert, setShowAlert] = useState(false);
     const [alertType, setAlertType] = useState("warning");
     const [alertMessage, setAlertMessage] = useState("");
+    const [predictedImage, setPredictedImage] = useState("");
 
     const rowsPerPage = 20;
     const maxPageItems = 5;
@@ -70,9 +73,16 @@ function FileDetailsPage() {
 
             Array.from(selectedRows).map(rowIndex => {
                 const row = fileData[rowIndex];
+                let value = row[col.value];
+                const parsedValue = parseFloat(value);
+                if (parsedValue.toString() === value.toString()) {
+                    // If the parsed value is the same as the original, convert to number
+                    value = parsedValue;
+                }
+
                 data = {
                     ...data,
-                    [rowIndex.toString()]: row[col.value]
+                    [rowIndex.toString()]: value
                 }
             });
 
@@ -85,21 +95,28 @@ function FileDetailsPage() {
             url: apiUrl,
             data: payload
         }).then(response => {
-            console.log(response);
             setAlertType("success");
             setAlertMessage("Data submitted successfully");
             setShowAlert(true);
+            const res = response.data;
+            console.log(JSON.parse(res.body));
+            if (res?.statusCode === 200) {
+                const body = JSON.parse(res.body);
+                setPredictedImage(predictedImageUrl);
+            }
         }).catch(error => {
             console.error('Error submitting data:', error);
             setAlertType("danger");
             setAlertMessage("Error submitting data");
             setShowAlert(true);
+            setPredictedImage("")
         });
     };
 
     const resetAlert = () => {
         setShowAlert(false);
         setAlertMessage("");
+        setPredictedImage("");
 
     };
 
@@ -171,15 +188,6 @@ function FileDetailsPage() {
 
         const totalPages = calculateTotalPages(data, rowsPerPage);
         const paginationItems = getPaginationItems(currentPage, totalPages);
-
-        // let paginationItems = [];
-        // for (let number = 1; number <= totalPages; number++) {
-        //     paginationItems.push(
-        //         <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
-        //             {number}
-        //         </Pagination.Item>,
-        //     );
-        // }
 
         return (
             <>
@@ -257,32 +265,50 @@ function FileDetailsPage() {
         );
     };
 
+    const backToTable = () => {
+        setPredictedImage("");
+    }
+
 
     return (
         <Container fluid>
-            <Row className="px-4 my-5">
-                <Col sm={12}>
-                    <h2 className="font-weight-light text-center">Uploaded File Details</h2>
-                    <p><a href="/">Back to Files</a></p>
+            {
+                predictedImage === "" &&
+                <Row className="px-4 my-5">
+                    <Col sm={12}>
+                        <h2 className="font-weight-light text-center">Uploaded File Details</h2>
+                        <p><a href="/">Back to Files</a></p>
 
-                    {showAlert && (
-                        <Alert variant={alertType} onClose={() => resetAlert()} dismissible>
-                            {alertMessage}
-                        </Alert>
-                    )}
+                        {showAlert && (
+                            <Alert variant={alertType} onClose={() => resetAlert()} dismissible>
+                                {alertMessage}
+                            </Alert>
+                        )}
 
-                    {/* Loader or Message */}
-                    {isLoading ? (
-                        <div style={{ textAlign: 'center', margin: '20px' }}>
-                            <Spinner animation="border" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </Spinner>
-                        </div>
-                    ) : (
-                        <CSVTable data={fileData} />
-                    )}
-                </Col>
-            </Row>
+                        {/* Loader or Message */}
+                        {isLoading ? (
+                            <div style={{ textAlign: 'center', margin: '20px' }}>
+                                <Spinner animation="border" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </Spinner>
+                            </div>
+                        ) : (
+                            <CSVTable data={fileData} />
+                        )}
+                    </Col>
+                </Row>
+            }
+
+            {
+                predictedImage &&
+                <div style={{ width: '100%', padding: '10px 40px' }}>
+                    <p style={{ cursor: 'pointer' }} onClick={() => resetAlert()}>Back to Data Table</p>
+                    <img
+                        style={{ display: 'block', margin: 'auto' }}
+                        src={predictedImage}
+                    />
+                </div>
+            }
         </Container>
     )
 }
