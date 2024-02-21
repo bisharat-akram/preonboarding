@@ -7,6 +7,7 @@ import Select from 'react-select';
 import Papa from 'papaparse';
 import FileTable from './FileTable';
 import predictedImageUrl from "../../assets/img/Actual_vs_Predicted.png";
+import predictionJson from "../../assets/json/prediction-data.json";
 
 function FileDetailsPage() {
     const navigate = useNavigate();
@@ -103,6 +104,15 @@ function FileDetailsPage() {
             if (res?.statusCode === 200) {
                 const body = JSON.parse(res.body);
                 setPredictedImage(predictedImageUrl);
+                console.log(predictionJson);
+                axios({
+                    method: 'get',
+                    url: 'https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/json/data.json'
+                }).then(response => {
+                    console.log(response.data);
+                }).catch(error => {
+
+                });
             }
         }).catch(error => {
             console.error('Error submitting data:', error);
@@ -265,8 +275,28 @@ function FileDetailsPage() {
         );
     };
 
-    const backToTable = () => {
-        setPredictedImage("");
+
+    const renderDataTable = (columns, data) => {
+        return (
+            <table className="table table-bordered">
+                <thead>
+                    <tr>
+                        {columns.map((header, index) => (
+                            <th key={index}>{header}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((row, index) => (
+                        <tr key={index}>
+                            {row.map((cell, idx) => (
+                                <td key={idx}>{cell}</td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        )
     }
 
 
@@ -301,14 +331,20 @@ function FileDetailsPage() {
 
             {
                 predictedImage &&
-                <div style={{ width: '100%', padding: '10px 40px' }}>
-                    <p style={{ cursor: 'pointer' }} onClick={() => resetAlert()}>Back to Data Table</p>
+                <div style={{ width: '100%', padding: '10px 40px', marginTop: '15px' }}>
+                    <p style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => resetAlert()}>{'Back to Data Table'}</p>
                     <img
                         style={{ display: 'block', margin: 'auto' }}
                         src={predictedImage}
                     />
+                    <div style={{ width: '80%', margin: 'auto', marginTop: '20px' }}>
+                        <h5 style={{ marginBottom: '20px' }}>Prediction Data Table</h5>
+                        {renderDataTable(predictionJson.columns, predictionJson.data)}
+                    </div>
                 </div>
             }
+
+
         </Container>
     )
 }
