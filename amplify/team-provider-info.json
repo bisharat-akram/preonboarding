@@ -23,41 +23,63 @@
       }
     }
   },
-  "devnazmul": {
-    "categories": {
-      "auth": {
-        "aiagentplatform2bc895b2": {}
-      }
-    },
-    "awscloudformation": {}
-  },
-  "nazmul": {
+  "nazmuldev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-aiagentplatform-nazmul-13841-authRole",
-      "UnauthRoleArn": "arn:aws:iam::692637161728:role/amplify-aiagentplatform-nazmul-13841-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::692637161728:role/amplify-aiagentplatform-nazmul-13841-authRole",
+      "AuthRoleName": "amplify-aiagentplatform-nazmuldev-12717-authRole",
+      "UnauthRoleArn": "arn:aws:iam::692637161728:role/amplify-aiagentplatform-nazmuldev-12717-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::692637161728:role/amplify-aiagentplatform-nazmuldev-12717-authRole",
       "Region": "ap-southeast-1",
-      "DeploymentBucketName": "amplify-aiagentplatform-nazmul-13841-deployment",
-      "UnauthRoleName": "amplify-aiagentplatform-nazmul-13841-unauthRole",
-      "StackName": "amplify-aiagentplatform-nazmul-13841",
-      "StackId": "arn:aws:cloudformation:ap-southeast-1:692637161728:stack/amplify-aiagentplatform-nazmul-13841/050d1170-c395-11ee-9eb4-0a653c677f92",
-      "AmplifyAppId": "dab3xdmuhto5z"
+      "DeploymentBucketName": "amplify-aiagentplatform-nazmuldev-12717-deployment",
+      "UnauthRoleName": "amplify-aiagentplatform-nazmuldev-12717-unauthRole",
+      "StackName": "amplify-aiagentplatform-nazmuldev-12717",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:692637161728:stack/amplify-aiagentplatform-nazmuldev-12717/10098ca0-d026-11ee-954a-0a72b59aecab",
+      "AmplifyAppId": "d2y1tjjag98wew"
     },
     "categories": {
       "auth": {
         "aiagentplatform2bc895b2": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2y1tjjag98wew",
+          "type": "manual"
+        }
       },
       "api": {
         "aiagentplatformgraphqlapi": {}
       },
       "storage": {
         "aiagentplatformcontactstorage": {}
+      }
+    }
+  },
+  "nazmulhas": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-aiagentplatform-nazmulhas-15405-authRole",
+      "UnauthRoleArn": "arn:aws:iam::692637161728:role/amplify-aiagentplatform-nazmulhas-15405-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::692637161728:role/amplify-aiagentplatform-nazmulhas-15405-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-aiagentplatform-nazmulhas-15405-deployment",
+      "UnauthRoleName": "amplify-aiagentplatform-nazmulhas-15405-unauthRole",
+      "StackName": "amplify-aiagentplatform-nazmulhas-15405",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:692637161728:stack/amplify-aiagentplatform-nazmulhas-15405/ce831e00-d029-11ee-ab34-0a5d285e7c13",
+      "AmplifyAppId": "d3nxw7ibkzz76l"
+    },
+    "categories": {
+      "auth": {
+        "aiagentplatform2bc895b2": {}
       },
       "hosting": {
         "amplifyhosting": {
-          "appId": "dab3xdmuhto5z",
+          "appId": "d3nxw7ibkzz76l",
           "type": "manual"
         }
+      },
+      "api": {
+        "aiagentplatformgraphqlapi": {}
+      },
+      "storage": {
+        "aiagentplatformcontactstorage": {}
       }
     }
   }

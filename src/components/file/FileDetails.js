@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { uploadData, getUrl } from 'aws-amplify/storage';
-import { Container, Row, Col, Button, Spinner, Form, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner, Form, Pagination, Alert } from 'react-bootstrap';
 import Select from 'react-select';
 import Papa from 'papaparse';
 import FileTable from './FileTable';
+import predictedImageUrl from "../../assets/img/Actual_vs_Predicted.png";
+import predictionJson from "../../assets/json/prediction-data.json";
 
 function FileDetailsPage() {
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
     const [fileData, setFileData] = useState([]);
     const [selectedRows, setSelectedRows] = useState(new Set());
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertType, setAlertType] = useState("warning");
+    const [alertMessage, setAlertMessage] = useState("");
+    const [predictedImage, setPredictedImage] = useState("");
+
     const rowsPerPage = 20;
     const maxPageItems = 5;
+
+    const apiUrl = "https://m1vqmhqu9g.execute-api.us-west-1.amazonaws.com/dev/";
 
     const { fileKey } = useParams();
 
@@ -53,15 +64,70 @@ function FileDetailsPage() {
 
 
     const submitData = () => {
-        const payload = Array.from(selectedRows).map(rowIndex => {
-            const row = fileData[rowIndex];
-            return selectedColumns.reduce((acc, col) => {
-                acc[col.value] = row[col.value];
-                return acc;
-            }, {});
+
+        setAlertType("info");
+        setAlertMessage("Your request is being processed. Please wait...");
+        setShowAlert(true);
+
+        const payload = selectedColumns.reduce((acc, col) => {
+            let data = {};
+
+            Array.from(selectedRows).map(rowIndex => {
+                const row = fileData[rowIndex];
+                let value = row[col.value];
+                const parsedValue = parseFloat(value);
+                if (parsedValue.toString() === value.toString()) {
+                    // If the parsed value is the same as the original, convert to number
+                    value = parsedValue;
+                }
+
+                data = {
+                    ...data,
+                    [rowIndex.toString()]: value
+                }
+            });
+
+            acc[col.value] = data;
+            return acc;
+        }, {});
+
+        axios({
+            method: 'post',
+            url: apiUrl,
+            data: payload
+        }).then(response => {
+            setAlertType("success");
+            setAlertMessage("Data submitted successfully");
+            setShowAlert(true);
+            const res = response.data;
+            console.log(JSON.parse(res.body));
+            if (res?.statusCode === 200) {
+                const body = JSON.parse(res.body);
+                setPredictedImage(predictedImageUrl);
+                console.log(predictionJson);
+                axios({
+                    method: 'get',
+                    url: 'https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/json/data.json'
+                }).then(response => {
+                    console.log(response.data);
+                }).catch(error => {
+
+                });
+            }
+        }).catch(error => {
+            console.error('Error submitting data:', error);
+            setAlertType("danger");
+            setAlertMessage("Error submitting data");
+            setShowAlert(true);
+            setPredictedImage("")
         });
-        console.log(payload);
-        // Here you can further process the payload as required
+    };
+
+    const resetAlert = () => {
+        setShowAlert(false);
+        setAlertMessage("");
+        setPredictedImage("");
+
     };
 
     const calculateTotalPages = (data, rowsPerPage) => {
@@ -132,15 +198,6 @@ function FileDetailsPage() {
 
         const totalPages = calculateTotalPages(data, rowsPerPage);
         const paginationItems = getPaginationItems(currentPage, totalPages);
-
-        // let paginationItems = [];
-        // for (let number = 1; number <= totalPages; number++) {
-        //     paginationItems.push(
-        //         <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
-        //             {number}
-        //         </Pagination.Item>,
-        //     );
-        // }
 
         return (
             <>
@@ -219,25 +276,75 @@ function FileDetailsPage() {
     };
 
 
+    const renderDataTable = (columns, data) => {
+        return (
+            <table className="table table-bordered">
+                <thead>
+                    <tr>
+                        {columns.map((header, index) => (
+                            <th key={index}>{header}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((row, index) => (
+                        <tr key={index}>
+                            {row.map((cell, idx) => (
+                                <td key={idx}>{cell}</td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        )
+    }
+
+
     return (
         <Container fluid>
-            <Row className="px-4 my-5">
-                <Col sm={12}>
-                    <h2 className="font-weight-light text-center">Uploaded File Details</h2>
-                    <p><a href="/">Back to Files</a></p>
+            {
+                predictedImage === "" &&
+                <Row className="px-4 my-5">
+                    <Col sm={12}>
+                        <h2 className="font-weight-light text-center">Uploaded File Details</h2>
+                        <p><a href="/">Back to Files</a></p>
 
-                    {/* Loader or Message */}
-                    {isLoading ? (
-                        <div style={{ textAlign: 'center', margin: '20px' }}>
-                            <Spinner animation="border" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </Spinner>
-                        </div>
-                    ) : (
-                        <CSVTable data={fileData} />
-                    )}
-                </Col>
-            </Row>
+                        {showAlert && (
+                            <Alert variant={alertType} onClose={() => resetAlert()} dismissible>
+                                {alertMessage}
+                            </Alert>
+                        )}
+
+                        {/* Loader or Message */}
+                        {isLoading ? (
+                            <div style={{ textAlign: 'center', margin: '20px' }}>
+                                <Spinner animation="border" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </Spinner>
+                            </div>
+                        ) : (
+                            <CSVTable data={fileData} />
+                        )}
+                    </Col>
+                </Row>
+            }
+
+            {
+                predictedImage &&
+                <div style={{ width: '100%', padding: '10px 40px', marginTop: '15px' }}>
+                    <p style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => resetAlert()}>{'Back to Data Table'}</p>
+                    <img
+                        style={{ display: 'block', margin: 'auto' }}
+                        src={predictedImage}
+                    />
+                    <div style={{ width: '80%', margin: 'auto', marginTop: '20px' }}>
+                        <h5 style={{ marginBottom: '20px' }}>Prediction Data Table</h5>
+                        {renderDataTable(predictionJson.columns, predictionJson.data)}
+                    </div>
+                </div>
+            }
+
+
         </Container>
     )
 }
