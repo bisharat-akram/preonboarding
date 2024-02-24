@@ -66,7 +66,6 @@ function FileDetailsPage() {
     const getS3UrlBodies = (urlKey) => {
         // return bucket and key
         const parts = urlKey.replace("s3://", "").split('/');
-        console.log(parts);
         return {
             bucket: parts[0],
             key: parts.slice(1).join('/')
@@ -114,13 +113,12 @@ function FileDetailsPage() {
             console.log(JSON.parse(res.body));
             if (res?.statusCode === 200) {
                 const body = JSON.parse(res.body);
-                console.log(body.actual_vs_predicted_s3_path);
-                console.log(body.prediction_s3_path);
 
                 const urlObj = getS3UrlBodies(body.actual_vs_predicted_s3_path);
 
                 const signedUrl = `https://${urlObj.bucket}.s3.amazonaws.com/${urlObj.key}`;
                 setPredictedImage(signedUrl);
+                console.log(signedUrl);
 
                 // setPredictedImage(predictedImageUrl);
                 // console.log(predictionJson);
