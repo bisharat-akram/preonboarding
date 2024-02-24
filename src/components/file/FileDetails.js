@@ -63,6 +63,17 @@ function FileDetailsPage() {
     };
 
 
+    const getS3UrlBodies = (urlKey) => {
+        // return bucket and key
+        const parts = urlKey.replace("s3://", "").split('/');
+        console.log(parts);
+        return {
+            bucket: parts[0],
+            key: parts.slice(1).join('/')
+        };
+    }
+
+
     const submitData = () => {
 
         setAlertType("info");
@@ -103,16 +114,24 @@ function FileDetailsPage() {
             console.log(JSON.parse(res.body));
             if (res?.statusCode === 200) {
                 const body = JSON.parse(res.body);
-                setPredictedImage(predictedImageUrl);
-                console.log(predictionJson);
-                axios({
-                    method: 'get',
-                    url: 'https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/json/data.json'
-                }).then(response => {
-                    console.log(response.data);
-                }).catch(error => {
+                console.log(body.actual_vs_predicted_s3_path);
+                console.log(body.prediction_s3_path);
 
-                });
+                const urlObj = getS3UrlBodies(body.actual_vs_predicted_s3_path);
+
+                const signedUrl = `https://${urlObj.bucket}.s3.amazonaws.com/${urlObj.key}`;
+                setPredictedImage(signedUrl);
+
+                // setPredictedImage(predictedImageUrl);
+                // console.log(predictionJson);
+                // axios({
+                //     method: 'get',
+                //     url: 'https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/json/data.json'
+                // }).then(response => {
+                //     console.log(response.data);
+                // }).catch(error => {
+
+                // });
             }
         }).catch(error => {
             console.error('Error submitting data:', error);
