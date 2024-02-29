@@ -7,6 +7,12 @@ const FileTable = ({ files, deleteFile }) => {
         return (bytes / 1048576).toFixed(2);
     }
 
+    const getFileNameFromKey = (key) => {
+        const parts = key.split('/');
+        const lastElement = parts[parts.length - 1];
+        return lastElement;
+    }
+
     return (
         <Table striped bordered hover>
             <thead>
@@ -20,11 +26,11 @@ const FileTable = ({ files, deleteFile }) => {
             <tbody>
                 {files.map(file => (
                     <tr key={file.key}>
-                        <td>{file.key}</td>
+                        <td>{getFileNameFromKey(file.key)}</td>
                         <td>{new Date(file.lastModified).toLocaleString()}</td>
                         <td>{bytesToMB(file.size)} MB</td>
                         <td>
-                            <a style={{ marginRight: '10px' }} href={`/files/${file.key}`}>Details</a>
+                            <a style={{ marginRight: '10px' }} href={`/files/${getFileNameFromKey(file.key)}`}>Details</a>
                             <a style={{ color: 'red', cursor: 'pointer' }} onClick={() => deleteFile(file.key)}>Delete</a>
                         </td>
                     </tr>

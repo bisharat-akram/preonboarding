@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { uploadData, list, remove } from 'aws-amplify/storage';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { Container, Row, Col, Button, Alert, Modal } from 'react-bootstrap';
 import Papa from 'papaparse';
 import { useDropzone } from 'react-dropzone';
@@ -19,14 +20,16 @@ function UploadViewPage() {
 
     useEffect(() => {
         fetchUploadedFiles();
+
     }, []);
 
     const onDrop = useCallback(acceptedFiles => {
         const uploadedFile = acceptedFiles[0];
         if (uploadedFile) {
-            setFile(uploadedFile); // Update the local state with the uploaded file
-            console.log(uploadedFile.name); // Optionally log the file name
+            setFile(uploadedFile);
         }
+
+
     }, []);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -38,7 +41,10 @@ function UploadViewPage() {
 
 
     const fetchUploadedFiles = async () => {
+        const userId = (await getCurrentUser()).userId;
+        const prefix = `assets/${userId}/`;
         let response = await list({
+            prefix: prefix,
             options: {
                 limit: PAGE_SIZE,
                 nextToken: nextToken
@@ -70,12 +76,11 @@ function UploadViewPage() {
         setIsLoading(true);
         //upload csv to s3
         try {
+            const userId = (await getCurrentUser()).userId;
             const result = await uploadData({
-                key: file?.name,
+                key: `assets/${userId}/${file?.name}`,
                 data: file
             }).result;
-
-            console.log('Key from Response: ', result.key);
 
             fetchUploadedFiles();
             resetModal();

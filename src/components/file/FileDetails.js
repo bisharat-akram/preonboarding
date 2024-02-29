@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { uploadData, getUrl } from 'aws-amplify/storage';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { Container, Row, Col, Button, Spinner, Form, Pagination, Alert } from 'react-bootstrap';
 import Select from 'react-select';
 import Papa from 'papaparse';
@@ -34,8 +35,10 @@ function FileDetailsPage() {
     }, []);
 
     const getSignUrl = async () => {
+        const userId = (await getCurrentUser()).userId;
+        const key = `assets/${userId}/${fileKey}`
         const getUrlResult = await getUrl({
-            key: fileKey
+            key: key
         });
         const signedUrl = getUrlResult.url.href;
         const response = await fetch(signedUrl);
