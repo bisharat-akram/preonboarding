@@ -116,10 +116,9 @@ function FileDetailsPage() {
             setAlertMessage("Data submitted successfully");
             setShowAlert(true);
             const res = response.data;
-            console.log(JSON.parse(res.body));
+
             if (res?.statusCode === 200) {
                 const body = JSON.parse(res.body);
-                console.log(body);
 
                 const urlObj = getS3UrlBodies(body.actual_vs_predicted_s3_path);
                 const jsonObj = getS3UrlBodies(body.prediction_s3_path);
@@ -132,7 +131,6 @@ function FileDetailsPage() {
                     method: 'get',
                     url: jsonSignedUrl
                 }).then(response => {
-                    console.log(response.data);
                     setPredictedJson(response.data);
                 }).catch(error => {
                     console.error('Error getting prediction data:', error);
