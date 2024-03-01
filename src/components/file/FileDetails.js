@@ -7,8 +7,6 @@ import { Container, Row, Col, Button, Spinner, Form, Pagination, Alert } from 'r
 import Select from 'react-select';
 import Papa from 'papaparse';
 import FileTable from './FileTable';
-import predictedImageUrl from "../../assets/img/Actual_vs_Predicted.png";
-import predictionJson from "../../assets/json/prediction-data.json";
 
 function FileDetailsPage() {
     const navigate = useNavigate();
@@ -22,6 +20,7 @@ function FileDetailsPage() {
     const [alertType, setAlertType] = useState("warning");
     const [alertMessage, setAlertMessage] = useState("");
     const [predictedImage, setPredictedImage] = useState("");
+    const [predictedJson, setPredictedJson] = useState(null);
 
     const rowsPerPage = 20;
     const maxPageItems = 5;
@@ -76,13 +75,15 @@ function FileDetailsPage() {
     }
 
 
-    const submitData = () => {
+    const submitData = async () => {
 
         setAlertType("info");
         setAlertMessage("Your request is being processed. Please wait...");
         setShowAlert(true);
 
-        const payload = selectedColumns.reduce((acc, col) => {
+        const userId = (await getCurrentUser()).userId;
+
+        let payload = selectedColumns.reduce((acc, col) => {
             let data = {};
 
             Array.from(selectedRows).map(rowIndex => {
@@ -104,6 +105,8 @@ function FileDetailsPage() {
             return acc;
         }, {});
 
+        payload['userId'] = userId;
+
         axios({
             method: 'post',
             url: apiUrl,
@@ -116,23 +119,24 @@ function FileDetailsPage() {
             console.log(JSON.parse(res.body));
             if (res?.statusCode === 200) {
                 const body = JSON.parse(res.body);
+                console.log(body);
 
                 const urlObj = getS3UrlBodies(body.actual_vs_predicted_s3_path);
+                const jsonObj = getS3UrlBodies(body.prediction_s3_path);
 
                 const signedUrl = `https://${urlObj.bucket}.s3.amazonaws.com/${urlObj.key}`;
+                const jsonSignedUrl = `https://${jsonObj.bucket}.s3.amazonaws.com/${jsonObj.key}`;
                 setPredictedImage(signedUrl);
-                console.log(signedUrl);
 
-                // setPredictedImage(predictedImageUrl);
-                // console.log(predictionJson);
-                // axios({
-                //     method: 'get',
-                //     url: 'https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/json/data.json'
-                // }).then(response => {
-                //     console.log(response.data);
-                // }).catch(error => {
-
-                // });
+                axios({
+                    method: 'get',
+                    url: jsonSignedUrl
+                }).then(response => {
+                    console.log(response.data);
+                    setPredictedJson(response.data);
+                }).catch(error => {
+                    console.error('Error getting prediction data:', error);
+                });
             }
         }).catch(error => {
             console.error('Error submitting data:', error);
@@ -350,7 +354,7 @@ function FileDetailsPage() {
             }
 
             {
-                predictedImage &&
+                predictedImage && predictedJson &&
                 <div style={{ width: '100%', padding: '10px 40px', marginTop: '15px' }}>
                     <p style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => resetAlert()}>{'Back to Data Table'}</p>
                     <img
@@ -359,7 +363,7 @@ function FileDetailsPage() {
                     />
                     <div style={{ width: '80%', margin: 'auto', marginTop: '20px' }}>
                         <h5 style={{ marginBottom: '20px' }}>Prediction Data Table</h5>
-                        {renderDataTable(predictionJson.columns, predictionJson.data)}
+                        {renderDataTable(predictedJson.columns, predictedJson.data)}
                     </div>
                 </div>
             }
