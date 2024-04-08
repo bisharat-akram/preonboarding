@@ -29,13 +29,13 @@ const ResultsDetails = () => {
             <table className="table table-bordered">
                 <thead>
                     <tr>
-                        {columns.map((header, index) => (
+                        {columns && columns.map((header, index) => (
                             <th key={index}>{header}</th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((row, index) => (
+                    {data && data.map((row, index) => (
                         <tr key={index}>
                             {row.map((cell, idx) => (
                                 <td key={idx}>{cell}</td>
@@ -48,18 +48,30 @@ const ResultsDetails = () => {
     }
 
     const fetchResults = async () => {
+        let itemIndex = parseInt(key);
         axios.get(apiUrl).then((response) => {
-            const data = response.data?.body;
-            const body = JSON.parse(data);
-            const files = body?.files;
+            const res = response.data;
+            if (res.statusCode === 200) {
+                const data = response.data?.body;
+                const body = JSON.parse(data);
+                const files = body?.files;
 
-            let urlObj = getS3UrlBodies(files[key]);
-            let jsonObj = getS3UrlBodies(files[key + 1]);
-            const signedUrl = `https://${urlObj.bucket}.s3.amazonaws.com/${urlObj.key}`;
-            const jsonSignedUrl = `https://${jsonObj.bucket}.s3.amazonaws.com/${jsonObj.key}`;
+                const imageUrl = `https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/${files[itemIndex]}`;
+                const jsonSignedUrl = `https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/${files[itemIndex + 1]}`;
 
-            setPredictedImage(signedUrl);
-            setPredictedJson(jsonSignedUrl);
+                setPredictedImage(imageUrl);
+
+                axios({
+                    method: 'get',
+                    url: jsonSignedUrl
+                }).then(response => {
+                    setPredictedJson(response.data);
+                }).catch(error => {
+                    console.error('Error getting prediction data:', error);
+                });
+            }
+
+
         }).catch((error) => {
 
         });
@@ -67,6 +79,8 @@ const ResultsDetails = () => {
 
 
     useEffect(() => {
+        let itemIndex = parseInt(key);
+        if (itemIndex % 2 !== 0) navigate("/results");
         fetchResults();
     }, []);
 
@@ -79,10 +93,11 @@ const ResultsDetails = () => {
             >
                 <div style={{ width: '100%', padding: '10px 40px', marginTop: '15px' }}>
                     <p style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => navigate("/results")}>{'Back to Results'}</p>
-                    <img
+                    {predictedImage && <img
                         style={{ display: 'block', margin: 'auto' }}
                         src={predictedImage}
                     />
+                    }
                     <div style={{ width: '80%', margin: 'auto', marginTop: '20px' }}>
                         <h5 style={{ marginBottom: '20px' }}>Prediction Data Table</h5>
                         {predictedJson && renderDataTable(predictedJson.columns, predictedJson.data)}
