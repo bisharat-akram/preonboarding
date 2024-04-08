@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { Container, Row, Col } from 'react-bootstrap';
 import "../../assets/css/results.css";
 
-const testData = [
-    { title: "Result 1", info: "Some data info for Result 1" },
-    { title: "Result 2", info: "Some data info for Result 2" },
-    { title: "Result 3", info: "Some data info for Result 3" },
-    // Add more test data up to 10/12 items
-    { title: "Result 4", info: "Some data info for Result 10" },
-];
-
 const Results = () => {
     const apiUrl = "https://m1vqmhqu9g.execute-api.us-west-1.amazonaws.com/dev";
     const [results, setResults] = useState([]);
+
+    const navigate = useNavigate();
 
     const getS3UrlBodies = (urlKey) => {
         // return bucket and key
@@ -46,9 +41,6 @@ const Results = () => {
             });
 
             setResults(tempResults);
-            // split by / and get the last element, get the second element which is userId. match with the userId and keep in a list
-            // const userFiles = files.filter((file) => file.split('/')[1] === userId);
-            // console.log(userFiles);
         }).catch((error) => {
 
         });
@@ -70,7 +62,7 @@ const Results = () => {
                 <Row>
                     {results.map((item, index) => (
                         index % 2 === 0 && <Col key={index} sm={12} md={4} lg={3} xl={2} className="mb-4">
-                            <div className="result-box">
+                            <div className="result-box" onClick={() => navigate(`/results/${index}`)}>
                                 <img src={item} />
                             </div>
                         </Col>
