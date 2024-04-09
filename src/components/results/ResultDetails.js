@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getCurrentUser } from 'aws-amplify/auth';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import "../../assets/css/results.css";
 
 const ResultsDetails = () => {
@@ -92,6 +92,7 @@ const ResultsDetails = () => {
                 style={{ marginTop: '20px' }}
             >
                 <div style={{ width: '100%', padding: '10px 40px', marginTop: '15px' }}>
+                    <Button variant="danger" size="sm" style={{ float: 'right' }}>Delete</Button>
                     <p style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => navigate("/results")}>{'Back to Results'}</p>
                     {predictedImage && <img
                         style={{ display: 'block', margin: 'auto' }}
