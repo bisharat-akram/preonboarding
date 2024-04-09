@@ -31,7 +31,7 @@ const Results = () => {
 
             files.forEach(path => {
                 const fielData = path.split('/');
-                if (userId !== fielData[1]) return;
+                //if (userId !== fielData[1]) return;
                 let urlObj = getS3UrlBodies(path);
                 const imageUrl = `https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/${path}`;
                 // Push the result into the results array
@@ -61,7 +61,7 @@ const Results = () => {
                     {results.map((item, index) => (
                         index % 2 === 0 && <Col key={index} sm={12} md={4} lg={3} xl={2} className="mb-4">
                             <div className="result-box" onClick={() => navigate(`/results/${index}`)}>
-                                <img src={item} />
+                                <img src={item} style={{ display: 'block', width: '100%' }} />
                             </div>
                         </Col>
                     ))}
