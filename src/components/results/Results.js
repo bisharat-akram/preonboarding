@@ -35,7 +35,10 @@ const Results = () => {
                 let urlObj = getS3UrlBodies(path);
                 const imageUrl = `https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/${path}`;
                 // Push the result into the results array
-                tempResults.push(imageUrl);
+                tempResults.push({
+                    imageUrl: imageUrl,
+                    dateTime: parseQueryIdToDateTime(fielData[2])
+                });
             });
 
             setResults(tempResults);
@@ -49,6 +52,20 @@ const Results = () => {
         fetchResults();
     }, []);
 
+    // Function to parse queryId to a Date object
+    const parseQueryIdToDateTime = (queryId) => {
+        const year = parseInt(queryId.substring(0, 4), 10);
+        const month = parseInt(queryId.substring(4, 6), 10) - 1; // Month is 0-indexed
+        const day = parseInt(queryId.substring(6, 8), 10);
+        const hour = parseInt(queryId.substring(8, 10), 10);
+        const minute = parseInt(queryId.substring(10, 12), 10);
+        const second = parseInt(queryId.substring(12, 14), 10);
+        const millisecond = parseInt(queryId.substring(14, 17), 10); // Truncate to milliseconds
+
+        const dateTime = new Date(year, month, day, hour, minute, second, millisecond);
+        return dateTime.toLocaleString();
+    };
+
 
     return (
         <div style={{ width: '95%', margin: 'auto', marginTop: '20px' }}>
@@ -58,11 +75,13 @@ const Results = () => {
                 style={{ marginTop: '20px' }}
             >
                 <Row>
-                    {results.map((item, index) => (
+                    {results && results.map((item, index) => (
                         index % 2 === 0 && <Col key={index} sm={12} md={4} lg={3} xl={2} className="mb-4">
                             <div className="result-box" onClick={() => navigate(`/results/${index}`)}>
-                                <img src={item} style={{ display: 'block', width: '100%' }} />
+                                <img src={item.imageUrl} style={{ display: 'block', width: '100%' }} />
+
                             </div>
+                            <p style={{ marginTop: '2px', textAlign: 'center' }}>{item.dateTime}</p>
                         </Col>
                     ))}
                     {
