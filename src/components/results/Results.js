@@ -31,7 +31,7 @@ const Results = () => {
 
             files.forEach(path => {
                 const fielData = path.split('/');
-                //if (userId !== fielData[1]) return;
+                if (userId !== fielData[1]) return;
                 let urlObj = getS3UrlBodies(path);
                 const imageUrl = `https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/${path}`;
                 // Push the result into the results array
