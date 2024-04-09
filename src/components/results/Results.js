@@ -33,11 +33,9 @@ const Results = () => {
                 const fielData = path.split('/');
                 if (userId !== fielData[1]) return;
                 let urlObj = getS3UrlBodies(path);
-                const signedUrl = `https://${urlObj.bucket}.s3.amazonaws.com/${urlObj.key}`;
+                const imageUrl = `https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/${path}`;
                 // Push the result into the results array
-                if (signedUrl) {
-                    tempResults.push(signedUrl);
-                }
+                tempResults.push(imageUrl);
             });
 
             setResults(tempResults);
