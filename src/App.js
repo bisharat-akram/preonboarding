@@ -15,6 +15,8 @@ import HomePage from './components/home/HomePage';
 import Contacts from './components/contacts/Contacts';
 import UploadViewPage from './components/file/UploadView';
 import FileDetailsPage from './components/file/FileDetails';
+import Results from './components/results/Results';
+import ResultsDetails from './components/results/ResultDetails';
 
 Amplify.configure(awsExports);
 
@@ -57,6 +59,8 @@ function App() {
             <Route path='/contacts' element={<Contacts />} />
             {/* <Route path='/files/' element={<UploadViewPage />} /> */}
             <Route path='/files/:fileKey' element={<FileDetailsPage />} />
+            <Route path='/results' element={<Results />} />
+            <Route path='/results/:key' element={<ResultsDetails />} />
           </Routes>
           <SiteFooter />
         </div>

@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { uploadData, getUrl } from 'aws-amplify/storage';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { Container, Row, Col, Button, Spinner, Form, Pagination, Alert } from 'react-bootstrap';
 import Select from 'react-select';
 import Papa from 'papaparse';
 import FileTable from './FileTable';
-import predictedImageUrl from "../../assets/img/Actual_vs_Predicted.png";
-import predictionJson from "../../assets/json/prediction-data.json";
 
 function FileDetailsPage() {
     const navigate = useNavigate();
@@ -21,6 +20,7 @@ function FileDetailsPage() {
     const [alertType, setAlertType] = useState("warning");
     const [alertMessage, setAlertMessage] = useState("");
     const [predictedImage, setPredictedImage] = useState("");
+    const [predictedJson, setPredictedJson] = useState(null);
 
     const rowsPerPage = 20;
     const maxPageItems = 5;
@@ -34,8 +34,10 @@ function FileDetailsPage() {
     }, []);
 
     const getSignUrl = async () => {
+        const userId = (await getCurrentUser()).userId;
+        const key = `assets/${userId}/${fileKey}`
         const getUrlResult = await getUrl({
-            key: fileKey
+            key: key
         });
         const signedUrl = getUrlResult.url.href;
         const response = await fetch(signedUrl);
@@ -63,13 +65,25 @@ function FileDetailsPage() {
     };
 
 
-    const submitData = () => {
+    const getS3UrlBodies = (urlKey) => {
+        // return bucket and key
+        const parts = urlKey.replace("s3://", "").split('/');
+        return {
+            bucket: parts[0],
+            key: parts.slice(1).join('/')
+        };
+    }
+
+
+    const submitData = async () => {
 
         setAlertType("info");
         setAlertMessage("Your request is being processed. Please wait...");
         setShowAlert(true);
 
-        const payload = selectedColumns.reduce((acc, col) => {
+        const userId = (await getCurrentUser()).userId;
+
+        let payload = selectedColumns.reduce((acc, col) => {
             let data = {};
 
             Array.from(selectedRows).map(rowIndex => {
@@ -91,6 +105,8 @@ function FileDetailsPage() {
             return acc;
         }, {});
 
+        payload['userId'] = userId;
+
         axios({
             method: 'post',
             url: apiUrl,
@@ -100,18 +116,24 @@ function FileDetailsPage() {
             setAlertMessage("Data submitted successfully");
             setShowAlert(true);
             const res = response.data;
-            console.log(JSON.parse(res.body));
+
             if (res?.statusCode === 200) {
                 const body = JSON.parse(res.body);
-                setPredictedImage(predictedImageUrl);
-                console.log(predictionJson);
+
+                const urlObj = getS3UrlBodies(body.actual_vs_predicted_s3_path);
+                const jsonObj = getS3UrlBodies(body.prediction_s3_path);
+
+                const signedUrl = `https://${urlObj.bucket}.s3.amazonaws.com/${urlObj.key}`;
+                const jsonSignedUrl = `https://${jsonObj.bucket}.s3.amazonaws.com/${jsonObj.key}`;
+                setPredictedImage(signedUrl);
+
                 axios({
                     method: 'get',
-                    url: 'https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/json/data.json'
+                    url: jsonSignedUrl
                 }).then(response => {
-                    console.log(response.data);
+                    setPredictedJson(response.data);
                 }).catch(error => {
-
+                    console.error('Error getting prediction data:', error);
                 });
             }
         }).catch(error => {
@@ -330,7 +352,7 @@ function FileDetailsPage() {
             }
 
             {
-                predictedImage &&
+                predictedImage && predictedJson &&
                 <div style={{ width: '100%', padding: '10px 40px', marginTop: '15px' }}>
                     <p style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => resetAlert()}>{'Back to Data Table'}</p>
                     <img
@@ -339,7 +361,7 @@ function FileDetailsPage() {
                     />
                     <div style={{ width: '80%', margin: 'auto', marginTop: '20px' }}>
                         <h5 style={{ marginBottom: '20px' }}>Prediction Data Table</h5>
-                        {renderDataTable(predictionJson.columns, predictionJson.data)}
+                        {renderDataTable(predictedJson.columns, predictedJson.data)}
                     </div>
                 </div>
             }
