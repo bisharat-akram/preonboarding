@@ -54,6 +54,7 @@ function App() {
           <SiteNav logOut={signOut} />
           <Routes>
             <Route path='*' element={<HomePage />} />
+            <Route path='/dashboard' element={<HomePage />} />
             <Route path='/' exact={true} element={<UploadViewPage />} />
             {/* <Route path='/' exact={true} element={<HomePage />} /> */}
             <Route path='/contacts' element={<Contacts />} />
