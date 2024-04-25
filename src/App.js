@@ -17,6 +17,7 @@ import UploadViewPage from './components/file/UploadView';
 import FileDetailsPage from './components/file/FileDetails';
 import Results from './components/results/Results';
 import ResultsDetails from './components/results/ResultDetails';
+import RoleListPage from './components/role/RoleListPage';
 
 Amplify.configure(awsExports);
 
@@ -62,6 +63,7 @@ function App() {
             <Route path='/files/:fileKey' element={<FileDetailsPage />} />
             <Route path='/results' element={<Results />} />
             <Route path='/results/:key' element={<ResultsDetails />} />
+            <Route path='/roles' element={<RoleListPage />} />
           </Routes>
           <SiteFooter />
         </div>

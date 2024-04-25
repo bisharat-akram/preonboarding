@@ -58,7 +58,7 @@ const options = {
 function HomePage() {
     return (
         <React.Fragment>
-            <Container fluid className='mt-3'>
+            <Container className='mt-3'>
                 <Row className="g-4">
                     <Col md={12}>
                         <h2>Dashboard</h2>
