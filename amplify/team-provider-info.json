@@ -135,11 +135,13 @@
       "function": {
         "addUserToDefautGroupAfterSignUp": {
           "deploymentBucketName": "amplify-aiagentplatform-friyaddev-214345-deployment",
-          "s3Key": "amplify-builds/addUserToDefautGroupAfterSignUp-4d48695a2b456a485a59-build.zip"
+          "s3Key": "amplify-builds/addUserToDefautGroupAfterSignUp-4b585572694d6661777a-build.zip",
+          "amplifyAuthUserpoolId": "us-west-1_HH5nqgGsF"
         },
         "aiagentplatformFunction": {
           "deploymentBucketName": "amplify-aiagentplatform-friyaddev-214345-deployment",
-          "s3Key": "amplify-builds/aiagentplatformFunction-6b3773464e436a483373-build.zip"
+          "s3Key": "amplify-builds/aiagentplatformFunction-6262656468676c484c39-build.zip",
+          "amplifyAuthUserpoolId": "us-west-1_HH5nqgGsF"
         }
       },
       "api": {

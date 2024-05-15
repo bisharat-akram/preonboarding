@@ -87,6 +87,14 @@
   },
   "hosting": {},
   "parameters": {
+    "AMPLIFY_function_addUserToDefautGroupAfterSignUp_amplifyAuthUserpoolId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "addUserToDefautGroupAfterSignUp"
+        }
+      ]
+    },
     "AMPLIFY_function_addUserToDefautGroupAfterSignUp_deploymentBucketName": {
       "usedBy": [
         {
@@ -100,6 +108,14 @@
         {
           "category": "function",
           "resourceName": "addUserToDefautGroupAfterSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_aiagentplatformFunction_amplifyAuthUserpoolId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "aiagentplatformFunction"
         }
       ]
     },

@@ -8,7 +8,7 @@ exports.handler = async (event, context, callback) => {
 
   // Constants
   const client = new CognitoIdentityProviderClient({});
-  const userPoolID = "us-east-1_DiPfATP7x";
+  const userPoolID = process.env.AMPLIFY_AUTH_USERPOOL_ID;
 
   // Retrieve user attributes from the event object
   const { request } = event;

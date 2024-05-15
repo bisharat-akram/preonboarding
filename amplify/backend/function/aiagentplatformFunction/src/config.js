@@ -5,7 +5,7 @@ const {
 const client = new CognitoIdentityProviderClient({});
 
 // Constants
-const userPoolID = "us-east-1_DiPfATP7x";
+const userPoolID = process.env.AMPLIFY_AUTH_USERPOOL_ID;
 
 module.exports = {
   client,

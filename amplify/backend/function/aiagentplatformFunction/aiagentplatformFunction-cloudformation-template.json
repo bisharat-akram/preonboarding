@@ -15,6 +15,9 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "amplifyAuthUserpoolId": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -69,6 +72,9 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "AMPLIFY_AUTH_USERPOOL_ID": {
+              "Ref": "amplifyAuthUserpoolId"
             }
           }
         },
