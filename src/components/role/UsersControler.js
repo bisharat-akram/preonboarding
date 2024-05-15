@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { Container, Row, Col, Card, Table, Button } from "react-bootstrap";
 import { get } from "aws-amplify/api";
-import { fetchAuthSession } from "aws-amplify/auth";
 import UpdateRoleModal from "./UpdateRoleModal";
 
 const UsersControler = () => {
@@ -27,16 +26,8 @@ const UsersControler = () => {
     }
   }
 
-  // const getSeasion = async () => {
-  //   const session = await fetchAuthSession();
-
-  //   console.log("id token", session.tokens.idToken);
-  //   console.log("access token", session.tokens.accessToken);
-  // };
-
   useEffect(() => {
     getUserList();
-    // getSeasion();
   }, []);
 
   return (
@@ -45,7 +36,7 @@ const UsersControler = () => {
         <Row className="g-4">
           <Col md={12}>
             <div className="d-flex justify-content-between align-items-center">
-              <h2>Users</h2>
+              <h2>User List</h2>
             </div>
           </Col>
           <Col md={12}>
@@ -68,7 +59,7 @@ const UsersControler = () => {
                     {users.map((user, index) => (
                       <tr key={index}>
                         <td>{user.email}</td>
-                        <td>{user.createdAt}</td>
+                        <td>{new Date(user.createdAt)?.toUTCString()}</td>
                         <td style={{ textTransform: "capitalize" }}>
                           {user?.roles?.toString().replaceAll(",", " | ")}
                         </td>

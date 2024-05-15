@@ -15,7 +15,7 @@ const AdminRoute = ({ children }) => {
     if (roles && roles.includes("admins")) {
       setAdmin(true);
     } else {
-      navigate("/dashboard");
+      navigate("/");
       setAdmin(false);
     }
     setLoading(false);

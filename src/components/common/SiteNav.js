@@ -30,7 +30,7 @@ function SiteNav(props) {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-md-auto">
               <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-              {isAdmin && <Nav.Link href="/roles">User Roles</Nav.Link>}
+              <Nav.Link href="/users-roles">Users & Roles</Nav.Link>
               <Nav.Link href="/upload-file">Upload & View Files</Nav.Link>
               <Nav.Link href="/results">Results</Nav.Link>
               <Nav.Link onClick={handleLogout} style={{ color: "#ff3333" }}>

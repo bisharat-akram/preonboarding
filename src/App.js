@@ -60,9 +60,9 @@ function App() {
           <div>
             <SiteNav logOut={signOut} />
             <Routes>
-              <Route path="*" element={<HomePage />} />
-              <Route path="/" element={<HomePage />} />
-              <Route path="/dashboard" element={<HomePage />} />
+              <Route path="/" element={<Results />} />
+              <Route path="*" element={<Results />} />
+              <Route path="/results" element={<Results />} />
               <Route
                 path="/upload-file"
                 exact={true}
@@ -72,10 +72,17 @@ function App() {
               <Route path="/contacts" element={<Contacts />} />
               {/* <Route path='/files/' element={<UploadViewPage />} /> */}
               <Route path="/files/:fileKey" element={<FileDetailsPage />} />
-              <Route path="/results" element={<Results />} />
               <Route path="/results/:key" element={<ResultsDetails />} />
               <Route
-                path="/roles"
+                path="/dashboard"
+                element={
+                  <AdminRoute>
+                    <HomePage />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/users-roles"
                 element={
                   <AdminRoute>
                     <RoleListPage />

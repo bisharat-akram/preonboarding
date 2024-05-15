@@ -13,7 +13,7 @@ const ExecuteRoute = () => {
     if (roles && roles.includes("executes")) {
       setExecute(true);
     } else {
-      navigate("/dashboard");
+      navigate("/");
       setExecute(false);
     }
     setLoading(false);
