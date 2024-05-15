@@ -9,8 +9,8 @@ const ExecuteRoute = () => {
   const getSeasion = async () => {
     const session = await fetchAuthSession();
     const roles = session.tokens.idToken.payload["cognito:groups"];
-    if (!roles) return;
-    if (roles.includes("executes")) {
+
+    if (roles && roles.includes("executes")) {
       setExecute(true);
     } else {
       navigate("/dashboard");

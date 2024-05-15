@@ -11,8 +11,8 @@ const AdminRoute = ({ children }) => {
   const getSeasion = async () => {
     const session = await fetchAuthSession();
     const roles = session.tokens.idToken.payload["cognito:groups"];
-    if (!roles) return;
-    if (roles.includes("admins")) {
+
+    if (roles && roles.includes("admins")) {
       setAdmin(true);
     } else {
       navigate("/dashboard");
