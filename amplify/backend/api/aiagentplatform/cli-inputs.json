@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "paths": {
+    "/get-users": {
+      "name": "/get-users",
+      "lambdaFunction": "aiagentplatformFunction",
+      "permissions": {
+        "groups": {
+          "admins": [
+            "create",
+            "read",
+            "update",
+            "delete"
+          ]
+        },
+        "setting": "private"
+      }
+    },
+    "/update-roles": {
+      "name": "/update-roles",
+      "lambdaFunction": "aiagentplatformFunction",
+      "permissions": {
+        "groups": {
+          "admins": [
+            "create",
+            "read",
+            "update",
+            "delete"
+          ]
+        },
+        "setting": "private"
+      }
+    }
+  }
+}

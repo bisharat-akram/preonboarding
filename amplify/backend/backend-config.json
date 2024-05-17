@@ -1,24 +1,36 @@
 {
   "api": {
-    "aiagentplatformgraphqlapi": {
-      "dependsOn": [],
-      "output": {
-        "authConfig": {
-          "additionalAuthenticationProviders": [],
-          "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            },
-            "authenticationType": "API_KEY"
-          }
+    "aiagentplatform": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "aiagentplatformFunction"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "aiagentplatform307412c5"
+        },
+        {
+          "attributes": [
+            "adminsGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
         }
-      },
+      ],
       "providerPlugin": "awscloudformation",
-      "service": "AppSync"
+      "service": "API Gateway"
     }
   },
   "auth": {
-    "aiagentplatform2bc895b2": {
+    "aiagentplatform307412c5": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -43,38 +55,86 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
-    }
-  },
-  "hosting": {
-    "amplifyhosting": {
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "aiagentplatform307412c5"
+        }
+      ],
       "providerPlugin": "awscloudformation",
-      "service": "amplifyhosting",
-      "type": "manual"
+      "service": "Cognito-UserPool-Groups"
     }
   },
+  "function": {
+    "addUserToDefautGroupAfterSignUp": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "aiagentplatformFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "hosting": {},
   "parameters": {
-    "AMPLIFY_hosting_amplifyhosting_appId": {
+    "AMPLIFY_function_addUserToDefautGroupAfterSignUp_amplifyAuthUserpoolId": {
       "usedBy": [
         {
-          "category": "hosting",
-          "resourceName": "amplifyhosting"
+          "category": "function",
+          "resourceName": "addUserToDefautGroupAfterSignUp"
         }
       ]
     },
-    "AMPLIFY_hosting_amplifyhosting_type": {
+    "AMPLIFY_function_addUserToDefautGroupAfterSignUp_deploymentBucketName": {
       "usedBy": [
         {
-          "category": "hosting",
-          "resourceName": "amplifyhosting"
+          "category": "function",
+          "resourceName": "addUserToDefautGroupAfterSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_addUserToDefautGroupAfterSignUp_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "addUserToDefautGroupAfterSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_aiagentplatformFunction_amplifyAuthUserpoolId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "aiagentplatformFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_aiagentplatformFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "aiagentplatformFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_aiagentplatformFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "aiagentplatformFunction"
         }
       ]
     }
   },
-  "storage": {
-    "aiagentplatformcontactstorage": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "S3"
-    }
-  }
+  "storage": {}
 }
