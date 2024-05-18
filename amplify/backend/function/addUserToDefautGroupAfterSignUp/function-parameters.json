@@ -1,9 +1,0 @@
-{
-  "lambdaLayers": [],
-  "environmentVariableList": [
-    {
-      "cloudFormationParameterName": "amplifyAuthUserpoolId",
-      "environmentVariableName": "AMPLIFY_AUTH_USERPOOL_ID"
-    }
-  ]
-}

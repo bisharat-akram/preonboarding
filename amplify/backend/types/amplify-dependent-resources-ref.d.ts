@@ -10,6 +10,7 @@ export type AmplifyDependentResourcesAttributes = {
     "aiagentplatform307412c5": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
+      "CreatedSNSRole": "string",
       "IdentityPoolId": "string",
       "IdentityPoolName": "string",
       "UserPoolArn": "string",
@@ -23,7 +24,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
-    "addUserToDefautGroupAfterSignUp": {
+    "aiagentplatform307412c5PostConfirmation": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

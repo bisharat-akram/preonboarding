@@ -125,7 +125,8 @@
       "UnauthRoleName": "amplify-aiagentplatform-friyaddev-214345-unauthRole",
       "StackName": "amplify-aiagentplatform-friyaddev-214345",
       "StackId": "arn:aws:cloudformation:us-west-1:753961606656:stack/amplify-aiagentplatform-friyaddev-214345/c289bde0-1208-11ef-ade5-02e3a7f3fb31",
-      "AmplifyAppId": "d4e3xq1xuul9m"
+      "AmplifyAppId": "d4e3xq1xuul9m",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-aiagentplatform-friyaddev-214345-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
@@ -133,15 +134,14 @@
         "userPoolGroups": {}
       },
       "function": {
-        "addUserToDefautGroupAfterSignUp": {
-          "deploymentBucketName": "amplify-aiagentplatform-friyaddev-214345-deployment",
-          "s3Key": "amplify-builds/addUserToDefautGroupAfterSignUp-4b585572694d6661777a-build.zip",
-          "amplifyAuthUserpoolId": "us-west-1_HH5nqgGsF"
-        },
         "aiagentplatformFunction": {
           "deploymentBucketName": "amplify-aiagentplatform-friyaddev-214345-deployment",
-          "s3Key": "amplify-builds/aiagentplatformFunction-6262656468676c484c39-build.zip",
-          "amplifyAuthUserpoolId": "us-west-1_HH5nqgGsF"
+          "s3Key": "amplify-builds/aiagentplatformFunction-745157427a317269464f-build.zip"
+        },
+        "aiagentplatform307412c5PostConfirmation": {
+          "GROUP": "viewers",
+          "deploymentBucketName": "amplify-aiagentplatform-friyaddev-214345-deployment",
+          "s3Key": "amplify-builds/aiagentplatform307412c5PostConfirmation-4a57524e715742664979-build.zip"
         }
       },
       "api": {

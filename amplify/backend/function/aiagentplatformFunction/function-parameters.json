@@ -1,9 +1,14 @@
 {
   "lambdaLayers": [],
-  "environmentVariableList": [
-    {
-      "cloudFormationParameterName": "amplifyAuthUserpoolId",
-      "environmentVariableName": "AMPLIFY_AUTH_USERPOOL_ID"
+  "environmentVariableList": [],
+  "permissions": {
+    "auth": {
+      "aiagentplatform307412c5": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
     }
-  ]
+  }
 }
