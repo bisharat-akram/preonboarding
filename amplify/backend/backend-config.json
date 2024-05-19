@@ -32,9 +32,19 @@
   "auth": {
     "aiagentplatform307412c5": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "aiagentplatform307412c5PostConfirmation",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
+        "mfaConfiguration": "OPTIONAL",
         "mfaTypes": [
           "SMS"
         ],
@@ -74,48 +84,49 @@
     }
   },
   "function": {
-    "addUserToDefautGroupAfterSignUp": {
+    "aiagentplatform307412c5PostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "aiagentplatformFunction": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "aiagentplatform307412c5"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "hosting": {},
   "parameters": {
-    "AMPLIFY_function_addUserToDefautGroupAfterSignUp_amplifyAuthUserpoolId": {
+    "AMPLIFY_function_aiagentplatform307412c5PostConfirmation_GROUP": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "addUserToDefautGroupAfterSignUp"
+          "resourceName": "aiagentplatform307412c5PostConfirmation"
         }
       ]
     },
-    "AMPLIFY_function_addUserToDefautGroupAfterSignUp_deploymentBucketName": {
+    "AMPLIFY_function_aiagentplatform307412c5PostConfirmation_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "addUserToDefautGroupAfterSignUp"
+          "resourceName": "aiagentplatform307412c5PostConfirmation"
         }
       ]
     },
-    "AMPLIFY_function_addUserToDefautGroupAfterSignUp_s3Key": {
+    "AMPLIFY_function_aiagentplatform307412c5PostConfirmation_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "addUserToDefautGroupAfterSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_aiagentplatformFunction_amplifyAuthUserpoolId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "aiagentplatformFunction"
+          "resourceName": "aiagentplatform307412c5PostConfirmation"
         }
       ]
     },

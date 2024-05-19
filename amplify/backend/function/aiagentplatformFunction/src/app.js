@@ -1,4 +1,8 @@
-const express = require("express");
+/* Amplify Params - DO NOT EDIT
+	AUTH_AIAGENTPLATFORM307412C5_USERPOOLID
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT */ const express = require("express");
 const bodyParser = require("body-parser");
 const awsServerlessExpressMiddleware = require("aws-serverless-express/middleware");
 const cors = require("cors");
@@ -19,30 +23,6 @@ app.use(awsServerlessExpressMiddleware.eventContext());
 /**********************
  * Example get method *
  **********************/
-/* 
-{
-    "sub": "0448e4c8-9071-708e-236f-02f32d7e536c",
-    "cognito:groups": [
-        "admins"
-    ],
-    "email_verified": true,
-    "cognito:preferred_role": "arn:aws:iam::706020865425:role/us-east-1_DiPfATP7x-adminsGroupRole",
-    "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_DiPfATP7x",
-    "cognito:username": "0448e4c8-9071-708e-236f-02f32d7e536c",
-    "origin_jti": "b1d63c58-d161-4af7-9ede-62abff31ba9e",
-    "cognito:roles": [
-        "arn:aws:iam::706020865425:role/us-east-1_DiPfATP7x-adminsGroupRole"
-    ],
-    "aud": "7sbjqfc5ij1hmmqivub8n1je4t",
-    "event_id": "00a65314-65a9-42e0-bbab-d21c329e9834",
-    "token_use": "id",
-    "auth_time": 1715186874,
-    "exp": 1715198006,
-    "iat": 1715194406,
-    "jti": "4969a597-69e5-4a54-9212-581a5e997d7c",
-    "email": "riyadblue9@gmail.com"
-}
- */
 
 app.get("/get-users", async function (req, res) {
   const listUserParams = {
