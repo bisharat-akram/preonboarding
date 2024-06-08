@@ -18,6 +18,7 @@ function App() {
   const navigate = useNavigate();
   console.log(user);
 
+  
   useEffect(() => {
     console.log(location.pathname)
     if(location.pathname==='/signup')
