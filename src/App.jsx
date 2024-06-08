@@ -8,27 +8,9 @@ import ModalCreate from './pages/Modalcreate'
 import SignUp from './pages/signUp'
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import outputs from '../amplify_outputs.json';
 
-Amplify.configure({
-  Auth: {
-    Cognito: {
-      userPoolClientId: '2dm1pfhom4scg1h2f86gviuie3',
-      userPoolId: 'ap-south-1_KFg0e1okT',
-      loginWith: { // Optional
-        oauth: {
-          domain: 'https://sparktest.auth.ap-south-1.amazoncognito.com',
-          scopes: ['openid email phone profile aws.cognito.signin.user.admin '],
-          redirectSignIn: ['http://localhost:5173/', 'https://example.com/'],
-          redirectSignOut: ['http://localhost:5173/', 'https://example.com/'],
-          responseType: 'code',
-        },
-        username: 'true',
-        email: 'true', // Optional
-        phone: 'false', // Optional
-      }
-    }
-  }
-});
+Amplify.configure(outputs);
 
 function App() {
   const location = useLocation();
