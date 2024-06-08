@@ -1,0 +1,7 @@
+.modal-table .ant-spin-container{
+display: flex;
+    flex-direction: column;
+}
+.modal-table .ant-spin-container>.ant-pagination{
+align-self: center;
+}

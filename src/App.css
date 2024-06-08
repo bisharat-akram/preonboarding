@@ -1,27 +1,22 @@
-.table-checkbox {
-    width: 50px;
-    /* or any other suitable width */
+#root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
 }
 
-.table-header {
-    width: 200px;
-    /* or any other suitable width */
+.background-grid {
+  background-image: url('bg-grid.png');
+  background-repeat: no-repeat;
 }
 
-.table-cell {
-    max-width: 550px;
-    /* Adjust as needed */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding-left: 10px;
-    padding-right: 10px;
+
+/* remove this later */
+:where(.css-dev-only-do-not-override-3rel02).ant-menu-inline.ant-menu-root .ant-menu-item >.ant-menu-title-content, :where(.css-dev-only-do-not-override-3rel02).ant-menu-inline.ant-menu-root .ant-menu-submenu-title >.ant-menu-title-content {
+  flex:none
 }
 
-/* Responsive table */
-@media (max-width: 768px) {
-    .table-cell {
-        max-width: 200px;
-        /* Adjust for smaller screens */
-    }
+:where(.css-dev-only-do-not-override-3rel02).ant-menu-light.ant-menu-inline .ant-menu-item, :where(.css-dev-only-do-not-override-3rel02).ant-menu-light>.ant-menu.ant-menu-inline .ant-menu-item{
+  padding-left: 10px !important;
 }
