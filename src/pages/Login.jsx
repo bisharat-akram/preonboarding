@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import sparklogin from '../assets/sparklogin.png'
 import sparklogo from '../assets/sparklogo.png'
 import { Button, Checkbox, Form, Input } from 'antd';
@@ -16,8 +15,6 @@ export default function Login() {
 	const onFinish = async (values) => {
 		try {
 			let signin = await signIn({ username: values.email, password: values.password });
-			console.log(signin); 
-			fetchUserAttributes()
 			let user = await fetchUserAttributes();
 			dispatch(createUser({...signin,...user}))
 			navigate('/');

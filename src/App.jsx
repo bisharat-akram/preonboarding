@@ -7,22 +7,28 @@ import ModalCreate from './pages/Modalcreate'
 import SignUp from './pages/signUp'
 import { useEffect, useState } from 'react';
 import { Hub } from 'aws-amplify/utils';
-import { fetchAuthSession } from 'aws-amplify/auth';
+import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
+import { useDispatch } from 'react-redux'
+import { createUser } from './redux/actions/userAction'
 
 function App() {
   const location = useLocation();
   const [session, setSession] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
 
   useEffect(() => {
     async function init() {
       const _session = await fetchAuthSession();
       console.log(_session)
-      if (_session?.tokens?.accessToken)
+      if (_session?.tokens?.accessToken) {
         setSession(true);
+        const user = await fetchUserAttributes();
+        dispatch(createUser(user));
+      }
       else {
-        if(location.pathname!=='/signup' && location.pathname!=='/login')
+        if (location.pathname !== '/signup' && location.pathname !== '/login')
           navigate('/login')
       }
       // if(username)
