@@ -1,47 +1,75 @@
 import './App.css'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import { Amplify } from 'aws-amplify';
 import Login from './pages/Login'
 import LayoutSiderWrapper from './Components/LayoutSiderWrapper'
 import Dashboard from './pages/Dashboard'
 import ModalCreate from './pages/Modalcreate'
 import SignUp from './pages/signUp'
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import outputs from '../amplify_outputs.json';
-
-Amplify.configure(outputs);
+import { useEffect, useState } from 'react';
+import { Hub } from 'aws-amplify/utils';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 function App() {
   const location = useLocation();
-  const user = useSelector(st => st?.user);
+  const [session, setSession] = useState();
   const navigate = useNavigate();
-  console.log(user);
 
-  
+
   useEffect(() => {
-    console.log(location.pathname)
-    if(location.pathname==='/signup')
-      navigate('/signup');
-    else if (!user.isSignedIn) 
-      navigate('/login');
-    else
-      navigate('/')
-  }, [user.isSignedIn])
+    async function init() {
+      const _session = await fetchAuthSession();
+      console.log(_session)
+      if (_session?.tokens?.accessToken)
+        setSession(true);
+      else {
+        if(location.pathname!=='/signup' && location.pathname!=='/login')
+          navigate('/login')
+      }
+      // if(username)
 
-  if (user.isSignedIn) {
-    console.log(user)
+      Hub.listen('auth', ({ payload }) => {
+        console.log(payload)
+        switch (payload.event) {
+          case 'signedIn':
+            console.log('user have been signedIn successfully.');
+            setSession(true)
+            break;
+          case 'signedOut':
+            console.log('user have been signedOut successfully.');
+            setSession(false)
+            break;
+          case 'tokenRefresh':
+            console.log('auth tokens have been refreshed.');
+            break;
+          case 'tokenRefresh_failure':
+            console.log('failure while refreshing auth tokens.');
+            break;
+          case 'signInWithRedirect':
+            console.log('signInWithRedirect API has successfully been resolved.');
+            break;
+          case 'signInWithRedirect_failure':
+            console.log('failure while trying to resolve signInWithRedirect API.');
+            break;
+          case 'customOAuthState':
+            console.log('custom state returned from CognitoHosted UI');
+            break;
+        }
+      });
+    }
+    init();
+
+  }, [])
+
+  if (session) {
     return (
       <Routes>
         <Route exact path='/' element={<LayoutSiderWrapper><Dashboard /></LayoutSiderWrapper>} />
         <Route exact path='/modal' element={<ModalCreate />} />
-        {/* <Route exact path='/dashboard' element={<Dashboard />} /> */}
       </Routes>
     )
   }
- 
-  return (
 
+  return (
     <Routes>
       <Route exact path='/login' element={<Login />} />
       <Route exact path='/signup' element={<SignUp />} />
