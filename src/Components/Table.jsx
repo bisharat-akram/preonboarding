@@ -1,61 +1,31 @@
 import React, { useState } from 'react';
 import { Button, Table } from 'antd';
 import '../CSS/Table.css'
-const columns = [
-    {
-        title: 'Chemical_Name',
-        dataIndex: 'chemical_name',
-    },
-    {
-        title: 'Smiles',
-        dataIndex: 'smiles',
-    },
-    {
-        title: 'Formula',
-        dataIndex: 'formula',
-    },
-    {
-        title: 'Formula',
-        dataIndex: 'formula',
-    },
-    {
-        title: 'Molecular_Weight',
-        dataIndex:'molecular_weight'
-    },
-    {
-        title: 'MP_Kexp',
-        dataIndex: 'mp_kexp'
-    },
-    {
-        title: 'MP_Cexp',
-        dataIndex: 'mp_cexp'
-    }
-];
-const data = [];
-for (let i = 0; i < 46; i++) {
-    data.push({
-        key: i,
-        chemical_name: `[(benzoylamino)oxy]acetic acid`,
-        smiles:'C1=CC=C(C=C1)C(=O)NOCC(=O)O',
-        formula: 32,
-        molecular_weight:'237.078978',
-        mp_kexp: `443.2`,
-        mp_cexp:'170.05'
-    });
-}
-const CommonTable = ({ enablenext, showCheckoption}) => {
+
+// const data = [];
+// for (let i = 0; i < 46; i++) {
+//     data.push({
+//         key: i,
+//         chemical_name: `[(benzoylamino)oxy]acetic acid`,
+//         smiles:'C1=CC=C(C=C1)C(=O)NOCC(=O)O',
+//         formula: 32,
+//         molecular_weight:'237.078978',
+//         mp_kexp: `443.2`,
+//         mp_cexp:'170.05'
+//     });
+// }
+const CommonTable = ({ enablenext, showCheckoption, data, uploadselectedexceldata, columns }) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [loading, setLoading] = useState(false);
-    const start = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setSelectedRowKeys([]);
-            setLoading(false);
-        }, 1000);
-    };
-    const onSelectChange = (newSelectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-        setSelectedRowKeys(newSelectedRowKeys);
+  console.log(data)
+    const onSelectChange = (newSelectedRowKeys,selectedRows) => {
+        console.log(data)
+        console.log('selectedRowKeys changed: ', selectedRows);
+        setSelectedRowKeys(() => {
+            console.log(newSelectedRowKeys)
+            return newSelectedRowKeys;
+        });
+        uploadselectedexceldata(selectedRows);
         if (newSelectedRowKeys.length) {
             enablenext(false)
         }
@@ -69,7 +39,7 @@ const CommonTable = ({ enablenext, showCheckoption}) => {
     };
     const hasSelected = selectedRowKeys.length > 0;
     return (
-        <div style={{ border: '1px solid rgba(234, 236, 240, 1)',width:'95%' }}>
+        <div className="overflow-auto" style={{ border: '1px solid rgba(234, 236, 240, 1)',width:'95%' }}>
             <div className='flex justify-between items-center'
                 style={{ height:'81px',padding:'20px 24px'}}
             >
@@ -90,7 +60,7 @@ const CommonTable = ({ enablenext, showCheckoption}) => {
                 <p style={{
                     color: 'rgba(105, 65, 198, 1)',fontWeight:'600',fontSize:'14px',lineHeight:'20px'}}>Replace File</p>
             </div>
-            {showCheckoption ? <Table className="modal-table" rowSelection={rowSelection} columns={columns} dataSource={data} footer={() => 'Footer'} /> : <Table className="modal-table"  columns={columns} dataSource={data?.splice(0,4)} footer={() => 'Footer'} />}
+            {showCheckoption ? <Table className="modal-table" rowSelection={rowSelection} columns={columns} dataSource={data} /> : <Table className="modal-table"  columns={columns} dataSource={data} />}
            
         </div>
     );

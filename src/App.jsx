@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import LayoutSiderWrapper from './Components/LayoutSiderWrapper'
 import Dashboard from './pages/Dashboard'
 import ModalCreate from './pages/Modalcreate'
+import ListUser from './pages/listUser'
 import SignUp from './pages/signUp'
 import { useEffect, useState } from 'react';
 import { Hub } from 'aws-amplify/utils';
@@ -16,12 +17,13 @@ function App() {
   const [session, setSession] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // cog:-"a173cdda-4011-709d-adae-325fc36c21a8"
 
 
   useEffect(() => {
     async function init() {
       const _session = await fetchAuthSession();
-      console.log(_session)
+      console.log(_session);
       if (_session?.tokens?.accessToken) {
         setSession(true);
         const user = await fetchUserAttributes();
@@ -71,6 +73,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<LayoutSiderWrapper><Dashboard /></LayoutSiderWrapper>} />
         <Route exact path='/modal' element={<ModalCreate />} />
+        <Route exact path='/account' element={<ListUser/>}></Route>
       </Routes>
     )
   }

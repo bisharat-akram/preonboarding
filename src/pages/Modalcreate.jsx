@@ -10,57 +10,44 @@ import nexticon from '../assets/nexticon.png'
 import nextdisabledarrow from '../assets/nextdisabledarrow.png'
 import { useNavigate } from 'react-router-dom';
 import folder from '../assets/folder.png'
+import Featuredfileicon from '../assets/Featuredfileicon.png'
+import rowsselected from '../assets/rowsselected.png'
+import selectedcolumnname from '../assets/selectedcolumnname.png'
+import time from '../assets/time.png'
 import Icon from '@ant-design/icons/lib/components/Icon';
 const ModalCreate = () => {
     const navigate = useNavigate();
-    const columns = [
-        {
-            title: 'Chemical_Name',
-            dataIndex: 'chemical_name',
-        },
-        {
-            title: 'Smiles',
-            dataIndex: 'smiles',
-        },
-        {
-            title: 'Formula',
-            dataIndex: 'formula',
-        },
-        {
-            title: 'Molecular_Weight',
-            dataIndex: 'molecular_weight'
-        },
-        {
-            title: 'MP_Kexp	',
-            dataIndex: 'mpkexp'
-        },
-        {
-            title: 'MP_Cexp	',
-            dataIndex: 'mpcexp'
-        }
-    ];
-    const data = [];
-    for (let i = 0; i < 4; i++) {
-        data.push({
-            key: i,
-            chemical_name: `[(benzoylamino)oxy]acetic acid`,
-            smiles: 'C1=CC=C(C=C1)C(=O)NOCC(=O)O',
-            formula: 32,
-            molecular_weight: '237.078978',
-            mpkexp: '443.2',
-            mpcexp: '170.05'
-        });
-        console.log(data)
+    const [excelData, setExcelData] = useState([]);
+    const [uploadedFile, setUploadedFile] = useState();
+    const [selectedexcelData, setSelectedExcelData] = useState([]);
+    const [columns, setColumns] = useState([]);
+    async function addColumns(data) {
+        setColumns(data);
     }
     const [step, setStep] = useState(0);
     const [disablenextstep, setDisablenextstep] = useState(true);
+    const [selectedColumnName, setSelectedColumnName] = useState([]);
     const onChange = (value) => {
-        setDisablenextstep(false);
+        console.log(value)
+        setSelectedColumnName(value)
+        enablenext(false);
         console.log(`selected ${value}`);
+    };
+    const changeuploadedfile = (file) => {
+        console.log(file)
+        setUploadedFile(file)
     };
     const onSearch = (value) => {
         console.log('search:', value);
     };
+    const uploadexceldata=(data)=>{
+        console.log(data);
+        setExcelData(data);
+    }
+    const uploadselectedexceldata = (data) => {
+        console.log(data);
+        setSelectedExcelData(data);
+    }
     const filterOption = (input, option) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     async function enablenext(val) {
@@ -71,7 +58,10 @@ const ModalCreate = () => {
         if (step < 3) {
             setStep(step + 1);
         }
-        setDisablenextstep(true)
+        setDisablenextstep(true);
+    }
+    async function callLambda() {
+        
     }
     async function gotoprevstep() {
         console.log(step)
@@ -107,7 +97,7 @@ const ModalCreate = () => {
                                     width: '16px',
                                     height: '12px'
                                 }
-                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }}  onClick={gotonextstep} >Create Modal</Button>
+                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }}  onClick={callLambda()} >Create Modal</Button>
                     }
                     
                 </div>
@@ -142,7 +132,7 @@ const ModalCreate = () => {
               
             </div>}
             {step === 0 && <div className='w-full flex justify-center dragger'>
-                <DraggerComponent enablenext={enablenext}></DraggerComponent>
+                <DraggerComponent enablenext={enablenext} uploadexceldata={uploadexceldata} changeuploadedfile={changeuploadedfile} addColumns={addColumns}></DraggerComponent>
             </div>}
             {step === 1 && <div className='steptext'>
                 <div className='flex flex-col'>
@@ -151,7 +141,7 @@ const ModalCreate = () => {
                 </div>
 
             </div>}
-            {step === 1 && <div className='w-full flex justify-center'><CommonTable enablenext={enablenext} showCheckoption={ true}></CommonTable></div>}
+            {step === 1 && <div className='w-full flex justify-center '><CommonTable enablenext={enablenext} showCheckoption={true} data={excelData} columns={columns} uploadselectedexceldata={uploadselectedexceldata} ></CommonTable></div>}
             {step === 2 && <div className='thirdsteptext'>
                 <div className='flex flex-col'>
                     <p className='title'>Select Your Target Property</p>
@@ -176,31 +166,19 @@ const ModalCreate = () => {
                     >
                         <Select
                             showSearch
+                            mode="multiple"
                             placeholder="Select a person"
                             optionFilterProp="children"
                             onChange={onChange}
                             onSearch={onSearch}
                             filterOption={filterOption}
-                            options={[
-                                {
-                                    value: 'jack',
-                                    label: 'Jack',
-                                },
-                                {
-                                    value: 'lucy',
-                                    label: 'Lucy',
-                                },
-                                {
-                                    value: 'tom',
-                                    label: 'Tom',
-                                },
-                            ]}
+                            options={columns}
                         />
                     </Form.Item>
                 </Form>
             </div>}
             {step === 2 && <div className='w-full flex flex-col justify-center items-center'>
-                <CommonTable showCheckoption={false} columns={columns} dataSource={data} ></CommonTable>
+                <CommonTable showCheckoption={false} columns={columns} data={selectedexcelData} ></CommonTable>
             </div>}
             {step === 3 && <div className='fourthsteptext'>
                 <div className='flex flex-col'>
@@ -222,18 +200,18 @@ const ModalCreate = () => {
                 </div>
             </div>
             }
-            {step === 3 && <div className='flex gap-4'>
-                <div style={{ flexGrow: 1, height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
-                    <div className="flex flex-col" style={{ height: '161px', gap: '8px', padding: '24px 0px 0 24px' }}>
+            {step === 3 && <div className='flex gap-4' style={{padding:'0 24px'}}>
+                <div style={{ width:'25%', height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
+                    <div className="flex flex-col" style={{ height: '161px', gap: '8px', padding: '24px 0px 0 24px'}}>
                         <div className='flex justify-start items-center' style={{ gap: '40px' }}>
-                            <span style={{ height: '35px' }}>
-                                <img src={folder} style={{ height: '100%' }}></img>
+                            <span style={{ height: '55px' }}>
+                                <img src={Featuredfileicon} style={{ height: '100%' }}></img>
                             </span>
                         </div>
-                        <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }}> File Uploaded</p>
-                        <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px' }}>1779282660-01-09T14_07_02.csv</p>
+                        <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }} > File Uploaded</p>
+                        <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '80%' }}>{uploadedFile?.name}</p>
                     </div>
-                    <div className='flex justify-center items-center' style={{
+                    <div className='flex justify-center items-center' onClick={()=>setStep(0)}  style={{
                         height: '40px', borderTop: '1px solid rgba(234, 236, 240, 1)'
                     }}>
                         <p style={{
@@ -241,17 +219,17 @@ const ModalCreate = () => {
                         }}>Edit</p>
                     </div>
                 </div>
-                <div style={{ flexGrow: 1, height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
+                <div style={{ width: '25%', height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
                     <div className="flex flex-col" style={{ height: '161px', gap: '8px', padding: '24px 0px 0 24px' }}>
                         <div className='flex justify-start items-center' style={{ gap: '40px' }}>
-                            <span style={{ height: '35px' }}>
-                                <img src={folder} style={{ height: '100%' }}></img>
+                            <span style={{ height: '55px' }}>
+                                <img src={rowsselected} style={{ height: '100%' }}></img>
                             </span>
                         </div>
-                        <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }}> File Uploaded</p>
-                        <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px' }}>1779282660-01-09T14_07_02.csv</p>
+                        <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }}> Rows Selected</p>
+                        <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px' }}>{selectedexcelData?.length} Rows</p>
                     </div>
-                    <div className='flex justify-center items-center' style={{
+                    <div className='flex justify-center items-center' onClick={() => setStep(1)} style={{
                         height: '40px', borderTop: '1px solid rgba(234, 236, 240, 1)'
                     }}>
                         <p style={{
@@ -259,17 +237,35 @@ const ModalCreate = () => {
                         }}>Edit</p>
                     </div>
                 </div>
-                <div style={{ flexGrow: 1, height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
+                <div style={{ width: '25%', height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
                     <div className="flex flex-col" style={{ height: '161px', gap: '8px', padding: '24px 0px 0 24px' }}>
                         <div className='flex justify-start items-center' style={{ gap: '40px' }}>
-                            <span style={{ height: '35px' }}>
-                                <img src={folder} style={{ height: '100%' }}></img>
+                            <span style={{ height: '55px' }}>
+                                <img src={selectedcolumnname} style={{ height: '100%' }}></img>
                             </span>
                         </div>
-                        <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }}> File Uploaded</p>
-                        <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px' }}>1779282660-01-09T14_07_02.csv</p>
+                        <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }}> Targeted Property</p>
+                        <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '80%' }}>{selectedColumnName.join(',')}</p>
                     </div>
-                    <div className='flex justify-center items-center' style={{
+                    <div className='flex justify-center items-center' onClick={() => setStep(2)} style={{
+                        height: '40px', borderTop: '1px solid rgba(234, 236, 240, 1)'
+                    }}>
+                        <p style={{
+                            color: 'rgba(7, 148, 85, 1)', fontWeight: '600', fontSize: '14px', lineHeight: '20px'
+                        }}>Edit</p>
+                    </div>
+                </div>
+                <div style={{ width: '25%', height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
+                    <div className="flex flex-col" style={{ height: '161px', gap: '8px', padding: '24px 0px 0 24px' }}>
+                        <div className='flex justify-start items-center' style={{ gap: '40px' }}>
+                            <span style={{ height: '55px' }}>
+                                <img src={time} style={{ height: '100%' }}></img>
+                            </span>
+                        </div>
+                        <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }}>Estimated Completion Time</p>
+                        <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px' }}>May 23,2024 12:02 PM</p>
+                    </div>
+                    <div className='flex justify-center items-center'  style={{
                         height: '40px', borderTop: '1px solid rgba(234, 236, 240, 1)'
                     }}>
                         <p style={{
@@ -279,7 +275,7 @@ const ModalCreate = () => {
                 </div>
             </div>}
             {step === 3 && <div className='w-full flex flex-col justify-center items-center' style={{marginTop:'30px'}}>
-                <CommonTable showCheckoption={false} columns={columns} dataSource={data} ></CommonTable>
+                <CommonTable columns={columns } showCheckoption={false}  data={selectedexcelData} ></CommonTable>
             </div>}
         </div>
     );
