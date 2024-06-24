@@ -2,10 +2,12 @@ import { defineBackend } from '@aws-amplify/backend';
 import { Stack } from "aws-cdk-lib";
 import { auth } from './auth/resource';
 import { storage } from './storage/resource';
-import { amplifielambda } from './functions/amplifielambda/resource';
+import * as iam from "aws-cdk-lib/aws-iam"
+// import * as sns from "aws-cdk-lib/aws-sns"
 import {
   AuthorizationType,
   Cors,
+  CognitoUserPoolsAuthorizer,
   LambdaIntegration,
   RestApi,
 } from "aws-cdk-lib/aws-apigateway";
@@ -16,8 +18,19 @@ const backend = defineBackend({
   auth,
   storage,
   myApiFunction,
-  amplifielambda
 });
+
+const myApiFunctionLamda = backend.myApiFunction.resources.lambda;
+
+
+const statement = new iam.PolicyStatement({
+  sid: "AllowPublishToDigest",
+  actions: ["cognito-idp:ListUsers", "cognito-idp:ListGroups", "cognito-idp:AdminAddUserToGroup", "cognito-idp:AdminRemoveUserFromGroup"],
+  resources: ["*"],
+})
+
+
+myApiFunctionLamda.addToRolePolicy(statement)
 
 // create a new API stack
 const apiStack = backend.createStack("apistack");
@@ -41,26 +54,57 @@ const lambdaIntegration = new LambdaIntegration(
 );
 
 // create a new resource path with IAM authorization
-const itemsPath = myRestApi.root.addResource("items", {
-  defaultMethodOptions: {
-    authorizationType: AuthorizationType.NONE,
-  },
+const cognitoAuth = new CognitoUserPoolsAuthorizer(apiStack, "CognitoAuth", {
+  cognitoUserPools: [backend.auth.resources.userPool],
 });
 
-// add methods you would like to create to the resource path
-itemsPath.addMethod("GET", lambdaIntegration);
-itemsPath.addMethod("POST", lambdaIntegration);
-itemsPath.addMethod("DELETE", lambdaIntegration);
-itemsPath.addMethod("PUT", lambdaIntegration);
+// const gerUsersAndGroupsPath = myRestApi.root.addResource("gerUsersAndGroups", {
+//   defaultMethodOptions: {
+//     authorizationType: AuthorizationType.COGNITO,
+//     authorizer: cognitoAuth,
+//   },
+// });
 
+
+const gerUsersAndGroupsPath = myRestApi.root.addResource("gerUsersAndGroups");
+gerUsersAndGroupsPath.addMethod("GET", lambdaIntegration, {
+  authorizationType: AuthorizationType.COGNITO,
+  authorizer: cognitoAuth,
+});
+const addUserToGroupPath = myRestApi.root.addResource("addUserToGroup");
+addUserToGroupPath.addMethod("GET", lambdaIntegration, {
+  authorizationType: AuthorizationType.COGNITO,
+  authorizer: cognitoAuth,
+});
+const removeUserFromGroupPath = myRestApi.root.addResource("removeUserFromGroup");
+removeUserFromGroupPath.addMethod("GET", lambdaIntegration, {
+  authorizationType: AuthorizationType.COGNITO,
+  authorizer: cognitoAuth,
+});
+
+
+// const topic = new sns.Topic(apiStack, "Topic", {
+//   displayName: "digest",
+// })
+
+
+// const statement = new iam.PolicyStatement({
+//   sid: "AllowPublishToDigest",
+//   actions: ["sns:Publish"],
+//   resources: [topic.topicArn],
+// })
+
+
+// backend.myApiFunction.resources.lambda.addToRolePolicy(statement)
 // create a new IAM policy to allow Invoke access to the API
 const apiRestPolicy = new Policy(apiStack, "RestApiPolicy", {
   statements: [
     new PolicyStatement({
       actions: ["execute-api:Invoke"],
       resources: [
-        `${myRestApi.arnForExecuteApi("*", "/items", "dev")}`,
-        `${myRestApi.arnForExecuteApi("*", "/items/*", "dev")}`,
+        `${myRestApi.arnForExecuteApi("*", "/gerUsersAndGroups", "dev")}`,
+        `${myRestApi.arnForExecuteApi("*", "/gerUsersAndGroups/*", "dev")}`,
+        '*'
       ],
     }),
   ],

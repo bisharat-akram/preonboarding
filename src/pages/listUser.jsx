@@ -1,44 +1,27 @@
 import { useEffect, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { Space, Table, Dropdown, Modal, Select } from 'antd';
-import config from "../../amplify_outputs.json"
+import config from "../../amplify_outputs.json";
+import { get } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth'
+
 import { CognitoIdentityProviderClient, ListUsersCommand, AdminAddUserToGroupCommand, AdminListGroupsForUserCommand, ListGroupsCommand, AdminRemoveUserFromGroupCommand } from "@aws-sdk/client-cognito-identity-provider";
 const client = new CognitoIdentityProviderClient({
-    region: config.auth.aws_region,
-    credentials: {
-        accessKeyId: 'AKIA6DBPHLCV5BH7PVKX',
-        secretAccessKey: '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'
-    }
+    region: config.auth.aws_region
 });
 
 export default function ListUser() {
+
+
+
     const [users, setUsers] = useState([]);
     const [groups, setGroups] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRemoveRoleModalOpen, setIsRemoveRoleModalOpen] = useState(false);
-    const [tableData,setTableData] = useState([])
+    const [tableData, setTableData] = useState([])
     const [selectedUser, setSelectedUser] = useState();
-    async function addusertogroup(group, user) {
-        console.log(user,group)
-        const commandrole = new AdminAddUserToGroupCommand({
-            Username: user.Username,
-            GroupName: group,
-            UserPoolId: config.auth.user_pool_id,
-        })
-        const responserole = await client.send(commandrole);
-        console.log(responserole)
-    }
-    async function removeuserfromgroup(group, user) {
-        
-        const commandrole = new AdminRemoveUserFromGroupCommand({
-            Username: user.Username,
-            GroupName: group,
-            UserPoolId: config.auth.user_pool_id,
-        })
-        const responserole = await client.send(commandrole);
-        console.log(responserole)
-    }
-    
+    const [token, setToken] = useState();
+
     const showModal = () => {
         console.log(selectedUser)
         setIsModalOpen(true);
@@ -70,10 +53,10 @@ export default function ListUser() {
         },
         {
             key: '2',
-           
+
             label: (
                 <a onClick={(e) => {
-                    
+
                     showModal()
                 }}>
                     <Space>
@@ -122,11 +105,11 @@ export default function ListUser() {
             title: 'Action',
             key: 'action',
             sorter: true,
-            render: (_,record) => (
+            render: (_, record) => (
                 <Dropdown menu={{ items }} trigger={['click']}>
                     <a onClick={(e) => openactions(record)}>
                         <Space>
-                          Click
+                            Click
                             <DownOutlined />
                         </Space>
                     </a>
@@ -134,28 +117,26 @@ export default function ListUser() {
             ),
         },
     ];
-    const listAllUsers = async () => {
-        let usersdata = [];
+    const listAllUsers = async (token) => {
         try {
-                const command = new ListUsersCommand({
-                    Limit: 60,
-                    UserPoolId: config.auth.user_pool_id
-                });
-                const response = await client.send(command);
-
-                console.log(response);
-                usersdata = usersdata.concat(response.Users);
-           
-            usersdata.map(data => {
-                data?.Attributes?.push(
-                    {
-                        Name: "Username",
-                        Value: data?.Username
+            const restOperation = get({
+                apiName: config.custom.API.myRestApi.apiName,
+                path: `gerUsersAndGroups?userPoolId=${config.auth.user_pool_id}`,
+                options: {
+                    headers: {
+                        Authorization: token
                     }
-                )
+                }
+
             });
-            setUsers(usersdata);
-            const transformedData = usersdata?.map(user => {
+            console.log(restOperation)
+            let res = await restOperation.response;
+            console.log('GET call succeeded: ', res);
+            res = await res.body.json()
+            console.log('GET call succeeded: ', res);
+            const { Users, Groups } = res;
+            setUsers(Users);
+            const transformedData = Users?.map(user => {
                 const userAttributes = user.Attributes.reduce((acc, attr) => {
                     acc[attr.Name] = attr.Value;
                     return acc;
@@ -168,25 +149,9 @@ export default function ListUser() {
                 };
             });
             setTableData(transformedData)
-            let userfields = usersdata[0]?.Attributes?.map((data) => {
-                if (data?.Name === "sub" || data?.Name === "Username")
-                    return undefined;
-                return {
-                    title: data?.Name?.toUpperCase().split('_').join(' '),
-                    dataIndex: data?.Name,
-                    key: data?.Name,
-                };
-            });
-            userfields = userfields.filter((data) => { return data !== undefined })
-            // setColumns(userfields)
-            
-            // const groupuser = new AdminListGroupsForUserCommand({
-            //     Username:'91f31d3a-e001-7029-8e05-979274f22c70',
-            //     UserPoolId: config.auth.user_pool_id,
-            // })
-            const groupsresp = new ListGroupsCommand({ UserPoolId: config.auth.user_pool_id, });
-            const groupsres = await client.send(groupsresp);
-            let groupnames = groupsres.Groups?.map((data) => { return { label:data?.GroupName,value:data?.GroupName } })
+
+            let groupnames = Groups?.map((data) => { return { label: data?.GroupName, value: data?.GroupName } })
+            console.log(groupnames)
             setGroups(groupnames);
         } catch (error) {
             console.error('Error listing users:', error);
@@ -200,17 +165,47 @@ export default function ListUser() {
     //     const groupuserres = await client.send(groupuser);
     //     return groupuserres;
     // }
-    
-    const handleChange = ( value) => {
-        console.log(`selected ${value}`);
-        addusertogroup(value, selectedUser);
+
+    const handleChange = (value) => {
+        console.log(`selected`, selectedUser);
+
+        get({
+            apiName: config.custom.API.myRestApi.apiName,
+            path: `addUserToGroup?userPoolId=${config.auth.user_pool_id}&user=${selectedUser.sub}&group=${value}`,
+            options: {
+                headers: {
+                    Authorization: token
+                }
+            }
+
+        });
     };
     const handleChangeRemoveRole = (value) => {
         console.log(`selected ${value}`);
-        removeuserfromgroup(value, selectedUser);
+        // removeuserfromgroup(value, selectedUser);
+        get({
+            apiName: config.custom.API.myRestApi.apiName,
+            path: `removeUserFromGroup?userPoolId=${config.auth.user_pool_id}&user=${selectedUser.sub}&group=${value}`,
+            options: {
+                headers: {
+                    Authorization: token
+                }
+            }
+
+        });
     };
     useEffect(() => {
-        listAllUsers();
+
+        async function init(){
+            
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken
+            setToken(token);
+            
+            listAllUsers(token);
+        }
+
+        init();
     }, [])
 
     return (
