@@ -1,5 +1,5 @@
 import { Button, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {  Steps ,Form,Select} from 'antd';
 import '../CSS/Modal.css'
 import DraggerComponent from '../Components/Dragger';
@@ -15,8 +15,11 @@ import rowsselected from '../assets/rowsselected.png'
 import selectedcolumnname from '../assets/selectedcolumnname.png'
 import time from '../assets/time.png'
 import Icon from '@ant-design/icons/lib/components/Icon';
+import { post } from 'aws-amplify/api';
+import { useSelector } from 'react-redux';
 const ModalCreate = () => {
     const navigate = useNavigate();
+    const user = useSelector(st => st?.user);
     const [excelData, setExcelData] = useState([]);
     const [uploadedFile, setUploadedFile] = useState();
     const [selectedexcelData, setSelectedExcelData] = useState([]);
@@ -27,6 +30,7 @@ const ModalCreate = () => {
     const [step, setStep] = useState(0);
     const [disablenextstep, setDisablenextstep] = useState(true);
     const [selectedColumnName, setSelectedColumnName] = useState([]);
+    useEffect(() => {console.log(user) },[user])
     const onChange = (value) => {
         console.log(value)
         setSelectedColumnName(value)
@@ -61,7 +65,58 @@ const ModalCreate = () => {
         setDisablenextstep(true);
     }
     async function callLambda() {
+        console.log('ss', selectedexcelData, '', selectedColumnName)
+        const bodydata = {}
         
+        // let dummydata = Object.fromEntries(
+        //     Object.entries(selectedexcelData[0]).map(([key, value]) => [key.toUpperCase(), value])
+        // );
+        
+        const temp = selectedColumnName.map((data) => {
+            let arr = {}
+            console.log(data)
+        
+            selectedexcelData?.map((exceldataselected, ind) => {
+                console.log(exceldataselected, data, selectedexcelData, exceldataselected[`${data}`])
+                arr[ind] = exceldataselected[`${data}`]
+            })
+            console.log({ [data]: arr })
+            return { [data]: arr };
+        })
+        const bodyexcel = temp.reduce((result, item) => {
+            const [key, value] = Object.entries(item)[0];
+            result[key] = value;
+            return result;
+        }, {});
+        console.log(bodyexcel)
+        // const bodyexcel = temp.map((data) => data);
+        
+
+        const options = {
+            body: JSON.stringify({
+                "userId": user?.sub,
+                ...bodyexcel
+            }),
+            "method":"POST",
+            credentials: 'include',
+        };
+        let restOperation = await fetch(import.meta.env.VITE_PATH, options);
+
+        // const restOperation = post({
+        //     apiName: 'myRestApi',
+        //     path: ,
+        //     options: {
+        //         body: {
+        //             "userId": user?.sub,
+        //             ...bodyexcel
+        //         }
+        //     }
+        // });
+        const { body } = await restOperation.response;
+        const response = await body.json();
+
+        console.log('POST call succeeded');
+        console.log(response);
     }
     async function gotoprevstep() {
         console.log(step)
@@ -97,7 +152,7 @@ const ModalCreate = () => {
                                     width: '16px',
                                     height: '12px'
                                 }
-                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }}  onClick={callLambda()} >Create Modal</Button>
+                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }}  onClick={()=>callLambda()} >Create Model</Button>
                     }
                     
                 </div>

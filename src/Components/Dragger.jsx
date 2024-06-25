@@ -35,12 +35,13 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
 
         promise.then((d) => {
             // exceldatahandle(d);
-
+            console.log(d)
             let excelColumns = Object.keys(d[0]).map((data) => {
+                console.log(data)
                 return {
-                    title: data.toUpperCase(),
-                    label: data.toUpperCase(),
-                    value: data.toUpperCase(),
+                    title: data,
+                    label: data,
+                    value: data,
                     dataIndex: data
                 }
             })
