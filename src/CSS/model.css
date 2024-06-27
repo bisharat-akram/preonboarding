@@ -1,0 +1,38 @@
+.model-parent{
+    padding:32px;
+}
+
+.modelname{
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    text-align:start;
+}
+.createdtime{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(71, 84, 103, 1);
+}
+.model-bresdcrump-header{
+    gap:20px
+}
+.tab-parent-div{
+    background-color: rgba(249, 250, 251, 1);
+    border-radius: 10px;
+    border:1px solid rgba(234, 236, 240, 1);
+}
+.tab-parent-div > .ant-segmented{
+    margin-bottom:0;
+}
+.overview{
+    margin-top: 30px;
+    padding-bottom: 30px;
+}
+.overview > div > p{
+    text-align: start;
+}
+.image-container{
+    height:473px;
+    margin: auto;
+}

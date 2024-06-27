@@ -5,6 +5,7 @@ import LayoutSiderWrapper from './Components/LayoutSiderWrapper'
 import Dashboard from './pages/Dashboard'
 import ModalCreate from './pages/Modalcreate'
 import ListUser from './pages/listUser'
+import Model from './pages/model'
 import SignUp from './pages/signUp'
 import { useEffect, useState } from 'react';
 import { Hub } from 'aws-amplify/utils';
@@ -73,7 +74,8 @@ function App() {
       <Routes>
         <Route exact path='/' element={<LayoutSiderWrapper><Dashboard /></LayoutSiderWrapper>} />
         <Route exact path='/modal' element={<ModalCreate />} />
-        <Route exact path='/account' element={<ListUser/>}></Route>
+        <Route exact path='/account' element={<ListUser />}></Route>
+        <Route exact path='/model' element={<LayoutSiderWrapper><Model /></LayoutSiderWrapper>}></Route>
       </Routes>
     )
   }
