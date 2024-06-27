@@ -8,7 +8,7 @@ export const storage = defineStorage({
             allow.entity('identity').to(['read', 'write', 'delete'])
         ],
         'files-submissions/*': [
-            allow.authenticated.to([ 'write', 'list']),
+            allow.authenticated.to(['write', 'read']),
             allow.guest.to(['read', 'write'])
         ],
     })

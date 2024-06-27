@@ -26,7 +26,7 @@ const items = [
 const Model = () => {
     async function getList() {
         try {
-            const result = await list({
+            const result = await getUrl({
                 path: 'public/',
             });
             console.log(result)
