@@ -46,8 +46,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         }
     }
 
-    async function addusertogroup(group: any, user: any) {
-        console.log(user, group)
+    async function addusertogroup(group: string, user: string) {
 
         const commandrole = new AdminAddUserToGroupCommand({
             Username: user,
@@ -59,7 +58,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         return responserole;
     }
 
-    async function removeuserfromgroup(group: any, user: any) {
+    async function removeuserfromgroup(group: string, user: string) {
 
         const commandrole = new AdminRemoveUserFromGroupCommand({
             Username: user,
@@ -99,18 +98,17 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             break;
         case "addUserToGroup": if (event.queryStringParameters) {
             const { user, group } = event.queryStringParameters;
-            response = await addusertogroup(group, user)
+            response = await addusertogroup(group || "", user || "")
         }
             break;
         case "removeUserFromGroup": if (event.queryStringParameters) {
             const { user, group } = event.queryStringParameters;
-            response = await removeuserfromgroup(group, user)
+            response = await removeuserfromgroup(group || "", user || "")
         }
             break;
         case "getimagediffbucket": console.log(event.queryStringParameters)
             if (event.queryStringParameters) {
-            const { user } = event.queryStringParameters;
-            response = await getimagediffbucket(user)
+            response = await getimagediffbucket()
         }
             break;
 

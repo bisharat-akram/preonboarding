@@ -4,7 +4,7 @@ import { Avatar, Image, Input, Layout, Menu, Typography, Badge } from "antd";
 import { signOut } from "aws-amplify/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../redux/actions/userAction";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const { Sider, Content } = Layout;
 
