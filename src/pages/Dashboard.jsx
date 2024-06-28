@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import icondual from '../assets/icondual.png'
 import dots3 from '../assets/dots3.png'
 import folder from '../assets/folder.png'
 import Sidebar from '../Components/Sidebar';
 import Arrowup from '../assets/arrowup.png';
 import '../CSS/Dashboard.css'
-import { Button, Segmented, Tabs } from 'antd';
+import { Button, Segmented } from 'antd';
+import config from "../../amplify_outputs.json";
+import { fetchAuthSession } from 'aws-amplify/auth'
+import { get } from 'aws-amplify/api';
+import { useNavigate } from 'react-router-dom';
 import { ModalComponent as Modal } from '../Components/modal'
 const onChange = (key) => {
     console.log(key);
@@ -29,10 +33,53 @@ const items = [
 ];
 const Dashboard = () => {
     const [alignValue, setAlignValue] = useState('center');
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const [images, setImages] = useState([]);
+    const [selectedModel, setSelectedModel] = useState();
     async function closeOpenModal(val) {
         setOpen(val);
     }
+    async function getList() {
+        try {
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken
+            console.log(session)
+            let restOperation = get({
+                apiName: config.custom.API.myRestApi.apiName,
+                path: `getimagediffbucket?user=${session?.userSub}`,
+                options: {
+                    headers: {
+                        Authorization: token
+                    }
+                }
+
+            });
+            let result = await restOperation.response;
+            result = await result.body.json()
+            result = result.filter(data => {
+                console.log(`assets/${session.userSub}`,'z<=>', data, data.startsWith(`assets/${session.userSub}`))
+              return data.startsWith(`assets/${session.userSub}`)
+            });
+            let ids = result.map((data) => {
+                let urlarr = data.split('/');
+
+                let id = urlarr[2]
+                console.log(id);
+                return id;
+            })
+          
+            setImages(ids)
+            console.log(result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+
+
+        getList()
+    }, [])
     return (
         <div className='h-full w-full dashboard' >
             <div className='text-start flex flex-col home'>
@@ -103,7 +150,7 @@ const Dashboard = () => {
                 </div>
             </div>
             <div className='modals'>
-                <div className="child">
+                {images?.map((data) => <div className="child">
                     <div className="flex justify-between w-full gap-4 items-center images" >
                         <img src={icondual}></img>
                         <span ><img src={dots3}></img></span>
@@ -113,62 +160,22 @@ const Dashboard = () => {
                             <p>Processing
                             </p>
                         </div>
-                        
+
                         <p className='text-start text-title'>Model Testing 03</p>
-                        
+
                         <p className='text-start  createdtime' >Created: May 17, 2024 11:18 PM</p>
-                        <Button style={{ background: 'rgba(236, 253, 243, 1)' }} onClick={() => setOpen(true)}>
+                        <Button style={{ background: 'rgba(236, 253, 243, 1)' }} onClick={() => {
+                            setSelectedModel(data);
+                            setOpen(true)
+                        }}>
 
                             <div className='view' >
                                 <p>Approximately 3 hours left</p>
                             </div>
                         </Button>
                     </div>
-                </div>
-                <div className="child">
-                    <div className="flex justify-between w-full gap-4 items-center images" >
-                        <img src={icondual}></img>
-                        <span ><img src={dots3} ></img></span>
-                    </div>
-                    <div className="content"  >
-                        <div className="pill" >
-                            <p>Processing
-                            </p>
-                        </div>
-
-                        <p className='text-start text-title'>Model Testing 03</p>
-
-                        <p className='text-start  createdtime'>Created: May 17, 2024 11:18 PM</p>
-                        <Button style={{ background: 'rgba(236, 253, 243, 1)' }} onClick={() => setOpen(true)}>
-
-                            <div className='view' >
-                                <p>Open</p>
-                            </div>
-                        </Button>
-                    </div>
-                </div>
-                <div className="child">
-                    <div className="flex justify-between w-full gap-4 items-center images" >
-                        <img src={icondual}></img>
-                        <span ><img src={dots3}></img></span>
-                    </div>
-                    <div className="content"  >
-                        <div className="pill" >
-                            <p>Processing
-                            </p>
-                        </div>
-
-                        <p className='text-start text-title'>Model Testing 03</p>
-
-                        <p className='text-start  createdtime'>Created: May 17, 2024 11:18 PM</p>
-                        <Button style={{ background: 'rgba(236, 253, 243, 1)' }} onClick={() => setOpen(true)}>
-
-                            <div className='view' >
-                                <p>Open</p>
-                            </div>
-                        </Button>
-                    </div>
-                </div>
+                </div>)}
+                 
             </div>
             <div className="flex flex-col filesheading">
                 <p className='text-start' >Files (14)</p>
@@ -242,7 +249,7 @@ const Dashboard = () => {
                 </div>
 
                
-                {open ? <Modal open={open} closeOpenModal={closeOpenModal} /> : ''}
+                {open ? <Modal open={open} closeOpenModal={closeOpenModal} imageUrl={selectedModel} /> : ''}
             </div>
         </div>
     );

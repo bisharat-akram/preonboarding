@@ -5,7 +5,7 @@ import { FaArrowRight } from 'react-icons/fa'
 import Image from '../../assets/Modal/Image.png';
 import Image1 from '../../assets/Modal/Image1.png';
 import { useNavigate } from 'react-router-dom';
-export const ModalComponent = ({ open, closeOpenModal }) => {
+export const ModalComponent = ({ open, closeOpenModal, imageUrl }) => {
     const navigate = useNavigate();
     return (
         <>
@@ -78,7 +78,7 @@ export const ModalComponent = ({ open, closeOpenModal }) => {
                         <Button ghost onClick={() => closeOpenModal(false)} style={{ color: 'black', fontWeight: '600', padding: '20px', boxShadow: "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px", border: '0px' }}>
                             Go to Dashboard
                         </Button>
-                        <Button type="primary" onClick={() =>navigate('/modal')} style={{ background: '#079455', fontWeight: '600', padding: '20px' }}>
+                        <Button type="primary" onClick={() => navigate(`/model/20240409182351722028`)} style={{ background: '#079455', fontWeight: '600', padding: '20px' }}>
                             Proceed
                             <FaArrowRight />
                         </Button>

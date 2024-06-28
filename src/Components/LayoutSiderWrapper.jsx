@@ -86,6 +86,12 @@ export default function LayoutSiderWrapper({ children }) {
             icon: <img src="icons/pagi.svg" />,
         },
         {
+            key: "createmodel",
+            label: <Typography.Text className="font-semibold">Create Model</Typography.Text>,
+            icon: <img src="icons/pagi.svg" />,
+            onClick: ()=>navigate('/createmodal')
+        },
+        {
             key: "account",
             label: <Typography.Text className="font-semibold">Account</Typography.Text>,
             icon: <img src="icons/account.svg" />,

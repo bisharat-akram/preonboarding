@@ -1,13 +1,52 @@
 import type { APIGatewayProxyHandler } from "aws-lambda";
 import { AdminAddUserToGroupCommand, AdminRemoveUserFromGroupCommand, CognitoIdentityProviderClient, ListGroupsCommand, ListUsersCommand } from "@aws-sdk/client-cognito-identity-provider";
-
+import { env } from '$amplify/env/api-function';
+import {
+    S3Client,
+    ListObjectsV2Command,
+} from "@aws-sdk/client-s3";
+const Bucketclient = new S3Client();
 const client = new CognitoIdentityProviderClient();
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-
     let response = null;
+    async function getimagediffbucket() {
+        const command = new ListObjectsV2Command({
+            Bucket:env.BUCKET,
+            MaxKeys: 1000,
+        });
 
-    async function addusertogroup(group:any, user:any) {
+        try {
+            let isTruncated = true;
+
+
+            console.log("Your bucket contains the following objects:\n");
+            const filePaths = [];
+
+            console.log("Your bucket contains the following objects:\n");
+
+            while (isTruncated) {
+                const response = await Bucketclient.send(command);
+                const { Contents, IsTruncated, NextContinuationToken } = response;
+
+                // Iterate through contents and filter out only file paths
+                if (Contents) {
+                    const files = Contents.filter((obj) => !obj?.Key?.endsWith('/')); // Filter out objects that end with '/'
+                    const fileKeys = files.map((file) => file.Key);
+                    filePaths.push(...fileKeys);
+                }
+
+                isTruncated = IsTruncated || false;
+                command.input.ContinuationToken = NextContinuationToken;
+            }
+
+            return filePaths;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function addusertogroup(group: any, user: any) {
         console.log(user, group)
 
         const commandrole = new AdminAddUserToGroupCommand({
@@ -20,7 +59,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         return responserole;
     }
 
-    async function removeuserfromgroup(group: any, user:any) {
+    async function removeuserfromgroup(group: any, user: any) {
 
         const commandrole = new AdminRemoveUserFromGroupCommand({
             Username: user,
@@ -66,6 +105,12 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         case "removeUserFromGroup": if (event.queryStringParameters) {
             const { user, group } = event.queryStringParameters;
             response = await removeuserfromgroup(group, user)
+        }
+            break;
+        case "getimagediffbucket": console.log(event.queryStringParameters)
+            if (event.queryStringParameters) {
+            const { user } = event.queryStringParameters;
+            response = await getimagediffbucket(user)
         }
             break;
 

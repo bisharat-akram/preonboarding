@@ -9,13 +9,15 @@ import previcon from '../assets/previousicon.png'
 import nexticon from '../assets/nexticon.png'
 import nextdisabledarrow from '../assets/nextdisabledarrow.png'
 import { useNavigate } from 'react-router-dom';
-import folder from '../assets/folder.png'
-import Featuredfileicon from '../assets/Featuredfileicon.png'
-import rowsselected from '../assets/rowsselected.png'
+import folder from '../assets/folder.png';
+import Featuredfileicon from '../assets/Featuredfileicon.png';
+import rowsselected from '../assets/rowsselected.png';
 import selectedcolumnname from '../assets/selectedcolumnname.png'
-import time from '../assets/time.png'
+import time from '../assets/time.png';
+import config from "../../amplify_outputs.json";
 import Icon from '@ant-design/icons/lib/components/Icon';
-import { post } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth'
+import { get } from 'aws-amplify/api';
 import { useSelector } from 'react-redux';
 const ModalCreate = () => {
     const navigate = useNavigate();
@@ -30,7 +32,6 @@ const ModalCreate = () => {
     const [step, setStep] = useState(0);
     const [disablenextstep, setDisablenextstep] = useState(true);
     const [selectedColumnName, setSelectedColumnName] = useState([]);
-    useEffect(() => {console.log(user) },[user])
     const onChange = (value) => {
         console.log(value)
         setSelectedColumnName(value)

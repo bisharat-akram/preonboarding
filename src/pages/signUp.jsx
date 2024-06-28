@@ -6,6 +6,7 @@ import { signUp, confirmSignUp } from "aws-amplify/auth"
 import { useState } from 'react';
 
 const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
 };
 
 export default function SignUp() {

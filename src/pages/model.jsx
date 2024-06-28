@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/model.css'
 import { DownloadOutlined } from '@ant-design/icons';
+import config from "../../amplify_outputs.json";
 import { list } from 'aws-amplify/storage';
 import { Button, Segmented } from 'antd';
+import { get } from 'aws-amplify/api';
+import { fetchAuthSession } from 'aws-amplify/auth'
+import { useParams } from 'react-router-dom';
 const onChange = (key) => {
     console.log(key);
 };
@@ -24,19 +28,18 @@ const items = [
     },
 ];
 const Model = () => {
+    let { id } = useParams();
+    const [userSub,setUserSub] = useState() 
     async function getList() {
         try {
-            const result = await getUrl({
-                path: 'public/',
-            });
-            console.log(result)
+            const session = await fetchAuthSession();
+            setUserSub(session.userSub);
         } catch (error) {
             console.log(error);
         }
     }
     useEffect(() => {
-      
-
+        
         getList()
 },[])
     return <div className="model-parent flex flex-col justify-center">
@@ -70,7 +73,7 @@ const Model = () => {
             </div>
             <Button icon={<DownloadOutlined />} style={{ background: 'rgba(7, 148, 85, 1)', color:'rgba(255, 255, 255, 1)'}}>Download Graph</Button>
         </div>
-        <div className='image-container'><img src="https://lambda-png-opentoall.s3.us-west-1.amazonaws.com/assets/3a083a8b-32a3-4239-bc4e-0dcc37bc81fa/20240411170626569835/image/Actual_vs_Predicted.png"></img></div>
+        <div className='image-container'><img src={`${import.meta.env.VITE_S3URL}/assets/${userSub}/${id}/image/Actual_vs_Predicted+(2).png`}></img></div>
     </div>
         ;
 };

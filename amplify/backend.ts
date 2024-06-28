@@ -25,7 +25,7 @@ const myApiFunctionLamda = backend.myApiFunction.resources.lambda;
 
 const statement = new iam.PolicyStatement({
   sid: "AllowPublishToDigest",
-  actions: ["cognito-idp:ListUsers", "cognito-idp:ListGroups", "cognito-idp:AdminAddUserToGroup", "cognito-idp:AdminRemoveUserFromGroup"],
+  actions: ["cognito-idp:ListUsers", "cognito-idp:ListGroups", "cognito-idp:AdminAddUserToGroup", "cognito-idp:AdminRemoveUserFromGroup", "s3:*"],
   resources: ["*"],
 })
 
@@ -81,7 +81,11 @@ removeUserFromGroupPath.addMethod("GET", lambdaIntegration, {
   authorizationType: AuthorizationType.COGNITO,
   authorizer: cognitoAuth,
 });
-
+const getImageFromDifferentBucket = myRestApi.root.addResource("getimagediffbucket");
+getImageFromDifferentBucket.addMethod("GET", lambdaIntegration, {
+  authorizationType: AuthorizationType.COGNITO,
+  authorizer: cognitoAuth,
+});
 
 // const topic = new sns.Topic(apiStack, "Topic", {
 //   displayName: "digest",

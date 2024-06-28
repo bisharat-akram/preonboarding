@@ -5,8 +5,8 @@ import LayoutSiderWrapper from './Components/LayoutSiderWrapper'
 import Dashboard from './pages/Dashboard'
 import ModalCreate from './pages/Modalcreate'
 import ListUser from './pages/listUser'
-import Model from './pages/model'
 import SignUp from './pages/signUp'
+import Model from './pages/model'
 import { useEffect, useState } from 'react';
 import { Hub } from 'aws-amplify/utils';
 import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
@@ -34,8 +34,6 @@ function App() {
         if (location.pathname !== '/signup' && location.pathname !== '/login')
           navigate('/login')
       }
-      // if(username)
-
       Hub.listen('auth', ({ payload }) => {
         console.log(payload)
         switch (payload.event) {
@@ -73,9 +71,9 @@ function App() {
     return (
       <Routes>
         <Route exact path='/' element={<LayoutSiderWrapper><Dashboard /></LayoutSiderWrapper>} />
-        <Route exact path='/modal' element={<ModalCreate />} />
+        <Route exact path='/createmodal' element={<ModalCreate />} />
         <Route exact path='/account' element={<ListUser />}></Route>
-        <Route exact path='/model' element={<LayoutSiderWrapper><Model /></LayoutSiderWrapper>}></Route>
+        <Route exact path='/model/:id' element={<LayoutSiderWrapper><Model /></LayoutSiderWrapper>}></Route>
       </Routes>
     )
   }
