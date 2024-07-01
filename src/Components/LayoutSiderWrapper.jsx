@@ -5,6 +5,7 @@ import { signOut } from "aws-amplify/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../redux/actions/userAction";
 import { useNavigate } from "react-router-dom";
+import { ModalComponent } from "./modal";
 
 const { Sider, Content } = Layout;
 
@@ -62,13 +63,21 @@ export default function LayoutSiderWrapper({ children }) {
     const dispatch = useDispatch();
     const user = useSelector(st => st?.user);
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
     const [drawerVisible, setDrawerVisible] = useState(false);
+
+
+
+    const closeOpenModal = () => {
+        setOpen(false)
+    }
 
     const items = [
         {
             key: "home",
             label: <Typography.Text className="font-semibold">Home</Typography.Text>,
             icon: <img src="icons/home.svg" />,
+            onClick: () => navigate('/')
         },
         {
             key: "models",
@@ -89,7 +98,7 @@ export default function LayoutSiderWrapper({ children }) {
             key: "createmodel",
             label: <Typography.Text className="font-semibold">Create Model</Typography.Text>,
             icon: <img src="icons/pagi.svg" />,
-            onClick: ()=>navigate('/createmodal')
+            onClick: () => setOpen(true)
         },
         {
             key: "account",
@@ -154,6 +163,7 @@ export default function LayoutSiderWrapper({ children }) {
                 </div> : ''}
             </Sider>
             <Content style={{ overflow: 'auto', backgroundColor: 'white', marginLeft: `${drawerVisible ? '300px' : '0px'}` }}>{children}</Content>
+            {open ? <ModalComponent open={open} closeOpenModal={closeOpenModal} /> : ''}
         </Layout>
     )
 }

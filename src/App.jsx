@@ -71,7 +71,7 @@ function App() {
     return (
       <Routes>
         <Route exact path='/' element={<LayoutSiderWrapper><Dashboard /></LayoutSiderWrapper>} />
-        <Route exact path='/createmodal' element={<ModalCreate />} />
+        <Route exact path='/createmodel' element={<ModalCreate />} />
         <Route exact path='/account' element={<ListUser />}></Route>
         <Route exact path='/model/:id' element={<LayoutSiderWrapper><Model /></LayoutSiderWrapper>}></Route>
       </Routes>
