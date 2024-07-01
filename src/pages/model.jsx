@@ -73,7 +73,7 @@ const Model = () => {
             </div>
             <Button icon={<DownloadOutlined />} style={{ background: 'rgba(7, 148, 85, 1)', color:'rgba(255, 255, 255, 1)'}}>Download Graph</Button>
         </div>
-        <div className='image-container'><img src={`${import.meta.env.VITE_S3URL}/assets/${userSub}/${id}/image/Actual_vs_Predicted+(2).png`}></img></div>
+        <div className='image-container'><img src={`${import.meta.env.VITE_S3URL}/assets/${userSub}/${id}/image/Actual_vs_Predicted.png`}></img></div>
     </div>
         ;
 };
