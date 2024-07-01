@@ -20,6 +20,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             let isTruncated = true;
 
 
+            
             console.log("Your bucket contains the following objects:\n");
             const filePaths = [];
 
