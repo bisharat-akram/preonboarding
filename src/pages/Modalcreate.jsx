@@ -99,7 +99,6 @@ const ModalCreate = () => {
                 ...bodyexcel
             }),
             "method":"POST",
-            credentials: 'include',
         };
         let restOperation = await fetch(import.meta.env.VITE_PATH, options);
 
