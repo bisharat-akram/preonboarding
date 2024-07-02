@@ -18,8 +18,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
         try {
             let isTruncated = true;
-
-
             
             console.log("Your bucket contains the following objects:\n");
             const filePaths = [];
@@ -40,7 +38,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 isTruncated = IsTruncated || false;
                 command.input.ContinuationToken = NextContinuationToken;
             }
-
             return filePaths;
         } catch (err) {
             console.error(err);
