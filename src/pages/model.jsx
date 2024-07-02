@@ -7,6 +7,7 @@ import { Button, Segmented } from 'antd';
 import { get } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth'
 import { useParams } from 'react-router-dom';
+import {  Table } from 'antd';
 const onChange = (key) => {
     console.log(key);
 };
@@ -29,17 +30,61 @@ const items = [
 ];
 const Model = () => {
     let { id } = useParams();
-    const [userSub,setUserSub] = useState() 
+    const [userSub, setUserSub] = useState();
+    const [columns, setColumns] = useState();
+    const [selectedTab, setSelectedTab] = useState('Overview');
+    const [tableData, setTableData] = useState();
     async function getList() {
         try {
             const session = await fetchAuthSession();
             setUserSub(session.userSub);
+
+            await fetch(`${import.meta.env.VITE_S3URL}/assets/${session.userSub}/${id}/json/data.json`)
+                .then(async (response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return await response.json();
+                })
+                .then(data => {
+
+                    console.log(data);
+                    let tablecolumn = data?.columns?.map((tempdata) => {
+                        console.log(tempdata);
+                        return {
+                            title: tempdata.toUpperCase(),
+                            dataIndex: tempdata,
+                            key: tempdata
+                        }
+                    });
+
+                    let tabledata=data?.data.map((temprow,ind) => {
+                        let obj = {};
+                        let currentindex = 0;
+                        obj['key'] = ind;
+                        console.log(temprow)
+                        data?.columns?.map((coldata, index) => {
+                            console.log(coldata)
+                            obj[coldata] = temprow[currentindex++];
+                        })
+                        return obj;
+                    })
+                     
+                    setTableData(tabledata)
+                    setColumns(tablecolumn);
+                })
+                .catch(error => {
+                    console.error('There was a problem fetching the data:', error);
+                });
+          
         } catch (error) {
             console.log(error);
         }
     }
+    async function onTabChange(value) {
+        setSelectedTab(value);
+    }
     useEffect(() => {
-        
         getList()
 },[])
     return <div className="model-parent flex flex-col justify-center">
@@ -56,7 +101,8 @@ const Model = () => {
             </div>
             <div className='flex justify-start tab-parent-div items-center'>
                 <Segmented
-                    defaultValue="center"
+                    defaultValue={selectedTab}
+                    onChange={onTabChange}
                     style={{
                         marginBottom: 8,
                         background:'rgba(249, 250, 251, 1)'
@@ -65,15 +111,35 @@ const Model = () => {
                 />
             </div>
         </div>
-        <div className='overview flex justify-between items-center'>
+        {selectedTab === 'Overview' ? <div className='overview flex justify-between items-center'>
             <div style={{width:'75%'}}>
                 <p style={{ fontWeight: 600,fontSize:'18px',lineHeight:'28px'}}>Overview</p>
                 <p style={{
                     fontWeight: 400, fontSize: '14px', lineHeight: '20px', color: 'rgba(71, 84, 103, 1)' }}>View the accuracy of your model by comparing its predictions against the actual data from your source file.</p>
             </div>
             <Button icon={<DownloadOutlined />} style={{ background: 'rgba(7, 148, 85, 1)', color:'rgba(255, 255, 255, 1)'}}>Download Graph</Button>
-        </div>
-        <div className='image-container'><img src={`${import.meta.env.VITE_S3URL}/assets/${userSub}/${id}/image/Actual_vs_Predicted.png`}></img></div>
+        </div> : <div className='overview flex justify-between items-center'>
+            <div style={{ width: '75%' }}>
+                <p style={{ fontWeight: 600, fontSize: '18px', lineHeight: '28px' }}>Validation</p>
+                <p style={{
+                    fontWeight: 400, fontSize: '14px', lineHeight: '20px', color: 'rgba(71, 84, 103, 1)'
+                }}>Run validation tests by uploading new data rows to see how well your model's predictions match lab test  results</p>
+            </div>
+            <Button  style={{ background: 'rgba(7, 148, 85, 1)', color: 'rgba(255, 255, 255, 1)' }}>+ New Validation</Button>
+        </div>}
+        {selectedTab === 'Overview' ? <div className='image-container'><img src={`${import.meta.env.VITE_S3URL}/assets/${userSub}/${id}/image/Actual_vs_Predicted.png`}></img></div>:''}
+        <div className='table-container'>
+                <div className='flex justify-between items-center'
+                    style={{ height: '81px', padding: '20px 24px' }}
+                >
+                    <div className='flex gap-4'>
+                    <span style={{ fontSize: '18px', color: 'rgba(16, 24, 40, 1)', fontWeight: '600', lineHeight: '28px' }}>{tableData?.length > 1 ? `${tableData?.length} Files` : `${tableData?.length} File`} </span>
+                        
+                    </div>
+                   
+                </div>
+                <Table className="modal-table" columns={columns} dataSource={tableData} /> 
+            </div>
     </div>
         ;
 };
