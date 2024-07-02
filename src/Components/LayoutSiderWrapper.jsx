@@ -18,7 +18,7 @@ const secondsidebaritems = [
     {
         key: "Overview",
         label: <Typography.Text className="font-semibold">Overview</Typography.Text>,
-        icon: <img src="icons/home.svg" />,
+        icon: <img src="/icons/home.svg" />,
     },
     {
         key: "Notifications",
@@ -28,7 +28,7 @@ const secondsidebaritems = [
                 <Badge count={10} />
             </div>
         ),
-        icon: <img src="icons/models.svg" />,
+        icon: <img src="/icons/models.svg" />,
         return: () => {
 
         }
@@ -36,27 +36,27 @@ const secondsidebaritems = [
     {
         key: "Analytics",
         label: <Typography.Text className="font-semibold">Analytics</Typography.Text>,
-        icon: <img src="icons/files.svg" />,
+        icon: <img src="/icons/files.svg" />,
     },
     {
         key: "Saved Reports",
         label: <Typography.Text className="font-semibold">Saved Reports</Typography.Text>,
-        icon: <img src="icons/pagi.svg" />,
+        icon: <img src="/icons/pagi.svg" />,
     },
     {
         key: "Scheduled Reports",
         label: <Typography.Text className="font-semibold">Scheduled Reports</Typography.Text>,
-        icon: <img src="icons/files.svg" />,
+        icon: <img src="/icons/files.svg" />,
     },
     {
         key: "User Reports",
         label: <Typography.Text className="font-semibold">User Reports</Typography.Text>,
-        icon: <img src="icons/files.svg" />,
+        icon: <img src="/icons/files.svg" />,
     },
     {
         key: "Notifications",
         label: <Typography.Text className="font-semibold">Notifications</Typography.Text>,
-        icon: <img src="icons/account.svg" />,
+        icon: <img src="/icons/account.svg" />,
     }
 ]
 export default function LayoutSiderWrapper({ children }) {
@@ -76,34 +76,34 @@ export default function LayoutSiderWrapper({ children }) {
         {
             key: "home",
             label: <Typography.Text className="font-semibold">Home</Typography.Text>,
-            icon: <img src="icons/home.svg" />,
+            icon: <img src="/icons/home.svg" />,
             onClick: () => navigate('/')
         },
         {
             key: "models",
             label: <Typography.Text className="font-semibold">Models</Typography.Text>,
-            icon: <img src="icons/models.svg" />,
+            icon: <img src="/icons/models.svg" />,
         },
         {
             key: "files",
             label: <Typography.Text className="font-semibold">Files</Typography.Text>,
-            icon: <img src="icons/files.svg" />,
+            icon: <img src="/icons/files.svg" />,
         },
         {
             key: "pagi",
             label: <Typography.Text className="font-semibold">PAGI</Typography.Text>,
-            icon: <img src="icons/pagi.svg" />,
+            icon: <img src="/icons/pagi.svg" />,
         },
         {
             key: "createmodel",
             label: <Typography.Text className="font-semibold">Create Model</Typography.Text>,
-            icon: <img src="icons/pagi.svg" />,
+            icon: <img src="/icons/pagi.svg" />,
             onClick: () => setOpen(true)
         },
         {
             key: "account",
             label: <Typography.Text className="font-semibold">Account</Typography.Text>,
-            icon: <img src="icons/account.svg" />,
+            icon: <img src="/icons/account.svg" />,
             onClick: () => navigate("/account")
         }
     ]
@@ -138,7 +138,7 @@ export default function LayoutSiderWrapper({ children }) {
                                 <Typography.Text>{user?.email ? user?.email : ''}</Typography.Text>
                             </div>
                         </div>
-                        <img src="icons/logout.svg" onClick={() => { signOut(); dispatch(removeUser()); }} style={{ height: "20px", width: "20px" }} />
+                        <img src="/icons/logout.svg" onClick={() => { signOut(); dispatch(removeUser()); }} style={{ height: "20px", width: "20px" }} />
                     </div>
                 </div>
                 {drawerVisible ? <div style={{
