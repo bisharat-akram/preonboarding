@@ -147,7 +147,7 @@ const ModalCreate = () => {
                                 height: '12px'
                             }
                         }><img src={nextdisabledarrow} style={{ height: '100%' }}></img></span></Button> :   step < 3 ? 
-                            <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }} disabled={step > 0 && disablenextstep} onClick={gotonextstep} >Next Step<span style={
+                            <Button type='primary' className='modal-button' disabled={step > 0 && disablenextstep} onClick={gotonextstep} >Next Step<span style={
                                 {
                                     width: '16px',
                                     height: '12px'
