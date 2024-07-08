@@ -1,0 +1,7 @@
+.dragger-container{
+position: relative;
+}
+.dragger-container .ant-upload-list{
+    /* display: none; */
+    
+}

@@ -117,7 +117,7 @@ const Model = () => {
                 <p style={{
                     fontWeight: 400, fontSize: '14px', lineHeight: '20px', color: 'rgba(71, 84, 103, 1)' }}>View the accuracy of your model by comparing its predictions against the actual data from your source file.</p>
             </div>
-            <Button icon={<DownloadOutlined />} style={{ background: 'rgba(7, 148, 85, 1)', color:'rgba(255, 255, 255, 1)'}}>Download Graph</Button>
+            <Button type='primary' icon={<DownloadOutlined />} style={{  color:'rgba(255, 255, 255, 1)'}}>Download Graph</Button>
         </div> : <div className='overview flex justify-between items-center'>
             <div style={{ width: '75%' }}>
                 <p style={{ fontWeight: 600, fontSize: '18px', lineHeight: '28px' }}>Validation</p>

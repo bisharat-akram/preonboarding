@@ -12,6 +12,14 @@ import { Hub } from 'aws-amplify/utils';
 import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux'
 import { createUser } from './redux/actions/userAction'
+import { ConfigProvider } from 'antd';
+import { green } from '@ant-design/colors';
+
+
+const customTheme = {
+  primaryColor: 'black !important',
+};
+
 
 function App() {
   const location = useLocation();
@@ -66,15 +74,30 @@ function App() {
     init();
 
   }, [])
-
+  
   if (session) {
     return (
-      <Routes>
-        <Route exact path='/' element={<LayoutSiderWrapper><Dashboard /></LayoutSiderWrapper>} />
-        <Route exact path='/createmodel' element={<ModalCreate />} />
-        <Route exact path='/account' element={<ListUser />}></Route>
-        <Route exact path='/model/:id' element={<LayoutSiderWrapper><Model /></LayoutSiderWrapper>}></Route>
-      </Routes>
+      <ConfigProvider
+        theme={{
+          // token: {
+          //   colorPrimary: data.colorPrimary,
+          //   borderRadius: data.borderRadius,
+          // },
+          components: {
+            Button: {
+              colorPrimary: '#17B26A',
+            },
+          },
+        }}
+      >
+        <Routes>
+          <Route exact path='/' element={<LayoutSiderWrapper><Dashboard /></LayoutSiderWrapper>} />
+          <Route exact path='/createmodel' element={<ModalCreate />} />
+          <Route exact path='/account' element={<ListUser />}></Route>
+          <Route exact path='/model/:id' element={<LayoutSiderWrapper><Model /></LayoutSiderWrapper>}></Route>
+        </Routes>
+    </ConfigProvider>
+     
     )
   }
 

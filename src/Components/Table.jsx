@@ -44,7 +44,7 @@ const CommonTable = ({ enablenext, showCheckoption, data, uploadselectedexceldat
                 style={{ height:'81px',padding:'20px 24px'}}
             >
                 <div className='flex gap-4'>
-                <span style={{fontSize:'18px',color:'rgba(16, 24, 40, 1)',fontWeight:'600',lineHeight:'28px'}}>7 Items</span>
+                    <span style={{ fontSize: '18px', color: 'rgba(16, 24, 40, 1)', fontWeight: '600', lineHeight: '28px' }}>{`${data.length} Items`}</span>
                 {hasSelected ?
                     <div style={{
                         width: 'fit-content', padding: '2px 10px', borderRadius: '16px', border: '1px solid rgba(233, 215, 254, 1)', background: 'rgba(249, 245, 255, 1)'}}>

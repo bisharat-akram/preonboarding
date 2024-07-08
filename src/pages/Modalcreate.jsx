@@ -147,7 +147,7 @@ const ModalCreate = () => {
                                 height: '12px'
                             }
                         }><img src={nextdisabledarrow} style={{ height: '100%' }}></img></span></Button> :   step < 3 ? 
-                            <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }} disabled={step > 0 && disablenextstep} onClick={gotonextstep} >Next Step<span style={
+                            <Button type='primary' className='modal-button' disabled={step > 0 && disablenextstep} onClick={gotonextstep} >Next Step<span style={
                                 {
                                     width: '16px',
                                     height: '12px'
@@ -159,24 +159,148 @@ const ModalCreate = () => {
             </div>
             <div className='stepper flex justify-center '>
                 <Steps
-                    style={{width:'50%'}}
-                    // progressDot
+                    style={{ width: '80%' }}
                     current={step}
                     items={[
                         {
                             title: 'Upload Your Data',
+                            icon: (
+                                <div style={{
+                                    border: step === 0 ? '4px solid #0794553D' : '1px solid #0794553D',
+                                    borderRadius: '50%',
+                                    height: '35px',
+                                    width: '35px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+                                  
+                                    <div style={{
+                                        borderRadius: '50%',
+                                        background: step === 0 ? '#079455' : '#D0D5DD',
+                                        height: step === 0 ? '100%':'10px',
+                                        width: step === 0 ? '100%' : '10px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        {step === 0 && (
+                                            <div style={{
+                                                borderRadius: '50%',
+                                                background: 'white',
+                                                height: '50%',
+                                                width: '50%'
+                                            }}></div>
+                                        )}
+                                    </div>
+                                </div>
+                            )
                         },
                         {
                             title: 'Select Identifier',
+                            icon: (
+                                <div style={{
+                                    border: step === 1 ? '4px solid #0794553D' : '1px solid #0794553D',
+                                    borderRadius: '50%',
+                                    height: '35px',
+                                    width: '35px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+
+                                    <div style={{
+                                        borderRadius: '50%',
+                                        background: step === 1 ? '#079455' : '#D0D5DD',
+                                        height: step === 1 ? '100%' : '10px',
+                                        width: step === 1 ? '100%' : '10px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        {step === 1 && (
+                                            <div style={{
+                                                borderRadius: '50%',
+                                                background: 'white',
+                                                height: '50%',
+                                                width: '50%'
+                                            }}></div>
+                                        )}
+                                    </div>
+                                </div>
+                            )
                         },
                         {
-                            title: 'Select Property'
+                            title: 'Select Property',
+                            icon: (
+                                <div style={{
+                                    border: step === 2 ? '4px solid #0794553D' : '1px solid #0794553D',
+                                    borderRadius: '50%',
+                                    height: '35px',
+                                    width: '35px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+
+                                    <div style={{
+                                        borderRadius: '50%',
+                                        background: step === 2 ? '#079455' : '#D0D5DD',
+                                        height: step === 2 ? '100%' : '10px',
+                                        width: step === 2 ? '100%' : '10px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        {step === 2 && (
+                                            <div style={{
+                                                borderRadius: '50%',
+                                                background: 'white',
+                                                height: '50%',
+                                                width: '50%'
+                                            }}></div>
+                                        )}
+                                    </div>
+                                </div>
+                            )
                         },
                         {
-                            title: 'Review and Confirm'
+                            title: 'Review and Confirm',
+                            icon: (
+                                <div style={{
+                                    border: step === 3 ? '4px solid #0794553D' : '1px solid #0794553D',
+                                    borderRadius: '50%',
+                                    height: '35px',
+                                    width: '35px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+
+                                    <div style={{
+                                        borderRadius: '50%',
+                                        background: step === 3 ? '#079455' : '#D0D5DD',
+                                        height: step === 3 ? '100%' : '10px',
+                                        width: step === 3 ? '100%' : '10px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        {step === 3 && (
+                                            <div style={{
+                                                borderRadius: '50%',
+                                                background: 'white',
+                                                height: '50%',
+                                                width: '50%'
+                                            }}></div>
+                                        )}
+                                    </div>
+                                </div>
+                            )
                         },
                     ]}
                 />
+
             </div>
             
             {step===0 && <div className='steptext'>
@@ -184,7 +308,6 @@ const ModalCreate = () => {
                     <p className='title'>Upload Your Data to Get Started</p>
                     <p className='content'>Use your custom SMILES string data to create a model tailored specifically to your needs.This allows for in-depth analysis and precise results based on your unique formulations. Please note that model training may take up to 24 hours to complete.</p>
                 </div>
-              
             </div>}
             {step === 0 && <div className='w-full flex justify-center dragger'>
                 <DraggerComponent enablenext={enablenext} uploadexceldata={uploadexceldata} changeuploadedfile={changeuploadedfile} addColumns={addColumns}></DraggerComponent>
