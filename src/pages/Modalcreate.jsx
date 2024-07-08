@@ -139,8 +139,7 @@ const ModalCreate = () => {
                         }
                     }><img src={previcon}></img></span>Previous Step</Button>}
                     {
-                        disablenextstep && step < 3 ? <Button type='primary' className='modal-button' style={{
-                            backgroundColor: '#079455', color: 'rgba(152, 162, 179, 1)'
+                        disablenextstep && step < 3 ? <Button type='primary' className='modal-button' style={{ color: 'rgba(152, 162, 179, 1)'
                         }} >Next Step<span style={
                             {
 
@@ -153,7 +152,7 @@ const ModalCreate = () => {
                                     width: '16px',
                                     height: '12px'
                                 }
-                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }} onClick={() => callLambda()} >Create Model</Button>
+                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' onClick={() => callLambda()} >Create Model</Button>
                     }
 
                 </div>

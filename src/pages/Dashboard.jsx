@@ -31,6 +31,7 @@ const items = [
 const Dashboard = () => {
     const [alignValue, setAlignValue] = useState('center');
     const [size, setSize] = useState('small');
+    const [value, setValue] = useState('');
     const navigate = useNavigate();
     const [images, setImages] = useState([]);
     async function getList() {
@@ -84,35 +85,34 @@ const Dashboard = () => {
         }, [])
         const onChange = (e) => {
             setSize(e.target.value);
-        };
+    };
+    const optionsWithDisabled = [
+        { label: '30 days', value: '30 days' },
+        { label: '7 days', value: '7 days' },
+        { label: '24 hours', value: '24 hours'},
+    ];
+    const radiogroup = ({ target: { value } }) => {
+        console.log('radio4 checked', value);
+        setValue(value);
+    };
         return (
             <div className='h-full w-full dashboard' >
             <div className='text-start flex flex-col home'>
                 <p >Home</p>
                 <div className='tab'>
-                    {/* <Segmented
-                        defaultValue="30 days"
-                        style={{
-                            marginTop: 8,
-                            marginBottom: 8,
-                            background: 'white',
-                            border: '1px solid rgba(208, 213, 221, 1)'
-                        }}
-                        itemColor='blue'
-                        onChange={(value) => setAlignValue(value)}
-                        options={['30 days', '7 days', '24 hours']}
-                    /> */}
-                    <Radio.Group
-                        value={size}
-                        onChange={onChange}
-                        style={{
-                            marginBottom: 16
-                        }}
-                    >
-                            <Radio.Button value="30 days" style={{outline: 'none', backgroundColor: size === '30 days' ? '#F9FAFB' : 'inherit' }}>30 days</Radio.Button>
-                            <Radio.Button value="7 days" style={{outline: 'none', backgroundColor: size === '7 days' ? '#F9FAFB' : 'inherit' }}>7 days</Radio.Button>
-                            <Radio.Button value="24 hours" style={{outline: 'none',  backgroundColor: size === '24 hours' ? '#F9FAFB' : 'inherit' }}>24 hours</Radio.Button>
-                    </Radio.Group>
+                    
+              
+                        <Radio.Group
+                            style={{
+                                marginBottom: 16
+                            }}
+                            buttonCheckedBg="#F9FAFB"
+                            options={optionsWithDisabled}
+                            onChange={radiogroup}
+                            value={value}
+                            optionType="button"
+                            buttonStyle="solid"
+                        />
                 </div>
             </div>
             <div className='flex justify-start w-full stats' >

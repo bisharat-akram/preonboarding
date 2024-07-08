@@ -5,3 +5,9 @@ position: relative;
     /* display: none; */
     
 }
+.custom-item-renderer{
+    width:60vw;
+    border-radius: 12px;
+    border:1px solid #EAECF0;
+    padding: 16px;
+}

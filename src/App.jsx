@@ -69,7 +69,7 @@ function App() {
             console.log('custom state returned from CognitoHosted UI');
             break;
         }
-      });
+      }); 
     }
     init();
 
@@ -79,13 +79,9 @@ function App() {
     return (
       <ConfigProvider
         theme={{
-          // token: {
-          //   colorPrimary: data.colorPrimary,
-          //   borderRadius: data.borderRadius,
-          // },
           components: {
             Button: {
-              colorPrimary: '#17B26A',
+              colorPrimary: '#079455',
             },
           },
         }}

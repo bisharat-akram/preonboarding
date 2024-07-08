@@ -183,3 +183,14 @@ gap: 10px;
      border:1px solid rgba(234, 236, 240, 1);
       border-radius: 12px;
 }
+/* .tab  .ant-radio-button-checked{
+    background-color: #F9FAFB;
+    color:black
+}
+.tab .ant-radio-button-checked >input {
+
+    color: black
+}
+.tab .ant-radio-button-wrapper-checked{
+    border:none;
+} */
