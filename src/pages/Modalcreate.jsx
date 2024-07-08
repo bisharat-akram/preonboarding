@@ -1,6 +1,6 @@
 import { Button, Table } from 'antd';
-import React, { useState,useEffect } from 'react';
-import {  Steps ,Form,Select} from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Steps, Form, Select } from 'antd';
 import '../CSS/Modal.css'
 import DraggerComponent from '../Components/Dragger';
 import CommonTable from '../Components/Table';
@@ -45,7 +45,7 @@ const ModalCreate = () => {
     const onSearch = (value) => {
         console.log('search:', value);
     };
-    const uploadexceldata=(data)=>{
+    const uploadexceldata = (data) => {
         console.log(data);
         setExcelData(data);
     }
@@ -68,15 +68,15 @@ const ModalCreate = () => {
     async function callLambda() {
         console.log('ss', selectedexcelData, '', selectedColumnName)
         const bodydata = {}
-        
+
         // let dummydata = Object.fromEntries(
         //     Object.entries(selectedexcelData[0]).map(([key, value]) => [key.toUpperCase(), value])
         // );
-        
+
         const temp = selectedColumnName.map((data) => {
             let arr = {}
             console.log(data)
-        
+
             selectedexcelData?.map((exceldataselected, ind) => {
                 console.log(exceldataselected, data, selectedexcelData, exceldataselected[`${data}`])
                 arr[ind] = exceldataselected[`${data}`]
@@ -91,14 +91,14 @@ const ModalCreate = () => {
         }, {});
         console.log(bodyexcel)
         // const bodyexcel = temp.map((data) => data);
-        
+
 
         const options = {
             body: JSON.stringify({
                 "userId": user?.sub,
                 ...bodyexcel
             }),
-            "method":"POST",
+            "method": "POST",
         };
         let restOperation = await fetch(import.meta.env.VITE_PATH, options);
 
@@ -127,19 +127,20 @@ const ModalCreate = () => {
     return (
         <div className='h-screen w-screen flex flex-col'>
             <div className="flex justify-between items-center modal-create">
-                <Button className='button' onClick={() => { navigate('/')}}>Go to Dashboard</Button>
+                <Button className='button' onClick={() => { navigate('/') }}>Go to Dashboard</Button>
                 <p className='page-title'>New Model Creation</p>
                 <div className="flex justify-between items-center modal-create gap-4">
-                    {step > 0 && step<3 && <Button className='modal-button' onClick={gotoprevstep} style={{
-                        fontWeight: 600, lineHeight: '20px', fontSize: '14px', color: 'rgba(105, 65, 198, 1)'}}><span style={
+                    {step > 0 && step < 3 && <Button className='modal-button' onClick={gotoprevstep} style={{
+                        fontWeight: 600, lineHeight: '20px', fontSize: '14px', color: 'rgba(105, 65, 198, 1)'
+                    }}><span style={
                         {
                             width: '20px',
-                            height:'20px'
+                            height: '20px'
                         }
                     }><img src={previcon}></img></span>Previous Step</Button>}
                     {
-                        disablenextstep && step < 3   ? <Button type='primary' className='modal-button' style={{
-                            backgroundColor: 'rgba(242, 244, 247, 1)', color: 'rgba(152, 162, 179, 1)'
+                        disablenextstep && step < 3 ? <Button type='primary' className='modal-button' style={{
+                            backgroundColor: '#079455', color: 'rgba(152, 162, 179, 1)'
                         }} >Next Step<span style={
                             {
 
@@ -152,12 +153,12 @@ const ModalCreate = () => {
                                     width: '16px',
                                     height: '12px'
                                 }
-                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }}  onClick={()=>callLambda()} >Create Model</Button>
+                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' style={{ backgroundColor: 'rgba(127, 86, 217, 1)' }} onClick={() => callLambda()} >Create Model</Button>
                     }
-                    
+
                 </div>
             </div>
-            <div className='stepper flex justify-center '>
+            <div className='stepper flex justify-center text-[#079455]'>
                 <Steps
                     style={{ width: '80%' }}
                     current={step}
@@ -331,15 +332,16 @@ const ModalCreate = () => {
             </div>}
             {step === 2 && <div className='flex w-full justify-center'>
                 <div className='w-6/12 flex gap-4 items-center warning-div'>
-                    <span style={{height:'28px'}}><img src={warn} style={{height:'100%'}}></img></span>
+                    <span style={{ height: '28px' }}><img src={warn} style={{ height: '100%' }}></img></span>
                     <p style={{
-                        fontSize: '14px', lineHeight: '20px', fontWeight: '600', color: 'rgba(52, 64, 84, 1)'}}>It's important to select a column for a property, as not doing so may result in a processing error.</p>
-                    </div>
+                        fontSize: '14px', lineHeight: '20px', fontWeight: '600', color: 'rgba(52, 64, 84, 1)'
+                    }}>It's important to select a column for a property, as not doing so may result in a processing error.</p>
                 </div>
+            </div>
             }
-            {step === 2 && <div className='w-full flex justify-center' style={{padding:'15px 0px'}}>
-                <Form 
-                style={{width:'25%'}} layout='vertical'>
+            {step === 2 && <div className='w-full flex justify-center' style={{ padding: '15px 0px' }}>
+                <Form
+                    style={{ width: '25%' }} layout='vertical'>
                     <Form.Item label="Property Name"
                     >
                         <Select
@@ -367,20 +369,20 @@ const ModalCreate = () => {
                 </div>
 
             </div>}
-            {step === 3 && <div className='flex w-full justify-center' style={{paddingBottom:'24px'}}>
+            {step === 3 && <div className='flex w-full justify-center' style={{ paddingBottom: '24px' }}>
                 <div className=' flex gap-4 items-center warning-div'>
-                    <span style={{ height: '28px',width:'70px' }}><img src={warn} style={{ height: '100%' }}></img></span>
+                    <span style={{ height: '28px', width: '70px' }}><img src={warn} style={{ height: '100%' }}></img></span>
                     <div>
-                        <p style={{fontSize:'14px',lineHeight:'20px',fontWeight:600,textAlign:'start'}}>About Estimated Completion Times</p>
+                        <p style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 600, textAlign: 'start' }}>About Estimated Completion Times</p>
                         <p style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400, textAlign: 'start' }}>Estimated completion times are based on the size of your data. The average turnaround time is 24 hours, but completion times may be longer depending on your data. You will be notified via your account email once the model training is complete.</p>
 
                     </div>
                 </div>
             </div>
             }
-            {step === 3 && <div className='flex gap-4' style={{padding:'0 24px'}}>
-                <div style={{ width:'25%', height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
-                    <div className="flex flex-col" style={{ height: '161px', gap: '8px', padding: '24px 0px 0 24px'}}>
+            {step === 3 && <div className='flex gap-4' style={{ padding: '0 24px' }}>
+                <div style={{ width: '25%', height: '202px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(234, 236, 240, 1)', borderRadius: '12px' }}>
+                    <div className="flex flex-col" style={{ height: '161px', gap: '8px', padding: '24px 0px 0 24px' }}>
                         <div className='flex justify-start items-center' style={{ gap: '40px' }}>
                             <span style={{ height: '55px' }}>
                                 <img src={Featuredfileicon} style={{ height: '100%' }}></img>
@@ -389,7 +391,7 @@ const ModalCreate = () => {
                         <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }} > File Uploaded</p>
                         <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '80%' }}>{uploadedFile?.name}</p>
                     </div>
-                    <div className='flex justify-center items-center' onClick={()=>setStep(0)}  style={{
+                    <div className='flex justify-center items-center' onClick={() => setStep(0)} style={{
                         height: '40px', borderTop: '1px solid rgba(234, 236, 240, 1)'
                     }}>
                         <p style={{
@@ -443,7 +445,7 @@ const ModalCreate = () => {
                         <p className="text-start" style={{ color: 'rgba(130, 130, 130, 1)' }}>Estimated Completion Time</p>
                         <p className="text-start" style={{ fontSize: '15px', fontWeight: '600', lineHeight: '24px' }}>May 23,2024 12:02 PM</p>
                     </div>
-                    <div className='flex justify-center items-center'  style={{
+                    <div className='flex justify-center items-center' style={{
                         height: '40px', borderTop: '1px solid rgba(234, 236, 240, 1)'
                     }}>
                         <p style={{
@@ -452,8 +454,8 @@ const ModalCreate = () => {
                     </div>
                 </div>
             </div>}
-            {step === 3 && <div className='w-full flex flex-col justify-center items-center' style={{marginTop:'30px'}}>
-                <CommonTable columns={columns } showCheckoption={false}  data={selectedexcelData} ></CommonTable>
+            {step === 3 && <div className='w-full flex flex-col justify-center items-center' style={{ marginTop: '30px' }}>
+                <CommonTable columns={columns} showCheckoption={false} data={selectedexcelData} ></CommonTable>
             </div>}
         </div>
     );

@@ -1,5 +1,5 @@
 import sparklogin from '../assets/sparklogin.png'
-import sparklogo from '../assets/sparklogo.png'
+import logogreen from '../assets/logogreen.png'
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { signUp, confirmSignUp } from "aws-amplify/auth"
@@ -51,7 +51,7 @@ export default function SignUp() {
         <div className="flex flex-auto w-screen justify-center items-center">
             <div className='w-6/12 flex flex-col items-center  h-screen gap-4 background-grid'>
                 <div style={{ marginTop: '96px', lineHeight: '38px' }}>
-                    <img src={sparklogo} alt='logo'></img>
+                    <img src={logogreen} alt='logo'></img>
                 </div>
 
                 <p className='text-3xl font-bold font-inter' style={{ marginTop: '96px', lineHeight: '38px' }}>Welcome back</p>
@@ -149,7 +149,7 @@ export default function SignUp() {
                             <Button
                                 type="primary"
                                 className='w-full'
-                                style={{ backgroundColor: '#7F56D9', borderRadius: '8px', height: '50px' }}
+                                style={{ backgroundColor:'#17b26a', borderRadius: '8px', height: '50px' }}
                                 onClick={(e) => sendOtpToUser()}
                             >
                                 Send Otp
@@ -165,7 +165,7 @@ export default function SignUp() {
                                 type="primary"
                                 htmlType="submit"
                                 className='w-full'
-                                style={{ backgroundColor: '#7F56D9', borderRadius: '8px', height: '50px' }}
+                                style={{ backgroundColor: '#17b26a', borderRadius: '8px', height: '50px' }}
                             // onClick={() => navigate("/")}
                             >
                                 Submit
@@ -174,7 +174,7 @@ export default function SignUp() {
 
                     </Form>
                 </div>
-                <p>Don't have an account?<a href="/signup"> Request Access</a></p>
+                <p>Don't have an account?<a href="/signup" className='text-[#079455] hover:text-[#079455]'> Request Access</a></p>
             </div>
             <div className='w-6/12 flex-auto justify-center  items-center h-screen '><img src={sparklogin} className='object-cover w-full h-full'></img></div>
         </div>

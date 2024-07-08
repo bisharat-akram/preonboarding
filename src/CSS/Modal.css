@@ -13,6 +13,7 @@
 .stepper{
     /* margin-top:14px; */
     padding:30px 0px 30px 0px;
+  color: #097455;
 }
 .page-title{
     font-weight: 600;
@@ -114,4 +115,10 @@
     line-height: 20px; 
     font-size: 14px; 
     color: rgba(255, 255, 255, 1);
+}
+.ant-steps .ant-steps-item-process .ant-steps-item-icon{
+    background-color: #097455;
+}
+.ant-steps .ant-steps-item-process .ant-steps-item-title{
+    color: #097455 !important;
 }
