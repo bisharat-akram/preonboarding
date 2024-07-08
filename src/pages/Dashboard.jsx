@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Radio} from 'antd';
 import icondual from '../assets/icondual.png'
 import dots3 from '../assets/dots3.png'
 import folder from '../assets/folder.png'
@@ -29,6 +30,8 @@ const items = [
 ];
 const Dashboard = () => {
     const [alignValue, setAlignValue] = useState('center');
+    const [size, setSize] = useState('small');
+    const [value, setValue] = useState('');
     const navigate = useNavigate();
     const [images, setImages] = useState([]);
     async function getList() {
@@ -44,7 +47,7 @@ const Dashboard = () => {
                         Authorization: token
                     }
                 }
-
+                
             });
             let result = await restOperation.response;
             result = await result.body.json()
@@ -62,41 +65,54 @@ const Dashboard = () => {
                 return prev;
             }, 0);
             // let ids = result.map((data) => {
-            //     let urlarr = data.split('/');
-
-            //     let id = urlarr[2]
-            //     console.log(id);
-            //     return id;
-            // })
-
-            setImages(result)
-            console.log(result)
-        } catch (error) {
-            console.log(error);
+                //     let urlarr = data.split('/');
+                
+                //     let id = urlarr[2]
+                //     console.log(id);
+                //     return id;
+                // })
+                
+                setImages(result)
+                console.log(result)
+            } catch (error) {
+                console.log(error);
+            }
         }
-    }
-    useEffect(() => {
-
-
-        getList()
-    }, [])
-    return (
-        <div className='h-full w-full dashboard' >
+        useEffect(() => {
+            
+            
+            getList()
+        }, [])
+        const onChange = (e) => {
+            setSize(e.target.value);
+    };
+    const optionsWithDisabled = [
+        { label: '30 days', value: '30 days' },
+        { label: '7 days', value: '7 days' },
+        { label: '24 hours', value: '24 hours'},
+    ];
+    const radiogroup = ({ target: { value } }) => {
+        console.log('radio4 checked', value);
+        setValue(value);
+    };
+        return (
+            <div className='h-full w-full dashboard' >
             <div className='text-start flex flex-col home'>
                 <p >Home</p>
                 <div className='tab'>
-                    <Segmented
-                        defaultValue="30 days"
-                        style={{
-                            marginTop: 8,
-                            marginBottom: 8,
-                            background: 'white',
-                            border: '1px solid rgba(208, 213, 221, 1)'
-                        }}
-                        itemColor='blue'
-                        onChange={(value) => setAlignValue(value)}
-                        options={['30 days', '7 days', '24 hours']}
-                    />
+                    
+              
+                        <Radio.Group
+                            style={{
+                                marginBottom: 16
+                            }}
+                            buttonCheckedBg="#F9FAFB"
+                            options={optionsWithDisabled}
+                            onChange={radiogroup}
+                            value={value}
+                            optionType="button"
+                            buttonStyle="solid"
+                        />
                 </div>
             </div>
             <div className='flex justify-start w-full stats' >
