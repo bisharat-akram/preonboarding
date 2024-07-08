@@ -95,7 +95,7 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
             });
             changeuploadedfile(file);
             readExcel(file);
-            enablenext(false);
+            
             const intervalId = setInterval(() => {
                 if (percent >= 100) {
                     clearInterval(intervalId);
@@ -106,6 +106,7 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
 
             setTimeout(() => {
                 clearInterval(intervalId);
+                enablenext(false);
                 message.success(`${file.name} uploaded successfully.`);
             }, 20000);
         } catch (error) {
