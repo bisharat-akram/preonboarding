@@ -3,13 +3,12 @@ import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
 const { Dragger } = Upload;
 import uploadfileimage from '../assets/uploadfile.png'
-import fileuploaded from '../assets/fileuploaded.png'
 import { uploadData } from 'aws-amplify/storage';
 // import { exceldatahandle } from '../../amplify/functions/exceldatahandle/resource.ts'
 import '../CSS/Dragger.css'
 import * as XLSX from "xlsx";
 const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, addColumns }) => {
-    const [fileUploaded, setFileUploaded] = useState(false);
+    const [fileUploadStatus, setFileUploadStatus] = useState('');
     const readExcel = (file) => {
         const promise = new Promise((resolve, reject) => {
             const fileReader = new FileReader();
@@ -59,11 +58,16 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
     const props = {
         name: 'file',
         multiple: false,
-        action: null,
+        action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
         onChange(info) {
             const { status } = info.file;
             console.log(status)
-            if (status !== 'uploading') {
+            setFileUploadStatus(status)
+            if (status === 'removed') {
+                setFileUploadStatus('')
+                enablenext(true);
+            }
+            else if (status !== 'uploading') {
                 console.log(info.file, info?.file?.originFileObj);
                 // setFile(info.file);
                 let data = uploadData({
@@ -72,10 +76,10 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
                 });
                 changeuploadedfile(info?.file?.originFileObj)
                 readExcel(info?.file?.originFileObj);
-                setFileUploaded(()=>true);
-                console.log(data, fileUploaded);
-                enablenext(true);
+                console.log(data);
+                enablenext(false);
             }
+
             // if (status === 'done') {
             //     message.success(`${info.file.name} file uploaded successfully.`);
             //     enablenext(false)
@@ -90,26 +94,25 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
     };
     return (
         <div className='dragger-container'>
-            {fileUploaded?
-                    <div className="flex justify-center " style={{ height: '80px', position: 'absolute','zIndex':1,top:'30%',right:'10px'}}>
-                        <img src={fileuploaded} alt="Uploaded File Icon" />
-                    </div>
-                    : ''}
-            
-            <Dragger style={{
-                height: '100%', width: '702px', backgroundColor: 'white', border: '1px solid rgba(234, 236, 240, 1)'
-            }} {...props}>
-                <div className="flex  justify-center" style={{ height: '40px', marginBottom: '10px' }}>
-                    <img src={uploadfileimage}></img>
-                </div>
-                <p className="ant-upload-text" style={{ fontSize: '14px', fontWeight: 400, lineHeight: '20px' }}><span style={{
-                    fontWeight: 600,
-                    color: 'rgba(105, 65, 198, 1)'
-                }}>Click or drag file</span> to this area to upload</p>
-                <p className="ant-upload-text" style={{ fontSize: '14px', fontWeight: 400, lineHeight: '20px' }}>CSV and XLS files only (max. 100 MB).</p>
+            <Dragger
+                
+            style={{
+                display: `${fileUploadStatus !== '' ? 'none' : ''}`, height: '100%', width: '702px', backgroundColor: 'white', border: '1px solid rgba(234, 236, 240, 1)'
+            }}
+            {...props}
+                listType="picture">
+            <div className="flex  justify-center" style={{ height: '40px', marginBottom: '10px' }}>
+                <img src={uploadfileimage}></img>
+            </div>
+            <p className="ant-upload-text" style={{ fontSize: '14px', fontWeight: 400, lineHeight: '20px' }}><span style={{
+                fontWeight: 600,
+                color: '#067647'
+            }}>Click or drag file</span> to this area to upload</p>
+            <p className="ant-upload-text" style={{ fontSize: '14px', fontWeight: 400, lineHeight: '20px' }}>CSV and XLS files only (max. 100 MB).</p>
 
-            </Dragger>
-        </div>
+        </Dragger> 
+           
+        </div >
     )
 
 }

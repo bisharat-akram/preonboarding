@@ -2,6 +2,6 @@
 position: relative;
 }
 .dragger-container .ant-upload-list{
-    display: none;
+    /* display: none; */
     
 }
