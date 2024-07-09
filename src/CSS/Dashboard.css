@@ -11,7 +11,8 @@
      line-height: 38px;
 }
 .tab .ant-segmented-item-selected {
-    background-color: rgba(208, 213, 221, 1) !important;
+    background-color: #D0D5DD !important; 
+    border-color: #D0D5DD !important;
 }
 .stats{
     gap: 10px;
@@ -183,14 +184,28 @@ gap: 10px;
      border:1px solid rgba(234, 236, 240, 1);
       border-radius: 12px;
 }
-/* .tab  .ant-radio-button-checked{
-    background-color: #F9FAFB;
-    color:black
+.tab   .ant-radio-button-checked{
+    background-color: #D0D5DD;
+    color:black !important;
+    border-color: #D0D5DD;
 }
-.tab .ant-radio-button-checked >input {
 
-    color: black
+.tab .ant-radio-button-wrapper{
+    border-color: #D0D5DD;
 }
+
+.tab .ant-radio-button-checked >input {
+ border-color: #D0D5DD;
+    color: black;
+}
+/*
 .tab .ant-radio-button-wrapper-checked{
     border:none;
 } */
+.ant-radio-group-solid :where(.css-dev-only-do-not-override-vcilh1).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    border-color: #D0D5DD !important;
+    color: black !important;
+}
+:where(.css-dev-only-do-not-override-xyiv00).ant-radio-button-wrapper:not(:first-child)::before {
+    background-color: none !important;
+}

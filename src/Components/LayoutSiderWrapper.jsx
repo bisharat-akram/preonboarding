@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../redux/actions/userAction";
 import { useNavigate } from "react-router-dom";
 import { ModalComponent } from "./modal";
-
+import "../CSS/sidebar.css"
 const { Sider, Content } = Layout;
 
 const layoutStyle = {
@@ -120,7 +120,7 @@ export default function LayoutSiderWrapper({ children }) {
     }, [user.isSignedIn])
     return (
         <Layout style={layoutStyle}>
-            <Sider width="20%" theme="light" style={{ borderRight: "1px solid rgba(234, 236, 240, 1)" }} onMouseEnter={showDrawer}
+            <Sider className="sider" width="300px" theme="light" style={{ borderRight: "1px solid rgba(234, 236, 240, 1)" }} onMouseEnter={showDrawer}
                 onMouseLeave={closeDrawer}>
                 <div className="gap-6 flex h-full flex-col justify-start items-center py-4 px-3">
                     <Image src="siderlogo.png" preview={false} />
@@ -141,8 +141,9 @@ export default function LayoutSiderWrapper({ children }) {
                         <img src="/icons/logout.svg" onClick={() => { signOut(); dispatch(removeUser()); }} style={{ height: "20px", width: "20px" }} />
                     </div>
                 </div>
-                {drawerVisible ? <div style={{
-                    width: '300px',
+                <div className="secondnav" style={{
+                    // display:`${drawerVisible ? 'none' : 'block'}`,
+                    // display:'none',
                     backgroundColor: '#fff',
                     borderLeft: '1px solid rgba(234, 236, 240, 1)',
                     position: 'absolute',
@@ -150,7 +151,10 @@ export default function LayoutSiderWrapper({ children }) {
                     bottom: 0,
                     right: 0,
                     left: '100%',
-                    transition: 'width 0.3s',
+                    visibility: 'hidden',
+                    opacity: 0,
+                    width: '0px',
+                    transition: 'width 0.5s ease-in ,visibility  0.5s ease-in-out,opacity 0.5s ease-in',
                 }}>
                     <div className="gap-6 flex h-full flex-col justify-start items-center py-4 px-3">
                         <Menu
@@ -160,9 +164,9 @@ export default function LayoutSiderWrapper({ children }) {
                         />
 
                     </div>
-                </div> : ''}
+                </div>
             </Sider>
-            <Content style={{ overflow: 'auto', backgroundColor: 'white', marginLeft: `${drawerVisible ? '300px' : '0px'}` }}>{children}</Content>
+            <Content style={{ overflow: 'auto', backgroundColor: 'white', marginLeft: `${drawerVisible ? '300px' : '0px'}`, transition: 'margin-left 0.5s ease-in', }}>{children}</Content>
             {open ? <ModalComponent open={open} closeOpenModal={closeOpenModal} /> : ''}
         </Layout>
     )

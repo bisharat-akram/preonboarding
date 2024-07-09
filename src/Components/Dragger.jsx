@@ -89,26 +89,31 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
             const formData = new FormData();
             formData.append('file', file);
             onSuccess('file uploaded', file);
-            let data = uploadData({
-                path: `files-submissions/${file?.name}`,
-                data: file,
-            });
             changeuploadedfile(file);
             readExcel(file);
-            
-            const intervalId = setInterval(() => {
-                if (percent >= 100) {
-                    clearInterval(intervalId);
-                    return;
-                }
-                setPercent((prevValue) => prevValue + 1);
-            }, 200);
-
-            setTimeout(() => {
-                clearInterval(intervalId);
-                enablenext(false);
-                message.success(`${file.name} uploaded successfully.`);
-            }, 20000);
+            uploadData({
+                path: `files-submissions/${file?.name}`,
+                data: file,
+                options: {
+                    onProgress: ({ transferredBytes, totalBytes }) => {
+                        if (totalBytes) {
+                            setPercent(() => {
+                                let percentage = Math.round(
+                                    (transferredBytes / totalBytes) * 100);
+                                if (percentage === 100) {
+                                    enablenext(false);
+                                    message.success(`${file.name} uploaded successfully.`);
+                                }
+                                console.log(Math.round(
+                                    (transferredBytes / totalBytes) * 100))
+                                return Math.round(
+                                    (transferredBytes / totalBytes) * 100)
+                            })
+                        }
+                    },
+                },
+            });
+        
         } catch (error) {
             // Handle error
             console.error('Upload error:', error);

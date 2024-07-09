@@ -99,14 +99,16 @@ const Dashboard = () => {
             <div className='h-full w-full dashboard' >
             <div className='text-start flex flex-col home'>
                 <p >Home</p>
-                <div className='tab'>
+                <div className='tab '>
                     
               
                         <Radio.Group
                             style={{
-                                marginBottom: 16
+                                marginBottom: 16,
+                                color: 'black',
+                                borderColor:'#D0D5DD'
                             }}
-                            buttonCheckedBg="#F9FAFB"
+                           
                             options={optionsWithDisabled}
                             onChange={radiogroup}
                             value={value}
