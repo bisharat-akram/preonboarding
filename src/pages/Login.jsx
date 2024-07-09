@@ -100,7 +100,7 @@ export default function Login() {
 									span: 24,
 								}}
 							>
-								<a href="#" className='text-[#079455]'>Forgot Password</a>
+								<a href="#" className='text-[#097455] hover:text-[#097455]'>Forgot Password</a>
 							</Form.Item>
 						</div>
 						<Form.Item
@@ -114,7 +114,7 @@ export default function Login() {
 								type="primary"
 								htmlType="submit"
 								className='w-full'
-								style={{ backgroundColor: '#17b26a', borderRadius: '8px', height: '50px' }}
+								style={{  borderRadius: '8px', height: '50px' }}
 							>
 								Submit
 							</Button>
@@ -122,7 +122,7 @@ export default function Login() {
 
 					</Form>
 				</div>
-				<p>Don't have an account?<a href="/signup" className='text-[#079455] hover:text-[#079455]'> Request Access</a></p>
+				<p>Don't have an account?<a href="/signup" className='text-[#097455] hover:text-[#097455]'> Request Access</a></p>
 			</div>
 			<div className='w-6/12 flex-auto justify-center  items-center h-screen '><img src={sparklogin} className='object-cover w-full h-full'></img></div>
 		</div>

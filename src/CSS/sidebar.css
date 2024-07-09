@@ -1,0 +1,8 @@
+.ant-layout-sider-children:hover >.secondnav{
+    visibility: visible !important;
+    opacity:1 !important;
+    width:300px !important
+}
+/* .secondnav:hover{
+    display:none !important;
+} */

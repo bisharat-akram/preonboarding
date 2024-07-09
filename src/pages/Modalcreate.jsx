@@ -132,27 +132,31 @@ const ModalCreate = () => {
                 <div className="flex justify-between items-center modal-create gap-4">
                     {step > 0 && step < 3 && <Button className='modal-button' onClick={gotoprevstep} style={{
                         fontWeight: 600, lineHeight: '20px', fontSize: '14px', color: 'rgba(105, 65, 198, 1)'
-                    }}><span style={
-                        {
-                            width: '20px',
-                            height: '20px'
-                        }
-                    }><img src={previcon}></img></span>Previous Step</Button>}
+                    }}>
+                        <span style={
+                            {
+                                width: '20px',
+                                height: '20px'
+                            }
+                        }><img src={previcon}></img>
+                        </span>Previous Step</Button>}
                     {
-                        disablenextstep && step < 3 ? <Button type='primary' className='modal-button' style={{ color: 'rgba(152, 162, 179, 1)'
-                        }} >Next Step<span style={
+                        disablenextstep && step < 3 ? <Button type='primary' className='modal-button'  >Next Step<span style={
                             {
 
                                 width: '16px',
                                 height: '12px'
                             }
-                        }><img src={nextdisabledarrow} style={{ height: '100%' }}></img></span></Button> :   step < 3 ? 
-                            <Button type='primary' className='modal-button' disabled={step > 0 && disablenextstep} onClick={gotonextstep} >Next Step<span style={
-                                {
-                                    width: '16px',
-                                    height: '12px'
-                                }
-                            }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' onClick={() => callLambda()} >Create Model</Button>
+                        }><img src={nextdisabledarrow} style={{ color: 'rgba(255, 255, 255, 1)', height: '100%' }}></img>
+                        </span>
+                        </Button>
+                            : step < 3 ?
+                                <Button type='primary' className='modal-button' disabled={step > 0 && disablenextstep} onClick={gotonextstep} >Next Step<span style={
+                                    {
+                                        width: '16px',
+                                        height: '12px'
+                                    }
+                                }><img src={nexticon} style={{ height: '100%' }}></img></span></Button> : <Button type='primary' className='modal-button' onClick={() => callLambda()} >Create Model</Button>
                     }
 
                 </div>
@@ -174,11 +178,11 @@ const ModalCreate = () => {
                                     justifyContent: 'center',
                                     alignItems: 'center'
                                 }}>
-                                  
+
                                     <div style={{
                                         borderRadius: '50%',
                                         background: step === 0 ? '#079455' : '#D0D5DD',
-                                        height: step === 0 ? '100%':'10px',
+                                        height: step === 0 ? '100%' : '10px',
                                         width: step === 0 ? '100%' : '10px',
                                         display: 'flex',
                                         justifyContent: 'center',
@@ -302,8 +306,8 @@ const ModalCreate = () => {
                 />
 
             </div>
-            
-            {step===0 && <div className='steptext'>
+
+            {step === 0 && <div className='steptext'>
                 <div className='flex flex-col'>
                     <p className='title'>Upload Your Data to Get Started</p>
                     <p className='content'>Use your custom SMILES string data to create a model tailored specifically to your needs.This allows for in-depth analysis and precise results based on your unique formulations. Please note that model training may take up to 24 hours to complete.</p>

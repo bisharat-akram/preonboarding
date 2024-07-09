@@ -12,7 +12,7 @@ import { Hub } from 'aws-amplify/utils';
 import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux'
 import { createUser } from './redux/actions/userAction'
-import { ConfigProvider } from 'antd';
+import { ConfigProvider} from 'antd';
 import { green } from '@ant-design/colors';
 
 
@@ -69,22 +69,38 @@ function App() {
             console.log('custom state returned from CognitoHosted UI');
             break;
         }
-      }); 
+      });
     }
     init();
 
   }, [])
-  
+
   if (session) {
     return (
       <ConfigProvider
-        theme={{
-          components: {
-            Button: {
-              colorPrimary: '#079455',
+      theme={{
+        token: {
+          colorPrimary: '#097455',
+          colorLink: '#097455',
+          colorBorder: '#097455',
+          colorPrimaryHover: '#097455',
+          colorPrimaryBorder: '#097455',
+          
+        },
+        components: {
+            Radio: {
+              colorPrimary: '#D0D5DD',
+              buttonSolidCheckedColor: 'black',
+              buttonSolidCheckedHoverBg: '#D0D5DD',
+           
             },
+            Button: {
+              textHoverBg: 'transparent',
+            }
+           
           },
         }}
+       
       >
         <Routes>
           <Route exact path='/' element={<LayoutSiderWrapper><Dashboard /></LayoutSiderWrapper>} />
@@ -92,16 +108,33 @@ function App() {
           <Route exact path='/account' element={<ListUser />}></Route>
           <Route exact path='/model/:id' element={<LayoutSiderWrapper><Model /></LayoutSiderWrapper>}></Route>
         </Routes>
-    </ConfigProvider>
-     
+      </ConfigProvider>
+
     )
   }
 
   return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#079455',
+        colorLink: '#079455',
+          colorBorder: '#079455'
+        },
+       components: {
+        Button: {
+          defaultActiveBorderColor: 'black',
+          defaultHoverBorderColor: '#097455',
+        }
+       }
+        }}
+       
+      >
     <Routes>
       <Route exact path='/login' element={<Login />} />
       <Route exact path='/signup' element={<SignUp />} />
     </Routes>
+    </ConfigProvider>
   )
 }
 export default App;
