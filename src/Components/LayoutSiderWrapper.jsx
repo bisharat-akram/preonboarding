@@ -22,12 +22,7 @@ const secondsidebaritems = [
     },
     {
         key: "Notifications",
-        label: (
-            <div className="flex items-center  gap-2" style={{ width: '200px', justifyContent: 'space-between' }}>
-                <Typography.Text className="font-semibold">Notifications</Typography.Text>
-                <Badge count={10} />
-            </div>
-        ),
+        label: <Typography.Text className="font-semibold">Notifications</Typography.Text>,
         icon: <img src="/icons/models.svg" />,
         return: () => {
 
@@ -83,11 +78,13 @@ export default function LayoutSiderWrapper({ children }) {
             key: "models",
             label: <Typography.Text className="font-semibold">Models</Typography.Text>,
             icon: <img src="/icons/models.svg" />,
+            onClick: () => navigate("/imagemodelshow")
         },
         {
             key: "files",
             label: <Typography.Text className="font-semibold">Files</Typography.Text>,
             icon: <img src="/icons/files.svg" />,
+            onClick: () => navigate("/filemodel")
         },
         {
             key: "pagi",
