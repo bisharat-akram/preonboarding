@@ -4,6 +4,7 @@ import icondual from '../assets/icondual.png'
 import dots3 from '../assets/dots3.png'
 import folder from '../assets/folder.png'
 import Sidebar from '../Components/Sidebar';
+import ImageModel from '../Components/imagemodels';
 import Arrowup from '../assets/arrowup.png';
 import '../CSS/Dashboard.css'
 import { Button, Segmented } from 'antd';
@@ -32,57 +33,7 @@ const Dashboard = () => {
     const [alignValue, setAlignValue] = useState('center');
     const [size, setSize] = useState('small');
     const [value, setValue] = useState('');
-    const navigate = useNavigate();
-    const [images, setImages] = useState([]);
-    async function getList() {
-        try {
-            const session = await fetchAuthSession();
-            const token = session.tokens?.idToken
-            console.log(session)
-            let restOperation = get({
-                apiName: config.custom.API.myRestApi.apiName,
-                path: `getimagediffbucket?user=${session?.userSub}`,
-                options: {
-                    headers: {
-                        Authorization: token
-                    }
-                }
-                
-            });
-            let result = await restOperation.response;
-            result = await result.body.json()
-            result = result.reduce((prev, curr) => {
-                if (curr.startsWith(`assets/${session.userSub}`)) {
-                    let urlarr = curr.split('/');
-                    let id = urlarr[2]
-                    if (prev) {
-                        prev[id] = 1;
-                    } else {
-                        prev = { [id]: 1 }
-                    }
-                }
-                console.log(prev)
-                return prev;
-            }, 0);
-            // let ids = result.map((data) => {
-                //     let urlarr = data.split('/');
-                
-                //     let id = urlarr[2]
-                //     console.log(id);
-                //     return id;
-                // })
-                
-                setImages(result)
-                console.log(result)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        useEffect(() => {
-            
-            
-            getList()
-        }, [])
+    
         const onChange = (e) => {
             setSize(e.target.value);
     };
@@ -159,8 +110,9 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-            </div>
-            <div className="flex flex-col modalsheading" >
+                </div>
+                <ImageModel/>
+            {/* <div className="flex flex-col modalsheading" >
                 <p className='text-start'>Models (4)</p>
                 <div className='flex justify-between'>
                     <p>View your recent models and their current statuses. Manage all your formulations in the Models section.</p>
@@ -193,7 +145,7 @@ const Dashboard = () => {
                     </div>
                 </div>)}
 
-            </div>
+            </div> */}
             <div className="flex flex-col filesheading">
                 <p className='text-start' >Files (14)</p>
                 <div className='flex justify-between'>

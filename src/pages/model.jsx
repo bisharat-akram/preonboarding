@@ -7,7 +7,8 @@ import { Button, Segmented } from 'antd';
 import { get } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth'
 import { useParams } from 'react-router-dom';
-import {  Table } from 'antd';
+import { Table } from 'antd';
+import FileModel from '../Components/file';
 const onChange = (key) => {
     console.log(key);
 };
@@ -33,10 +34,12 @@ const Model = () => {
     const [userSub, setUserSub] = useState();
     const [columns, setColumns] = useState();
     const [selectedTab, setSelectedTab] = useState('Overview');
+    const [fileModelData, setFileModelData] = useState([]);
     const [tableData, setTableData] = useState();
     async function getList() {
         try {
             const session = await fetchAuthSession();
+            const token = session.tokens?.idToken
             setUserSub(session.userSub);
 
             await fetch(`${import.meta.env.VITE_S3URL}/assets/${session.userSub}/${id}/json/data.json`)
@@ -76,6 +79,31 @@ const Model = () => {
                 .catch(error => {
                     console.error('There was a problem fetching the data:', error);
                 });
+            
+            let restOperation = get({
+                apiName: config.custom.API.myRestApi.apiName,
+                path: `getimagediffbucket?user=${session?.userSub}`,
+                options: {
+                    headers: {
+                        Authorization: token
+                    }
+                }
+            });
+            let result = await restOperation.response;
+            result = await result.body.json()
+            console.log(result)
+            result = result.filter((data) => {
+                let pattern = new RegExp(`^assets\/${session.userSub}\/([^/]+)\/traintask`);
+                return data.match(pattern)
+            });
+            result = result.map((data,index) => {
+                console.log(data)
+                return {
+                    key: index,
+                    name: data?.split('/')[4]
+                }
+            })
+            setFileModelData(result)
           
         } catch (error) {
             console.log(error);
@@ -104,7 +132,6 @@ const Model = () => {
                     defaultValue={selectedTab}
                     onChange={onTabChange}
                     style={{
-                        marginBottom: 8,
                         background:'rgba(249, 250, 251, 1)'
                     }}
                     options={['Overview', 'Validation', 'Files']}
@@ -118,7 +145,8 @@ const Model = () => {
                     fontWeight: 400, fontSize: '14px', lineHeight: '20px', color: 'rgba(71, 84, 103, 1)' }}>View the accuracy of your model by comparing its predictions against the actual data from your source file.</p>
             </div>
             <Button type='primary' icon={<DownloadOutlined />} style={{  color:'rgba(255, 255, 255, 1)'}}>Download Graph</Button>
-        </div> : <div className='overview flex justify-between items-center'>
+        </div> :
+            selectedTab === 'Validation'?<div className='overview flex justify-between items-center'>
             <div style={{ width: '75%' }}>
                 <p style={{ fontWeight: 600, fontSize: '18px', lineHeight: '28px' }}>Validation</p>
                 <p style={{
@@ -126,9 +154,10 @@ const Model = () => {
                 }}>Run validation tests by uploading new data rows to see how well your model's predictions match lab test  results</p>
             </div>
             <Button  style={{ background: 'rgba(7, 148, 85, 1)', color: 'rgba(255, 255, 255, 1)' }}>+ New Validation</Button>
-        </div>}
+            </div> : <FileModel fileModelData={fileModelData} />
+        }
         {selectedTab === 'Overview' ? <div className='image-container'><img src={`${import.meta.env.VITE_S3URL}/assets/${userSub}/${id}/image/Actual_vs_Predicted.png`}></img></div>:''}
-        <div className='table-container'>
+        {selectedTab !== 'Files'  && <div className='table-container'>
                 <div className='flex justify-between items-center'
                     style={{ height: '81px', padding: '20px 24px' }}
                 >
@@ -139,7 +168,7 @@ const Model = () => {
                    
                 </div>
                 <Table className="modal-table" columns={columns} dataSource={tableData} /> 
-            </div>
+            </div>}
     </div>
         ;
 };

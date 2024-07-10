@@ -7,6 +7,7 @@ import ModalCreate from './pages/Modalcreate'
 import ListUser from './pages/listUser'
 import SignUp from './pages/signUp'
 import Model from './pages/model'
+import FileModel from './Components/file'
 import { useEffect, useState } from 'react';
 import { Hub } from 'aws-amplify/utils';
 import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
@@ -14,7 +15,7 @@ import { useDispatch } from 'react-redux'
 import { createUser } from './redux/actions/userAction'
 import { ConfigProvider} from 'antd';
 import { green } from '@ant-design/colors';
-
+import ImageModelShow from './pages/ImageModelShow'
 
 const customTheme = {
   primaryColor: 'black !important',
@@ -96,7 +97,12 @@ function App() {
             },
             Button: {
               textHoverBg: 'transparent',
-            }
+          },
+          Table: {
+            rowHoverBg: '#f0f0f0', 
+            rowSelectedBg: '#f0f0f0',
+            rowSelectedHoverBg:'#f0f0f0'
+          },
            
           },
         }}
@@ -107,6 +113,8 @@ function App() {
           <Route exact path='/createmodel' element={<ModalCreate />} />
           <Route exact path='/account' element={<ListUser />}></Route>
           <Route exact path='/model/:id' element={<LayoutSiderWrapper><Model /></LayoutSiderWrapper>}></Route>
+          <Route exact path='/imagemodelshow' element={<LayoutSiderWrapper><ImageModelShow /></LayoutSiderWrapper>}></Route>
+          <Route exact path='/filemodel' element={<LayoutSiderWrapper><FileModel /></LayoutSiderWrapper>}></Route>
         </Routes>
       </ConfigProvider>
 

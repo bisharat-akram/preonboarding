@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
 import { Button, message, Upload, Progress } from 'antd';
 const { Dragger } = Upload;
 import uploadfileimage from '../assets/uploadfile.png'
 import { uploadData } from 'aws-amplify/storage';
 import fileicon from '../assets/fileicon.png';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import deleteicon from '../assets/delete.png'
 // import { exceldatahandle } from '../../amplify/functions/exceldatahandle/resource.ts'
 import '../CSS/Dragger.css'
@@ -85,14 +86,15 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
     const customRequest = async (options) => {
         const { onSuccess, onError, file, onProgress } = options;
         try {
-            // Example of uploading file using axios
+            const session = await fetchAuthSession();
+            
             const formData = new FormData();
             formData.append('file', file);
             onSuccess('file uploaded', file);
             changeuploadedfile(file);
             readExcel(file);
             uploadData({
-                path: `files-submissions/${file?.name}`,
+                path: `files-submissions/${session?.userSub}/${file?.name}`,
                 data: file,
                 options: {
                     onProgress: ({ transferredBytes, totalBytes }) => {
@@ -132,6 +134,7 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
         });
         return true;
     };
+    
     return (
         <div className='dragger-container'>
             <Dragger
