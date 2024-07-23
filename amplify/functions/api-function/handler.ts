@@ -63,7 +63,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                     return []
                 })
             console.log(metadataResponses);
-            const filesWithMetadata = filePaths.map((key, index) => ({
+            const filesWithMetadata = filePaths.filter((data) => data && data?.includes('Actual_vs_Predicted.png')).map((key, index) => ({
                 key: key,
                 meta: metadataResponses[index]
             }));
