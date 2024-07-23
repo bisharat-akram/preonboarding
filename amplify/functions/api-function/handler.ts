@@ -30,9 +30,8 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             while (isTruncated) {
                 const response = await Bucketclient.send(command);
                 const { Contents, IsTruncated, NextContinuationToken } = response;
-
                 if (Contents) {
-                    const files = Contents.filter((obj) => !obj?.Key?.endsWith('/')); 
+                    const files = Contents.filter((obj) => !obj?.Key?.endsWith('/'));
                     const fileKeys = files.map((file) => {
                         return file.Key
                     });
@@ -43,7 +42,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 command.input.ContinuationToken = NextContinuationToken;
             }
             
-            const metadataPromises = filePaths.filter((data) => data?.includes('Actual_vs_Predicted.png')).map(async (key) => {
+            const metadataPromises = filePaths.filter((data) => data && data?.includes('Actual_vs_Predicted.png')).map(async (key) => {
                 const input = {
                     Bucket: env.BUCKET,
                     Key: key
