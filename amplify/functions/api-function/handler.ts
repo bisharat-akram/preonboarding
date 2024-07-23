@@ -13,10 +13,7 @@ const client = new CognitoIdentityProviderClient();
 export const handler: APIGatewayProxyHandler = async (event) => {
     let response = null;
     async function getimagediffbucket() {
-         const input = { 
-                Bucket: env.BUCKET,
-             Key: "/assets/f969a90e-0001-70c1-8cde-63d31c230217/20240701071630631322/image/Actual_vs_Predicted.png", // required
-        };
+        
         const command = new ListObjectsV2Command({
             Bucket:env.BUCKET,
             MaxKeys: 1000,
@@ -37,16 +34,23 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 // Iterate through contents and filter out only file paths
                 if (Contents) {
                     const files = Contents.filter((obj) => !obj?.Key?.endsWith('/')); // Filter out objects that end with '/'
-                    const fileKeys = files.map((file) => file.Key);
+                    const fileKeys = files.map(async (file) => {
+                        const input = {
+                            Bucket: env.BUCKET,
+                            Key: file.Key, // required
+                        };
+                        const commandmetadata = new HeadObjectCommand(input);
+                        const metadata = await Bucketclient.send(commandmetadata);
+                        return {key:file.Key,metadata:metadata}
+                    });
+                      
                     filePaths.push(...fileKeys);
                 }
 
                 isTruncated = IsTruncated || false;
                 command.input.ContinuationToken = NextContinuationToken;
             }
-            //   const commandmetadata = new HeadObjectCommand(input);
-            // const response = await Bucketclient.send(commandmetadata);
-            return { filePaths: filePaths ,metadata:{}};
+            return filePaths;
         } catch (err) {
             console.error(err);
         }
