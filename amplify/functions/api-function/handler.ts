@@ -50,9 +50,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 const commandmetadata = new HeadObjectCommand(input);
                 return await Bucketclient.send(commandmetadata);
             });
-
+            console.log(metadataPromises);
             const metadataResponses = await Promise.all(metadataPromises);
-
+            console.log(metadataResponses);
             const filesWithMetadata = filePaths.map((key, index) => ({
                 key: key,
                 meta: metadataResponses[index]
