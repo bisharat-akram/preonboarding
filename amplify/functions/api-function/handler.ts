@@ -31,30 +31,34 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 const response = await Bucketclient.send(command);
                 const { Contents, IsTruncated, NextContinuationToken } = response;
 
-                // Iterate through contents and filter out only file paths
                 if (Contents) {
-                    const files = Contents.filter((obj) => !obj?.Key?.endsWith('/')); // Filter out objects that end with '/'
+                    const files = Contents.filter((obj) => !obj?.Key?.endsWith('/')); 
                     const fileKeys = files.map((file) => {
-                        const input = {
-                            Bucket: env.BUCKET,
-                            Key: file.Key
-                        };
-                        const commandmetadata = new HeadObjectCommand(input);
-                        const response = await Bucketclient.send(commandmetadata);
-                        // return { key: file.Key, metadata: metadata }
-                        console.log('=>', response)
                         return file.Key
                     });
-                      
                     filePaths.push(...fileKeys);
                 }
 
                 isTruncated = IsTruncated || false;
                 command.input.ContinuationToken = NextContinuationToken;
             }
-            //   const commandmetadata = new HeadObjectCommand(input);
-            // const response = await Bucketclient.send(commandmetadata);
-            return { filePaths: filePaths ,metadata:{}};
+            const metadataPromises = filePaths.map(async (key) => {
+                const input = {
+                    Bucket: env.BUCKET,
+                    Key: key
+                };
+                const commandmetadata = new HeadObjectCommand(input);
+                return await Bucketclient.send(commandmetadata);
+            });
+
+            const metadataResponses = await Promise.all(metadataPromises);
+
+            const filesWithMetadata = filePaths.map((key, index) => ({
+                key: key,
+                meta: metadataResponses[index]
+            }));
+
+            return  filesWithMetadata ;
         } catch (err) {
             console.error(err);
         }
