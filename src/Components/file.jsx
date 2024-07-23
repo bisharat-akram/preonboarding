@@ -26,7 +26,6 @@ const FileModel = ({ fileModelData }) => {
     const onSelectChange = (newSelectedRowKeys, selectedRows) => {
         console.log('selectedRowKeys changed: ', selectedRows);
         setSelectedRowKeys(() => {
-            console.log(newSelectedRowKeys)
             return newSelectedRowKeys;
         });
     };

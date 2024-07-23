@@ -87,18 +87,18 @@ const ImageModel = () => {
                 </div>
             </div>
             <div className='modals'>
-                {Object.keys(images).map((data) => <div className="child">
+                {Object.keys(images).map((data,index) => <div className="child">
                     <div className="flex justify-between w-full gap-4 items-center images" >
                         <img src={icondual}></img>
                         <span ><img src={dots3}></img></span>
                     </div>
                     <div className="content"  >
                         <div className="pill" >
-                            <p>Processing
+                            <p>Ready to Use
                             </p>
                         </div>
 
-                        <p className='text-start text-title'>Model Testing 03</p>
+                        <p className='text-start text-title'>Model Testing {index+1}</p>
   
                         <p className='text-start  createdtime' >Created: May 17, 2024 11:18 PM</p>
                         <Button style={{ background: 'rgba(236, 253, 243, 1)' }} onClick={() => {
@@ -106,7 +106,7 @@ const ImageModel = () => {
                         }}>
 
                             <div className='view' >
-                                <p>Approximately 3 hours left</p>
+                                <p>Open</p>
                             </div>
                         </Button>
                     </div>

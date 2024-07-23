@@ -80,7 +80,7 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
             e.preventDefault();
         },
         onDragOver(e) {
-            e.preventDefault(); // Prevent default behavior
+            e.preventDefault();
         },
     };
     const customRequest = async (options) => {
@@ -120,7 +120,6 @@ const DraggerComponent = ({ enablenext, uploadexceldata, changeuploadedfile, add
             // Handle error
             console.error('Upload error:', error);
             onError(error);
-
             message.error(`${file.name} upload failed.`);
         }
     };

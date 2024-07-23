@@ -27,7 +27,6 @@ function App() {
   const [session, setSession] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // cog:-"a173cdda-4011-709d-adae-325fc36c21a8"
 
 
   useEffect(() => {
@@ -73,7 +72,6 @@ function App() {
       });
     }
     init();
-
   }, [])
 
   if (session) {
@@ -103,7 +101,6 @@ function App() {
             rowSelectedBg: '#f0f0f0',
             rowSelectedHoverBg:'#f0f0f0'
           },
-           
           },
         }}
        

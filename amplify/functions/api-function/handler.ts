@@ -4,13 +4,19 @@ import { env } from '$amplify/env/api-function';
 import {
     S3Client,
     ListObjectsV2Command,
+    HeadObjectCommand
 } from "@aws-sdk/client-s3";
+
 const Bucketclient = new S3Client();
 const client = new CognitoIdentityProviderClient();
 
 export const handler: APIGatewayProxyHandler = async (event) => {
     let response = null;
     async function getimagediffbucket() {
+         const input = { 
+                Bucket: env.BUCKET,
+                Key: "/assets/3a083a8b-32a3-4239-bc4e-0dcc37bc81fa/20240411172218873545/image/Actual_vs_Predicted.png", // required
+        };
         const command = new ListObjectsV2Command({
             Bucket:env.BUCKET,
             MaxKeys: 1000,
@@ -38,7 +44,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 isTruncated = IsTruncated || false;
                 command.input.ContinuationToken = NextContinuationToken;
             }
-            return filePaths;
+              const commandmetadata = new HeadObjectCommand(input);
+            const response = await Bucketclient.send(commandmetadata);
+            return { filePaths: filePaths ,metadata:response};
         } catch (err) {
             console.error(err);
         }
