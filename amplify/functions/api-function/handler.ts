@@ -44,9 +44,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 isTruncated = IsTruncated || false;
                 command.input.ContinuationToken = NextContinuationToken;
             }
-              const commandmetadata = new HeadObjectCommand(input);
-            const response = await Bucketclient.send(commandmetadata);
-            return { filePaths: filePaths ,metadata:response};
+            //   const commandmetadata = new HeadObjectCommand(input);
+            // const response = await Bucketclient.send(commandmetadata);
+            return { filePaths: filePaths ,metadata:{}};
         } catch (err) {
             console.error(err);
         }
