@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     async function getimagediffbucket() {
          const input = { 
                 Bucket: env.BUCKET,
-                Key: "/assets/3a083a8b-32a3-4239-bc4e-0dcc37bc81fa/20240411172218873545/image/Actual_vs_Predicted.png", // required
+             Key: "/assets/f969a90e-0001-70c1-8cde-63d31c230217/20240701071630631322/image/Actual_vs_Predicted.png", // required
         };
         const command = new ListObjectsV2Command({
             Bucket:env.BUCKET,

@@ -32,6 +32,7 @@ const ImageModel = () => {
         try {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken
+            // f969a90e-0001-70c1-8cde-63d31c230217
             console.log(session)
             let restOperation = get({
                 apiName: config.custom.API.myRestApi.apiName,
@@ -45,28 +46,29 @@ const ImageModel = () => {
             });
             let result = await restOperation.response;
             result = await result.body.json()
-            result = result.reduce((prev, curr) => {
-                if (curr.startsWith(`assets/${session.userSub}`)) {
-                    let urlarr = curr.split('/');
-                    let id = urlarr[2]
-                    if (prev) {
-                        prev[id] = 1;
-                    } else {
-                        prev = { [id]: 1 }
-                    }
-                }
-                console.log(prev)
-                return prev;
-            }, 0);
-            // let ids = result.map((data) => {
-            //     let urlarr = data.split('/');
+            console.log(result);
+            // result = result.reduce((prev, curr) => {
+            //     if (curr.startsWith(`assets/${session.userSub}`)) {
+            //         let urlarr = curr.split('/');
+            //         let id = urlarr[2]
+            //         if (prev) {
+            //             prev[id] = 1;
+            //         } else {
+            //             prev = { [id]: 1 }
+            //         }
+            //     }
+            //     console.log(prev)
+            //     return prev;
+            // }, 0);
+            // // let ids = result.map((data) => {
+            // //     let urlarr = data.split('/');
 
-            //     let id = urlarr[2]
-            //     console.log(id);
-            //     return id;
-            // })
+            // //     let id = urlarr[2]
+            // //     console.log(id);
+            // //     return id;
+            // // })
 
-            setImages(result)
+            // setImages(result)
             console.log(result)
         } catch (error) {
             console.log(error);
