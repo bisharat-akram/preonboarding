@@ -13,7 +13,7 @@ const client = new CognitoIdentityProviderClient();
 export const handler: APIGatewayProxyHandler = async (event) => {
     let response = null;
     async function getimagediffbucket() {
-        
+         
         const command = new ListObjectsV2Command({
             Bucket:env.BUCKET,
             MaxKeys: 1000,
@@ -34,14 +34,16 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 // Iterate through contents and filter out only file paths
                 if (Contents) {
                     const files = Contents.filter((obj) => !obj?.Key?.endsWith('/')); // Filter out objects that end with '/'
-                    const fileKeys = files.map(async (file) => {
+                    const fileKeys = files.map((file) => {
                         const input = {
                             Bucket: env.BUCKET,
-                            Key: file.Key, // required
+                            Key: file.Key
                         };
                         const commandmetadata = new HeadObjectCommand(input);
-                        const metadata = await Bucketclient.send(commandmetadata);
-                        return {key:file.Key,metadata:metadata}
+                        const response = await Bucketclient.send(commandmetadata);
+                        // return { key: file.Key, metadata: metadata }
+                        console.log('=>', response)
+                        return file.Key
                     });
                       
                     filePaths.push(...fileKeys);
@@ -50,7 +52,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 isTruncated = IsTruncated || false;
                 command.input.ContinuationToken = NextContinuationToken;
             }
-            return filePaths;
+            //   const commandmetadata = new HeadObjectCommand(input);
+            // const response = await Bucketclient.send(commandmetadata);
+            return { filePaths: filePaths ,metadata:{}};
         } catch (err) {
             console.error(err);
         }
