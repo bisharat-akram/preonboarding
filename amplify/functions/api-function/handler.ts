@@ -48,11 +48,14 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                     Key: key
                 };
                 const commandmetadata = new HeadObjectCommand(input);
-                return await Bucketclient.send(commandmetadata);
+                return Bucketclient.send(commandmetadata);
             });
-            console.log(metadataPromises);
+            console.log('=>',metadataPromises);
             const metadataResponses = await Promise.all(metadataPromises)
-                .then(data => data)
+                .then(data => {
+                    console.log(data)
+                    return data
+                })
                 .catch(err => {
                     console.log(err)
                     return []
