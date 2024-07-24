@@ -26,7 +26,7 @@ const CommonTable = ({ enablenext, showCheckoption, data, uploadselectedexceldat
             return newSelectedRowKeys;
         });
         uploadselectedexceldata(selectedRows);
-        if (newSelectedRowKeys.length) {
+        if (newSelectedRowKeys.length>=20) {
             enablenext(false)
         }
         else {

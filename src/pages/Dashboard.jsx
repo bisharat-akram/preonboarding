@@ -12,6 +12,7 @@ import config from "../../amplify_outputs.json";
 import { fetchAuthSession } from 'aws-amplify/auth'
 import { get } from 'aws-amplify/api';
 import { useNavigate } from 'react-router-dom';
+import { list } from 'aws-amplify/storage';
 const items = [
     {
         key: '1',
@@ -32,7 +33,10 @@ const items = [
 const Dashboard = () => {
     const [alignValue, setAlignValue] = useState('center');
     const [size, setSize] = useState('small');
-    const [value, setValue] = useState('');
+    const [images, setImages] = useState([]);
+    const [cognitoFile, setCognitoFile] = useState([]);
+
+    const [value, setValue] = useState('30 days');
     
         const onChange = (e) => {
             setSize(e.target.value);
@@ -46,13 +50,25 @@ const Dashboard = () => {
         console.log('radio4 checked', value);
         setValue(value);
     };
+    async function getList() {
+        const session = await fetchAuthSession();
+        const cognitobucket = await list({
+            path: `files-submissions/${session?.userSub}`,
+        });
+        setCognitoFile(cognitobucket.items);
+    }
+    async function getImage(val) {
+        setImages(val)
+    }
+    useEffect(() => {
+        getList()
+       
+    },[])
         return (
             <div className='h-full w-full dashboard' >
             <div className='text-start flex flex-col home'>
                 <p >Home</p>
                 <div className='tab '>
-                    
-              
                         <Radio.Group
                             style={{
                                 marginBottom: 16,
@@ -76,7 +92,7 @@ const Dashboard = () => {
                         <span><img src={dots3} ></img></span>
                     </div>
                     <div className='flex justify-between items-center content'>
-                        <p>4</p>
+                            <p>{Object.keys(images).length}</p>
                         <div className="flex items-center  justify-center" >
                             <span><img src={Arrowup} ></img></span>
                             10%
@@ -85,7 +101,20 @@ const Dashboard = () => {
                 </div>
                 <div className='flex flex-col justify-between gap-4 child'>
                     <div className='flex justify-between gap-4 w-full text-image'>
-                        <p>Total Models</p>
+                        <p>Total Assets</p>
+                        <span><img src={dots3} ></img></span>
+                    </div>
+                    <div className='flex justify-between items-center content'>
+                            <p>{cognitoFile.length}</p>
+                        <div className="flex items-center  justify-center" >
+                            <span><img src={Arrowup} ></img></span>
+                            10%
+                        </div>
+                    </div>
+                </div>
+                <div className='flex flex-col justify-between gap-4 child'>
+                    <div className='flex justify-between gap-4 w-full text-image'>
+                        <p>Total Pagi</p>
                         <span><img src={dots3} ></img></span>
                     </div>
                     <div className='flex justify-between items-center content'>
@@ -96,56 +125,9 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex flex-col justify-between gap-4 child'>
-                    <div className='flex justify-between gap-4 w-full text-image'>
-                        <p>Total Models</p>
-                        <span><img src={dots3} ></img></span>
-                    </div>
-                    <div className='flex justify-between items-center content'>
-                        <p>4</p>
-                        <div className="flex items-center  justify-center" >
-                            <span><img src={Arrowup} ></img></span>
-                            10%
-                        </div>
-                    </div>
-                </div>
 
                 </div>
-                <ImageModel/>
-            {/* <div className="flex flex-col modalsheading" >
-                <p className='text-start'>Models (4)</p>
-                <div className='flex justify-between'>
-                    <p>View your recent models and their current statuses. Manage all your formulations in the Models section.</p>
-                    <a href='#' >View All</a>
-                </div>
-            </div>
-            <div className='modals'>
-                {Object.keys(images).map((data,index) => <div className="child">
-                    <div className="flex justify-between w-full gap-4 items-center images" >
-                        <img src={icondual}></img>
-                        <span ><img src={dots3}></img></span>
-                    </div>
-                    <div className="content"  >
-                        <div className="pill" >
-                            <p>Ready to Use
-                            </p>
-                        </div>
-
-                        <p className='text-start text-title'>Model Testing {index+1}</p>
-
-                        <p className='text-start  createdtime' >Created: May 17, 2024 11:18 PM</p>
-                        <Button style={{ background: 'rgba(236, 253, 243, 1)' }} onClick={() => {
-                            navigate(`model/${data}`)
-                        }}>
-
-                            <div className='view' >
-                                <p>Open</p>
-                            </div>
-                        </Button>
-                    </div>
-                </div>)}
-
-            </div> */}
+                <ImageModel images={images}  getImage={getImage} value={value} />
             <div className="flex flex-col filesheading">
                 <p className='text-start' >Files (14)</p>
                 <div className='flex justify-between'>

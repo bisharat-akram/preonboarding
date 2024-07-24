@@ -7,6 +7,7 @@ import config from "../../amplify_outputs.json";
 import { fetchAuthSession } from 'aws-amplify/auth'
 import { get } from 'aws-amplify/api';
 import { useNavigate } from 'react-router-dom';
+import { list } from 'aws-amplify/storage';
 const items = [
     {
         key: '1',
@@ -24,16 +25,15 @@ const items = [
         children: 'Content of Tab Pane 3',
     },
 ];
-const ImageModel = () => {
-   
+const ImageModel = ({ value, getImage=()=>{} }) => {
     const navigate = useNavigate();
     const [images, setImages] = useState([]);
+    const [cognitoFile, setCognitoFile] = useState([]);
+    
     async function getList() {
         try {
             const session = await fetchAuthSession();
             const token = session.tokens?.idToken
-            // f969a90e-0001-70c1-8cde-63d31c230217
-            console.log(session)
             let restOperation = get({
                 apiName: config.custom.API.myRestApi.apiName,
                 path: `getimagediffbucket?user=${session?.userSub}`,
@@ -46,21 +46,37 @@ const ImageModel = () => {
             });
             let result = await restOperation.response;
             result = await result.body.json()
+            const currentDate = new Date();
+            let pastDate = new Date();
+            let filterdate = 30;
+            if (value === '7 days') {
+                filterdate = 7;
+            }
+            else if (value === '24 hours') {
+                filterdate = 1;
+            }
+            pastDate.setDate(currentDate.getDate() - filterdate);
             result = result.reduce((prev, curr) => {
-                if (curr.startsWith(`assets/${session.userSub}`)) {
-                    let urlarr = curr.split('/');
+                console.log(curr?.key?.startsWith(`assets/${session.userSub}`), curr?.meta?.LastModified, pastDate, new Date(curr?.meta?.LastModified) >= pastDate)
+                if (curr?.key?.startsWith(`assets/${session.userSub}`) && new Date(curr?.meta?.LastModified) >= pastDate) {
+                    let urlarr = curr?.key?.split('/');
                     let id = urlarr[2]
                     if (prev) {
-                        prev[id] = 1;
+                        prev[id] = curr?.meta?.LastModified;
                     } else {
-                        prev = { [id]: 1 }
+                        prev = { [id]: curr?.meta?.LastModified }
                     }
                 }
                 console.log(prev)
                 return prev;
             }, 0);
-
+            const cognitobucket = await list({
+                path: `files-submissions/${session?.userSub}`,
+            });
+            getImage(result)
             setImages(result)
+            setCognitoFile(cognitobucket.items)
+            console.log(cognitobucket)
             console.log(result)
         } catch (error) {
             console.log(error);
@@ -70,7 +86,7 @@ const ImageModel = () => {
 
 
         getList()
-    }, [])
+    }, [value])
     return (
         <div className='dashboard' >
             <div className="flex flex-col modalsheading" >
@@ -93,8 +109,8 @@ const ImageModel = () => {
                         </div>
 
                         <p className='text-start text-title'>Model Testing {index+1}</p>
-  
-                        <p className='text-start  createdtime' >Created: May 17, 2024 11:18 PM</p>
+                        {console.log(images[data])}
+                        <p className='text-start  createdtime' >Created: {new Date(images[data]).toUTCString()}</p>
                         <Button style={{ background: 'rgba(236, 253, 243, 1)' }} onClick={() => {
                             navigate(`/model/${data}`)
                         }}>

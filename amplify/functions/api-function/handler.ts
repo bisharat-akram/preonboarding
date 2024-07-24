@@ -67,7 +67,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
                 key: key,
                 meta: metadataResponses[index]
             }));
-            console.log('filesWithMetadata', filesWithMetadata)
             return filesWithMetadata ;
         } catch (err) {
             console.error(err);

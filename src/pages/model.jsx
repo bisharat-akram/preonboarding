@@ -94,7 +94,7 @@ const Model = () => {
             console.log(result)
             result = result.filter((data) => {
                 let pattern = new RegExp(`^assets\/${session.userSub}\/([^/]+)\/traintask`);
-                return data.match(pattern)
+                return data?.key?.match(pattern)
             });
             result = result.map((data,index) => {
                 console.log(data)
@@ -156,7 +156,7 @@ const Model = () => {
             <Button  style={{ background: 'rgba(7, 148, 85, 1)', color: 'rgba(255, 255, 255, 1)' }}>+ New Validation</Button>
             </div> : <FileModel fileModelData={fileModelData} />
         }
-        {selectedTab === 'Overview' ? <div className='image-container'><img src={`${import.meta.env.VITE_S3URL}/assets/${userSub}/${id}/image/Actual_vs_Predicted.png`}></img></div>:''}
+        {selectedTab === 'Overview' ? <div className='image-container'><img style={{width:'100%',height:'100%',objectFit:'contain'}} src={`${import.meta.env.VITE_S3URL}/assets/${userSub}/${id}/image/Actual_vs_Predicted.png`}></img></div>:''}
         {selectedTab !== 'Files'  && <div className='table-container'>
                 <div className='flex justify-between items-center'
                     style={{ height: '81px', padding: '20px 24px' }}
