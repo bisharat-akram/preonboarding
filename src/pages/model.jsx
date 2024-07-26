@@ -98,13 +98,15 @@ const Model = () => {
                 let pattern = new RegExp(`^assets\/${session.userSub}\/([^/]+)\/traintask`);
                 return data?.key?.match(pattern)
             });
+            console.log(result)
             result = result.map((data,index) => {
                 console.log(data)
                 return {
                     key: index,
-                    name: data?.split('/')[4]
+                    name: data?.key?.split('/')[4]
                 }
             })
+            console.log(result)
             setFileModelData(result)
           
         } catch (error) {
