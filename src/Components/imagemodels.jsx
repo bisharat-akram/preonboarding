@@ -42,7 +42,6 @@ const ImageModel = ({ value, getImage=()=>{} }) => {
                         Authorization: token
                     }
                 }
-
             });
             let result = await restOperation.response;
             result = await result.body.json()
@@ -56,15 +55,16 @@ const ImageModel = ({ value, getImage=()=>{} }) => {
                 filterdate = 1;
             }
             pastDate.setDate(currentDate.getDate() - filterdate);
+            console.log(result)
             result = result.reduce((prev, curr) => {
-                console.log(curr?.key?.startsWith(`assets/${session.userSub}`), curr?.meta?.LastModified, pastDate, new Date(curr?.meta?.LastModified) >= pastDate)
+                console.log(curr?.key, '=>', curr?.key, '=>', prev);
                 if (curr?.key?.startsWith(`assets/${session.userSub}`) && new Date(curr?.meta?.LastModified) >= pastDate) {
                     let urlarr = curr?.key?.split('/');
                     let id = urlarr[2]
                     if (prev) {
                         prev[id] = curr?.meta?.LastModified;
                     } else {
-                        prev = { [id]: curr?.meta?.LastModified }
+                        prev = {[id]:curr?.meta?.LastModified};
                     }
                 }
                 console.log(prev)
@@ -90,7 +90,8 @@ const ImageModel = ({ value, getImage=()=>{} }) => {
     return (
         <div className='dashboard' >
             <div className="flex flex-col modalsheading" >
-                <p className='text-start'>Models (4)</p>
+                {console.log(images)}
+                <p className='text-start'>Models {Object.keys(images)?.length}</p>
                 <div className='flex justify-between'>
                     <p>View your recent models and their current statuses. Manage all your formulations in the Models section.</p>
                     <a href='#' >View All</a>
@@ -112,7 +113,7 @@ const ImageModel = ({ value, getImage=()=>{} }) => {
                         {console.log(images[data])}
                         <p className='text-start  createdtime' >Created: {new Date(images[data]).toUTCString()}</p>
                         <Button style={{ background: 'rgba(236, 253, 243, 1)' }} onClick={() => {
-                            navigate(`/model/${data}`)
+                            navigate(`/model/${data}`, { state: { props: { modelName: `Model Testing ${index + 1}`, date: new Date(images[data]).toUTCString() } } })
                         }}>
 
                             <div className='view' >

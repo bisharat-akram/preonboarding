@@ -6,7 +6,7 @@ import { list } from 'aws-amplify/storage';
 import { Button, Segmented } from 'antd';
 import { get } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth'
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Table } from 'antd';
 import FileModel from '../Components/file';
 const onChange = (key) => {
@@ -30,6 +30,8 @@ const items = [
     },
 ];
 const Model = () => {
+    const location = useLocation();
+    const { props } = location.state || {};
     let { id } = useParams();
     const [userSub, setUserSub] = useState();
     const [columns, setColumns] = useState();
@@ -119,9 +121,9 @@ const Model = () => {
         <div className="flex flex-col model-bresdcrump-header">
             <div className="flex justify-between">
                 <div>
-                    <p className='modelname'>Model 01</p>
-                    <span className='createdtime'>Created: May 22, 2024 12:04 PM PT</span>
-                    <span className="m-4 createdtime">Created: May 22, 2024 12:04 PM PT</span>
+                    <p className='modelname'>{props?.modelName}</p>
+                    <span className='createdtime'>{props.date}</span>
+                    {/* <span className="m-4 createdtime">{props.date}</span> */}
                 </div>
                 <div>
                     <Button>Edit Model</Button>
