@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Table } from 'antd';
 import '../CSS/Table.css'
 
@@ -17,21 +17,38 @@ import '../CSS/Table.css'
 const CommonTable = ({ enablenext, showCheckoption, data, uploadselectedexceldata, columns }) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [loading, setLoading] = useState(false);
-  console.log(data)
-    const onSelectChange = (newSelectedRowKeys,selectedRows) => {
+    const headerSelected = useRef(false)
+    const onSelectChange = (newSelectedRowKeys, selectedRows, info) => {
         console.log(data)
-        console.log('selectedRowKeys changed: ', selectedRows);
-        setSelectedRowKeys(() => {
-            console.log(newSelectedRowKeys)
-            return newSelectedRowKeys;
-        });
-        uploadselectedexceldata(selectedRows);
-        if (newSelectedRowKeys.length>=20) {
+        console.log('selectedRowKeys changed: ', newSelectedRowKeys, selectedRows, info);
+
+        let morethan20 = newSelectedRowKeys.length >= 20;
+
+        if (info.type === "all") {
+            if (selectedRowKeys.length === data.length) {
+                setSelectedRowKeys([]);
+                uploadselectedexceldata([]);
+            } else {
+                setSelectedRowKeys(data.map((d, i) => i));
+                uploadselectedexceldata(data);
+                morethan20 = data.length >= 20
+            }
+
+        } else {
+
+            setSelectedRowKeys(() => {
+                console.log(newSelectedRowKeys)
+                return newSelectedRowKeys;
+            });
+            uploadselectedexceldata(selectedRows);
+        }
+        if (morethan20) {
             enablenext(false)
         }
         else {
             enablenext(true)
         }
+
     };
     const rowSelection = {
         selectedRowKeys,
@@ -39,29 +56,49 @@ const CommonTable = ({ enablenext, showCheckoption, data, uploadselectedexceldat
     };
     const hasSelected = selectedRowKeys.length > 0;
     return (
-        <div className="overflow-auto" style={{ border: '1px solid rgba(234, 236, 240, 1)',width:'95%' }}>
+        <div className="overflow-auto" style={{ border: '1px solid rgba(234, 236, 240, 1)', width: '95%' }}>
             <div className='flex justify-between items-center'
-                style={{ height:'81px',padding:'20px 24px'}}
+                style={{ height: '81px', padding: '20px 24px' }}
             >
                 <div className='flex gap-4'>
                     <span style={{ fontSize: '18px', color: 'rgba(16, 24, 40, 1)', fontWeight: '600', lineHeight: '28px' }}>{`${data.length} Items`}</span>
-                {hasSelected ?
-                    <div style={{
-                        width: 'fit-content', padding: '2px 10px', borderRadius: '16px', border: '1px solid rgba(233, 215, 254, 1)', background: 'rgba(249, 245, 255, 1)'}}>
-                    <p
-                    style={{
-                        textAlign: 'start'
-                    }}
-                >
-                                {hasSelected ? `${selectedRowKeys.length} ${selectedRowKeys.length>1?'rows' :'row'} selected` : ''}
-                        </p>
-                    </div> : ''}
+                    {hasSelected ?
+                        <div style={{
+                            width: 'fit-content',
+                            padding: '2px 10px',
+                            borderRadius: '16px',
+                            border: '1px solid rgba(233, 215, 254, 1)',
+                            background: 'rgba(249, 245, 255, 1)'
+                        }}>
+                            <p
+                                style={{
+                                    textAlign: 'start'
+                                }}
+                            >
+                                {hasSelected ? `${selectedRowKeys.length} ${selectedRowKeys.length > 1 ? 'rows' : 'row'} selected` : ''}
+                            </p>
+                        </div> : ''}
                 </div>
                 <p style={{
-                    color: 'rgba(105, 65, 198, 1)',fontWeight:'600',fontSize:'14px',lineHeight:'20px'}}>Replace File</p>
+                    color: 'rgba(105, 65, 198, 1)', fontWeight: '600', fontSize: '14px', lineHeight: '20px'
+                }}>Replace File</p>
             </div>
-            {showCheckoption ? <Table className="modal-table" rowSelection={rowSelection} columns={columns} dataSource={data} /> : <Table className="modal-table"  columns={columns} dataSource={data} />}
-           
+            {
+                showCheckoption
+                    ? <Table
+                        className="modal-table"
+                        rowSelection={rowSelection}
+                        columns={columns}
+                        dataSource={data}
+                    // onHeaderRow={onHeaderRow}
+                    />
+                    : <Table
+                        className="modal-table"
+                        columns={columns}
+                        dataSource={data}
+                    />
+            }
+
         </div>
     );
 };

@@ -1,25 +1,30 @@
-## AWS Amplify React+Vite Starter Template
-
-This repository provides a starter template for creating applications using React+Vite and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities.
-
-## Overview
-
-This template equips you with a foundational React application integrated with AWS Amplify, streamlined for scalability and performance. It is ideal for developers looking to jumpstart their project with pre-configured AWS services like Cognito, AppSync, and DynamoDB.
 
 ## Features
 
-- **Authentication**: Setup with Amazon Cognito for secure user authentication.
-- **API**: Ready-to-use GraphQL endpoint with AWS AppSync.
-- **Database**: Real-time database powered by Amazon DynamoDB.
+ - **Authentication:** Managed by Amazon Cognito with user pools and IAM roles.
+ - **Storage:** Amazon S3 buckets for file storage.
+ - **API Management:** Amazon API Gateway for creating and managing API endpoints.
+ - **Lambda Functions:** AWS Lambda functions to handle API requests.
+ - **IAM Policies:** Custom IAM policies to manage permissions.
 
-## Deploying to AWS
+## to initial a new project
+initiate an amplify project using the [quickstart guide](https://docs.amplify.aws/react/start/quickstart/)
 
-For detailed instructions on deploying your application, refer to the [deployment section](https://docs.amplify.aws/react/start/quickstart/#deploy-a-fullstack-app-to-aws) of our documentation.
+## SetUp locally
 
-## Security
+run 
+``npm i``
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+see how to configure ampx [sandbox](https://docs.amplify.aws/react/deploy-and-host/sandbox-environments/setup/#create-a-new-sandbox-environment)
+Then run
+``npx ampx sanbox``
+amplify will create new resouce for your sandbox environment
 
-## License
+``npm run dev``
 
-This library is licensed under the MIT-0 License. See the LICENSE file.
+the frontend of the project will open on the http://localhost:5173
+
+## Project Structure
+- the projects consists or congnito (for auth)
+- lambda got creating functionality
+- s3 for storing files
