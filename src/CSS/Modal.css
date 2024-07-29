@@ -1,0 +1,126 @@
+.modal-create{
+    padding:0 24px ;
+    height: 76px;
+    border-bottom: 1px solid rgba(234, 236, 240, 1);
+}
+.modal-create>.button{
+    padding: 10px 14px 10px 14px;
+    border: 1px solid rgba(208, 213, 221, 1);
+    width: 146px;
+    height: 40px;
+   
+}
+
+.stepper{
+    /* margin-top:14px; */
+    padding:30px 0px 30px 0px;
+  color: #097455;
+}
+.page-title{
+    font-weight: 600;
+    line-height: 28px;
+    font-size: 18px;
+    text-align: center;
+    color: rgba(16, 24, 40, 1);
+}
+.steptext{
+    padding: 15px 0px 24px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.steptext >div{
+    width: 750px;
+    gap: 10px;
+}
+.steptext >div>.title{
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 38px;
+}
+.steptext >div> .content {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(71, 84, 103, 1);
+}
+.thirdsteptext {
+    padding: 15px 0px 15px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.thirdsteptext>div {
+    width: 750px;
+    gap: 10px;
+}
+
+.thirdsteptext>div>.title {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 38px;
+}
+
+.thirdsteptext>div>.content {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(71, 84, 103, 1);
+}
+.fourthsteptext {
+    padding: 15px 0px 24px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.fourthsteptext>div {
+    width: 750px;
+    gap: 10px;
+}
+
+.fourthsteptext>div>.title {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 38px;
+}
+
+.fourthsteptext>div>.content {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(71, 84, 103, 1);
+}
+.dragger{
+    height:253px;
+}
+.warning-div{
+    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    border: 1px solid rgba(208, 213, 221, 1) ;
+    background: rgba(255, 255, 255, 1);
+    width: 792px;
+    padding: 16px ;
+        gap: 16px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+}
+.modal-button{
+    font-weight: 600;
+    line-height: 20px; 
+    font-size: 14px; 
+    color: rgba(255, 255, 255, 1);
+    box-shadow: none !important;
+}
+.ant-steps .ant-steps-item-process .ant-steps-item-icon{
+    background-color: #097455;
+}
+.ant-steps .ant-steps-item-process .ant-steps-item-title{
+    color: #097455 !important;
+}

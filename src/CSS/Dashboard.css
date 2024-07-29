@@ -1,0 +1,211 @@
+.dashboard{
+    padding: 32px 0px 48px 0px;
+}
+.dashboard > .home{
+    padding: 0 32px;
+     gap:24px;
+}
+.dashboard > .home > p{
+    font-size: 30px ;
+    font-weight: 600;
+     line-height: 38px;
+}
+.tab .ant-segmented-item-selected {
+    background-color: #D0D5DD !important; 
+    border-color: #D0D5DD !important;
+}
+.stats{
+    gap: 10px;
+    padding: 0 32px;
+}
+.stats > .child{
+    border: 1px solid rgba(234, 236, 240, 1);
+    flex-grow:1;
+    border-radius: 8px; 
+    height: 114px; 
+    padding: 24px;
+}
+.stats > .child > .text-image > p{
+    font-size: 14px;
+    font-weight: 500;
+    line-height:20px;
+    color:rgba(71, 84, 103, 1);
+}
+.stats>.child>.text-image>span {
+    height: 18px
+}
+.stats>.child>.text-image>span>img {
+    height: 100%;
+}
+.stats>.child>.content> p {
+    font-size: 30px;
+    font-weight:600;
+    line-height:38px
+}
+.stats > .child > .content > div{
+    border: 1px solid;
+    border-radius: 50px;
+    width: 61px;
+    height:24px;
+    background-color:rgba(236, 253, 243, 1);
+    border: 1px solid rgba(171, 239, 198, 1);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    color: rgba(6, 118, 71, 1);
+}
+.stats>.child>.content> div>span {
+    height: 12px;
+}
+.stats>.child>.content>div>span>img{
+    height: 100%;
+}
+.stats>.child>.text-image>span>img {
+    height: 100%;
+}
+.modalsheading{
+    padding: 32px 32px 24px 32px;
+    gap: 10px;
+}
+.modalsheading > p {
+    font-size: 24px;
+     font-weight:600;
+      line-height:36px;
+}
+.modalsheading > div > p{
+    font-size: 16px;
+     font-weight:400;
+      line-height:24px;
+       color:rgba(71, 84, 103, 1);
+}
+.modalsheading>div>a {
+margin-right: 34px;
+        color: rgba(7, 148, 85, 1);
+}
+.modals{
+    display: flex;
+    gap: 24px;
+    padding: 0px 32px 0px 32px;
+    overflow:auto;
+}
+.modals > .child {
+flex-grow: 1; 
+border: 1px solid rgba(234, 236, 240, 1); 
+border-radius: 12px; 
+display: flex; 
+flex-direction: column; 
+gap: 32px;
+ padding: 24px;
+}
+.modals>.child>.images {
+    height: 50px
+}
+.modals> .child > .images > img{
+    height: 100%;
+}
+.modals>.child>.images>span {
+    height: 18px;
+}
+.modals>.child>.content {
+    display: flex;
+     gap: 8px;
+      flex-direction: column;
+      width:100%;
+}
+.modals>.child>.content>.pill{
+    width: 114px; 
+    height: 24px; 
+    border-radius: 16px; 
+    border: 1.5px solid rgba(224, 79, 22, 1);
+}
+.modals>.child>.content>.pill>p{
+    font-size:14px; 
+    font-weight: 500; 
+    line-height: 20px; 
+    color: rgba(185, 56, 21, 1);
+    margin-bottom:24px;
+}
+.modals>.child>.content>.text-title{
+    font-size: 20px;
+     font-weight: 600;
+      line-height: 44px
+
+}
+.modals>.child>.content>.createdtime{
+    font-family: Inter;
+     font-weight: 500;
+      font-size: 14px;
+       line-height: 44px; 
+       color: rgba(130, 130, 130, 1);
+}
+.modals>.child>.content>.view{
+    padding:8px 0;
+background: rgba(236, 253, 243, 1);
+border-radius: 8px;
+}
+.modals> .child> .content> .view>p{
+    font-family: Inter;
+     font-weight: 500;
+     font-size: 14px; 
+     line-height: 20px;
+     
+     
+}
+.filesheading{
+padding: 32px 32px 24px 32px; 
+gap: 10px;
+}
+.filesheading>p{
+    font-size: 24px;
+     font-weight: 600; 
+     line-height: 36px
+}
+.filesheading>div>p{
+    font-size: 16px;
+     font-weight: 400;
+      line-height: 24px;
+       color: rgba(71, 84, 103, 1)
+}
+.filesheading>div>a{
+    margin-right: 34px; 
+    color: rgba(7, 148, 85, 1);
+}
+.files{
+    display: flex;
+    gap: 24px; 
+    padding: 0px 32px 0px 32px; 
+    overflow:auto
+}
+.files .child{
+    flex-grow: 1;
+    height: 202px;
+    display: flex;
+    flex-direction: column;
+     border:1px solid rgba(234, 236, 240, 1);
+      border-radius: 12px;
+}
+.tab   .ant-radio-button-checked{
+    background-color: #D0D5DD;
+    color:black !important;
+    border-color: #D0D5DD;
+}
+
+.tab .ant-radio-button-wrapper{
+    border-color: #D0D5DD;
+}
+
+.tab .ant-radio-button-checked >input {
+ border-color: #D0D5DD;
+    color: black;
+}
+/*
+.tab .ant-radio-button-wrapper-checked{
+    border:none;
+} */
+.ant-radio-group-solid :where(.css-dev-only-do-not-override-vcilh1).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    border-color: #D0D5DD !important;
+    color: black !important;
+}
+:where(.css-dev-only-do-not-override-xyiv00).ant-radio-button-wrapper:not(:first-child)::before {
+    background-color: none !important;
+}

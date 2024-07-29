@@ -16,38 +16,70 @@ Here, you can view a list of all registered users, edit their roles, and manage 
 - **Authentication**: The application includes comprehensive authentication features, including Sign Up, Sign In, and Logout. This ensures that only authorized users can access the system.
   <br/><br/>
 
-## Installation
+# Amplify Gen 2 Project
 
-To install and set up the AI Agent Platform application, follow these steps:
+This project is a web application using AWS Amplify Gen 2, which integrates with AWS services such as Cognito for authentication, Lambda for serverless functions, and S3 for storage.
 
-1. **Clone the [Repository](https://github.com/jwhwoo/aiagentplatform/tree/feature/upload-file-to-s3)**: Open your terminal and run the following command to clone the project repository:
+## Table of Contents
 
-```bash
-git clone https://github.com/jwhwoo/aiagentplatform.git
-```
+- [Introduction](#introduction)
+- [Architecture](#architecture)
+- [Setup](#setup)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Setup Locally](#setuplocally)
 
-This will create a copy of the project on your local machine. Then go to your project directory:
+## Introduction
 
-```bash
-cd aiagentplatform
-```
+The project leverages AWS Amplify to simplify the development of cloud-powered applications. The application includes:
 
-1. **Switch to the Relevant Branch**: Navigate into the cloned repository and switch to the "feature/upload-file-to-s3" branch, which contains the most recent updates. Use the command to switch to this branch.
+- **Authentication** using Amazon Cognito.
+- **Serverless functions** with AWS Lambda.
+- **File storage** with Amazon S3.
 
-```bash
-git checkout feature/upload-file-to-s3
-```
+## Architecture
 
-1. **Install Amplify**: As this project is built using AWS Amplify, make sure you have it installed on your system. If not, run the following command to install it:
+The architecture of this project involves the following components:
 
-```bash
-npm install -g @aws-amplify/cli
-```
+- **AWS Amplify**: Framework to build scalable mobile and web applications.
+- **Amazon Cognito**: Service for user authentication, authorization, and user management.
+- **AWS Lambda**: Serverless computing service to run code without provisioning or managing servers.
+- **Amazon S3**: Scalable object storage service to store and retrieve any amount of data.
 
-1. **Configure Amplify**: Now, you need to configure Amplify. Run `amplify configure` in your terminal and follow the prompts. [**View more**](https://docs.amplify.aws/gen1/react/start/getting-started/installation/)
-2. **Migrate project to another AWS:** If you don’t have this app already on your AWS account you have to push it there. Visit Amplify documentation to see how to **[Migrate project to another AWS account](https://docs.amplify.aws/gen1/react/tools/cli/migration/cli-migrate-aws-account/)**
-3. **Install Dependencies**: Navigate to the project directory and run `npm install` to install all the necessary dependencies.
-4. **Run the Project**: Finally, you can start the project on your local development server using the command `npm start`. This will start the application, and you can access it in your web browser at `http://localhost:3000`.
+## Setup
+
+
+
+### Prerequisites
+
+- Node.js (>=12.x)
+- AWS CLI
+- Amplify CLI
+- An AWS account
+
+### Installation
+
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/jwhwoo/aiagentplatform/tree/feature/new-ui
+    cd aiagentplatform
+    ```
+
+
+### SetUp locally
+
+run 
+``npm i``
+
+see how to configure ampx [sandbox](https://docs.amplify.aws/react/deploy-and-host/sandbox-environments/setup/#create-a-new-sandbox-environment)
+Then run
+``npx ampx sanbox``
+amplify will create new resouce for your sandbox environment
+
+``npm run dev``
+
+the frontend of the project will open on the http://localhost:5173
+
    <br/><br/>
 
 ## Authentication
