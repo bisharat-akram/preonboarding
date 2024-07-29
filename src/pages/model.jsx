@@ -155,7 +155,7 @@ const Model = () => {
                 <p style={{ fontWeight: 600, fontSize: '18px', lineHeight: '28px' }}>Validation</p>
                 <p style={{
                     fontWeight: 400, fontSize: '14px', lineHeight: '20px', color: 'rgba(71, 84, 103, 1)'
-                }}>Run validation tests by uploading new data rows to see how well your model's predictions match lab test  results</p>
+                }}>Run validation tests by uploading new data rows to see how well your model's predictions match lab test results</p>
             </div>
             <Button  style={{ background: 'rgba(7, 148, 85, 1)', color: 'rgba(255, 255, 255, 1)' }}>+ New Validation</Button>
             </div> : <FileModel fileModelData={fileModelData} />
@@ -166,7 +166,7 @@ const Model = () => {
                     style={{ height: '81px', padding: '20px 24px' }}
                 >
                     <div className='flex gap-4'>
-                    <span style={{ fontSize: '18px', color: 'rgba(16, 24, 40, 1)', fontWeight: '600', lineHeight: '28px' }}>{tableData?.length > 1 ? `${tableData?.length} Files` : `${tableData?.length} File`} </span>
+                    <span style={{ fontSize: '18px', color: 'rgba(16, 24, 40, 1)', fontWeight: '600', lineHeight: '28px' }}>{tableData?.length > 1 ? `${tableData?.length} Items` : `${tableData?.length} Item`} </span>
                         
                     </div>
                    
